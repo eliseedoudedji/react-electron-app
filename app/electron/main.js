@@ -32,7 +32,9 @@ function createWindow() {
     mainWindow.webContents.openDevTools();
   } else {
     // En production, chargez le fichier index.html depuis dist
-    startUrl = new URL(path.join(__dirname, '../dist/index.html'), 'file:').toString();
+    const distPath = path.join(__dirname, '../dist/index.html');
+    startUrl = new URL(`file://${distPath}`).toString();
+    console.log('Production path:', distPath);
   }
   
   console.log('Loading URL:', startUrl);

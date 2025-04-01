@@ -1,9 +1,0 @@
-directories:
-  output: release
-  buildResources: assets
-appId: com.yourapp.id
-files:
-  - filter:
-      - dist/**/*
-      - electron/**/*
-electronVersion: 35.1.2
