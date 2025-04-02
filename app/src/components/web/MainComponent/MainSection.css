@@ -1,0 +1,13 @@
+.custom-title {
+    text-align: left; /* Alignement par défaut, adaptable */
+    color: var(--color-text-default);
+    font-weight: var(--font-weight-semibold);
+    font-family: var(--font-family-default-latin);
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    word-wrap: break-word;
+    font-size: var(--font-size-600);
+    margin-bottom: var(--space-0);
+    margin-top: var(--space-0);
+  }
+  
