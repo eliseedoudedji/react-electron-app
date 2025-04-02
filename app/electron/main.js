@@ -66,14 +66,19 @@ function createWindow() {
     // Ouvrir les DevTools
     mainWindow.webContents.openDevTools();
   } else {
-    // En production, chargez le fichier index.html depuis dist
-    const distPath = path.join(__dirname, '../dist/index.html');
-    startUrl = new URL(`file://${distPath}`).toString();
+    // Modification du chemin pour la production
+    const distPath = path.join(__dirname, '..', 'dist', 'index.html');
+    startUrl = `file://${distPath}`;
     console.log('Production path:', distPath);
   }
 
   console.log('Loading URL:', startUrl);
   mainWindow.loadURL(startUrl);
+
+  // Ajouter ceci après mainWindow.loadURL(startUrl);
+  mainWindow.webContents.on('did-fail-load', (event, errorCode, errorDescription) => {
+    console.error('Failed to load:', errorCode, errorDescription);
+  });
 
   // Quand la fenêtre principale est prête à être affichée
   mainWindow.once('ready-to-show', () => {
