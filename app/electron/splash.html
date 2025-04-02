@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Splash Screen</title>
+    <style>
+        body {
+            background: #121212;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: white;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 100%;
+        }
+
+        img {
+            width: 100%;
+            max-width: 100%;
+            margin-bottom: 30px;
+        }
+
+        .progress-container {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(42, 42, 42, 0.5);
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 3px;
+            background: linear-gradient(90deg, #4285f4, #34a853, #fbbc05, #ea4335);
+            width: 0%;
+            transition: width 0.2s ease;
+        }
+
+        .status-text {
+            position: fixed;
+            bottom: 10px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <img src="splash-image.png" alt="App Logo">
+    </div>
+
+    <div class="progress-container">
+        <div class="progress-bar" id="progress-bar"></div>
+    </div>
+    <div class="status-text" id="status-text">Initializing...</div>
+
+    <script>
+        // Simuler le chargement de l'application
+        const progressBar = document.getElementById('progress-bar');
+        const statusText = document.getElementById('status-text');
+
+        const loadingSteps = [
+            { progress: 10, text: "Initializing application..." },
+            { progress: 25, text: "Loading resources..." },
+            { progress: 40, text: "Preparing environment..." },
+            { progress: 60, text: "Loading modules..." },
+            { progress: 75, text: "Configuring settings..." },
+            { progress: 90, text: "Almost ready..." },
+            { progress: 100, text: "Starting application..." }
+        ];
+
+        let currentStep = 0;
+
+        // Fonction pour mettre à jour la barre de progression
+        function updateProgress() {
+            if (currentStep < loadingSteps.length) {
+                const step = loadingSteps[currentStep];
+                progressBar.style.width = step.progress + '%';
+                statusText.textContent = step.text;
+                currentStep++;
+
+                // Envoyer un message à main.js quand le chargement est terminé
+                if (currentStep === loadingSteps.length) {
+                    // Attendre un peu avant de signaler que le chargement est terminé
+                    setTimeout(() => {
+                        console.log('Animation terminée, envoi du signal...');
+                        if (window.api) {
+                            window.api.send('splash-screen-loaded');
+                            console.log('Signal envoyé avec succès');
+                        } else {
+                            console.error('API non disponible');
+                        }
+                    }, 800);
+                } else {
+                    // Programmer la prochaine étape avec un délai aléatoire
+                    setTimeout(updateProgress, Math.random() * 400 + 300);
+                }
+            }
+        }
+
+        // Démarrer la simulation de chargement après un court délai
+        setTimeout(updateProgress, 500);
+    </script>
+</body>
+
+</html>

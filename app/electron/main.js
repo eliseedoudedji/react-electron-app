@@ -9,12 +9,47 @@ const __dirname = dirname(__filename);
 // Gardez une référence globale de l'objet window, sinon la fenêtre sera
 // fermée automatiquement quand l'objet JavaScript sera garbage collecté.
 let mainWindow;
+let splash;
+let appReady = false;
+let splashReady = false;
+
+// Durée minimale d'affichage du splash screen (en ms)
+const MIN_SPLASH_DURATION = 10000;
+let splashStartTime;
 
 function createWindow() {
-  // Créer la fenêtre du navigateur.
+  // Enregistrer le temps de démarrage du splash screen
+  splashStartTime = Date.now();
+
+  console.log('Création du splash screen...');
+  // Créer la fenêtre du Splash Screen
+  splash = new BrowserWindow({
+    width: 600,
+    height: 400,
+    transparent: true,
+    frame: false,
+    alwaysOnTop: true,
+    center: true,
+    skipTaskbar: true,
+    webPreferences: {
+      nodeIntegration: false,
+      contextIsolation: true,
+      preload: path.join(__dirname, 'preload-splash.js')
+    }
+  });
+
+  // Charger l'image du splash screen
+  splash.loadURL(`file://${__dirname}/splash.html`);
+
+  // Pour déboguer le splash screen
+  //splash.webContents.openDevTools({ mode: 'detach' });
+
+  console.log('Création de la fenêtre principale...');
+  // Créer la fenêtre principale mais la garder cachée
   mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
+    show: false, // Ne pas afficher immédiatement
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
@@ -24,7 +59,7 @@ function createWindow() {
 
   // Détermine l'URL à charger selon l'environnement
   let startUrl;
-  
+
   if (process.env.NODE_ENV === 'development') {
     // En développement, connectez-vous au serveur de développement Vite
     startUrl = process.env.ELECTRON_START_URL || 'http://localhost:5173';
@@ -36,9 +71,16 @@ function createWindow() {
     startUrl = new URL(`file://${distPath}`).toString();
     console.log('Production path:', distPath);
   }
-  
+
   console.log('Loading URL:', startUrl);
   mainWindow.loadURL(startUrl);
+
+  // Quand la fenêtre principale est prête à être affichée
+  mainWindow.once('ready-to-show', () => {
+    console.log('Fenêtre principale prête à être affichée');
+    appReady = true;
+    tryShowMainWindow();
+  });
 
   // Émis lorsque la fenêtre est fermée.
   mainWindow.on('closed', function () {
@@ -48,6 +90,43 @@ function createWindow() {
     mainWindow = null;
   });
 }
+
+// Fonction pour vérifier si on peut afficher la fenêtre principale
+function tryShowMainWindow() {
+  console.log(`État actuel - appReady: ${appReady}, splashReady: ${splashReady}`);
+
+  // Vérifier si les deux conditions sont remplies :
+  // 1. La fenêtre principale est prête
+  // 2. Le splash screen a été affiché pendant au moins MIN_SPLASH_DURATION
+  if (appReady && splashReady) {
+    console.log('Les deux conditions sont remplies, préparation à la fermeture du splash screen');
+    const elapsedTime = Date.now() - splashStartTime;
+    const remainingTime = Math.max(0, MIN_SPLASH_DURATION - elapsedTime);
+
+    console.log(`Temps écoulé: ${elapsedTime}ms, temps restant: ${remainingTime}ms`);
+
+    // Si le temps minimum n'est pas encore écoulé, attendre avant de fermer le splash
+    setTimeout(() => {
+      console.log('Fermeture du splash screen et affichage de la fenêtre principale');
+      if (splash) {
+        splash.destroy();
+        splash = null;
+      }
+      if (mainWindow) {
+        mainWindow.show();
+      }
+    }, remainingTime);
+  } else {
+    console.log('En attente de conditions supplémentaires avant de fermer le splash screen');
+  }
+}
+
+// Écouter le message du splash screen indiquant que l'animation est terminée
+ipcMain.on('splash-screen-loaded', () => {
+  console.log('Message reçu: splash-screen-loaded');
+  splashReady = true;
+  tryShowMainWindow();
+});
 
 // Cette méthode sera appelée quand Electron a fini
 // de s'initialiser et est prêt à créer des fenêtres de navigateur.
@@ -78,4 +157,4 @@ ipcMain.on('test-message', (event, message) => {
 });
 
 // Dans ce fichier, vous pouvez inclure le reste du code spécifique au processus principal de
-// votre application. Vous pouvez également le mettre dans des fichiers séparés et les inclure ici. 
+// votre application. Vous pouvez également le mettre dans des fichiers séparés et les inclure ici.
