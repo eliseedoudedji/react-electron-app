@@ -1,3 +1,265 @@
-.comparisonsection {
-  /* Ajoute tes styles ici */
+/* Styles généraux pour la section de comparaison */
+.comparison-section {
+  padding: 3rem 0;
+
+}
+
+/* Styles pour les onglets */
+.comparison-tabs {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.comparison-tab-container {
+  display: flex;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  padding: 0.5rem;
+}
+
+.comparison-tab {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  background: transparent;
+  color: #555;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 8px;
+  margin: 0 0.25rem;
+}
+
+.comparison-tab:hover {
+  background-color: rgba(0, 123, 255, 0.1);
+  color: #0d6efd;
+}
+
+.comparison-tab.active {
+  background-color: #0d6efd;
+  color: white;
+  box-shadow: 0 4px 12px rgba(13, 110, 253, 0.3);
+}
+
+.tab-icon {
+  font-size: 1.25rem;
+  margin-right: 0.5rem;
+}
+
+/* Styles pour le contenu des onglets */
+.comparison-content {
+  background-color: white;
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.comparison-pane {
+  padding: 2rem;
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Styles pour l'en-tête de version */
+.version-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid #eee;
+}
+
+.version-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.version-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.version-subtitle {
+  color: #666;
+  font-size: 1.1rem;
+}
+
+/* Styles pour les cartes de fonctionnalités */
+.feature-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.feature-card {
+  background-color: #f8f9fa;
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+  border: 1px solid #eee;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  border-color: #0d6efd;
+}
+
+.feature-icon {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.feature-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.75rem;
+}
+
+.feature-description {
+  color: #666;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+/* Styles pour le tableau moderne */
+.modern-table-container {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+}
+
+.modern-table-header {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  background-color: #0d6efd;
+  color: white;
+  font-weight: 600;
+}
+
+.header-cell {
+  padding: 1.25rem 1.5rem;
+  text-align: left;
+}
+
+.modern-table-body {
+  background-color: white;
+}
+
+.modern-table-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  border-bottom: 1px solid #eee;
+  transition: all 0.2s ease;
+}
+
+.modern-table-row:hover {
+  background-color: #f8f9fa;
+}
+
+.modern-table-row:last-child {
+  border-bottom: none;
+}
+
+.body-cell {
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.feature-cell {
+  display: flex;
+  flex-direction: column;
+}
+
+.saas-cell,
+.desktop-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.status-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.status-indicator.positive {
+  background-color: rgba(25, 135, 84, 0.15);
+  color: #198754;
+}
+
+.status-indicator.negative {
+  background-color: rgba(220, 53, 69, 0.15);
+  color: #dc3545;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .comparison-tab {
+    padding: 0.5rem 1rem;
+  }
+
+  .tab-text {
+    display: none;
+  }
+
+  .tab-icon {
+    margin-right: 0;
+    font-size: 1.5rem;
+  }
+
+  .feature-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .modern-table-row,
+  .modern-table-header {
+    grid-template-columns: 1.5fr 0.75fr 0.75fr;
+  }
+
+  .header-cell,
+  .body-cell {
+    padding: 1rem;
+  }
+
+  .feature-description {
+    display: none;
+  }
+}
+
+/* Animation au survol pour les indicateurs de statut */
+.status-indicator {
+  transition: all 0.3s ease;
+}
+
+.status-indicator:hover {
+  transform: scale(1.1);
 }

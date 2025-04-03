@@ -1,3 +1,411 @@
-.testimonialssection {
-  /* Ajoute tes styles ici */
+/* Styles généraux pour la section de témoignages */
+.testimonials-section {
+  padding: 4rem 0;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Titre de la section */
+.section-title {
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 3rem;
+  position: relative;
+  display: inline-block;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.section-title::after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(90deg, #0d6efd, #6610f2);
+  border-radius: 2px;
+}
+
+/* Styles du carousel */
+.testimonial-carousel {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin: 0 auto;
+  max-width: 1000px;
+}
+
+/* Conteneur des témoignages */
+.testimonial-container {
+  width: 100%;
+  overflow: hidden;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Piste du carousel */
+.testimonial-track {
+  display: flex;
+  transition: transform 0.6s cubic-bezier(0.33, 1, 0.68, 1);
+  will-change: transform;
+  height: 100%;
+}
+
+/* Carte de témoignage */
+.testimonial-card {
+  flex: 0 0 100%;
+  padding: 2rem;
+  background-color: white;
+  transition: all 0.5s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.testimonial-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  background: linear-gradient(90deg, #0d6efd, #6610f2);
+}
+
+.testimonial-card.active {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(13, 110, 253, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(13, 110, 253, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(13, 110, 253, 0);
+  }
+}
+
+/* Contenu du témoignage */
+.testimonial-content {
+  position: relative;
+  z-index: 1;
+}
+
+/* Icône de citation */
+.quote-icon {
+  color: rgba(13, 110, 253, 0.1);
+  font-size: 4rem;
+  position: absolute;
+  top: -20px;
+  left: -10px;
+  z-index: -1;
+  transform: rotate(180deg);
+}
+
+/* Citation */
+.testimonial-quote {
+  font-size: 1.25rem;
+  line-height: 1.6;
+  color: #444;
+  margin: 1.5rem 0;
+  position: relative;
+  z-index: 1;
+  font-style: italic;
+}
+
+/* Étoiles de notation */
+.testimonial-rating {
+  margin: 1rem 0;
+  display: flex;
+  justify-content: center;
+}
+
+.star {
+  font-size: 1.5rem;
+  margin: 0 2px;
+  transition: all 0.3s ease;
+}
+
+.star.filled {
+  color: #ffc107;
+  text-shadow: 0 0 5px rgba(255, 193, 7, 0.5);
+}
+
+.star.empty {
+  color: #e0e0e0;
+}
+
+/* Auteur du témoignage */
+.testimonial-author {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+.author-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-right: 1rem;
+  border: 3px solid #0d6efd;
+  box-shadow: 0 0 15px rgba(13, 110, 253, 0.3);
+  transition: all 0.3s ease;
+}
+
+.author-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.testimonial-card:hover .author-avatar {
+  transform: scale(1.1);
+}
+
+.author-info {
+  text-align: left;
+}
+
+.author-name {
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.author-position {
+  color: #666;
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+/* Flèches de navigation */
+.carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: white;
+  border: none;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.3s ease;
+}
+
+.carousel-arrow:hover {
+  background-color: #0d6efd;
+  transform: translateY(-50%) scale(1.1);
+}
+
+.carousel-arrow:hover svg {
+  fill: white;
+}
+
+.carousel-arrow svg {
+  fill: #333;
+  transition: all 0.3s ease;
+}
+
+.prev-arrow {
+  left: -25px;
+}
+
+.next-arrow {
+  right: -25px;
+}
+
+/* Indicateurs */
+.testimonial-indicators {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: #ddd;
+  margin: 0 5px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.indicator.active {
+  background-color: #0d6efd;
+  transform: scale(1.3);
+  box-shadow: 0 0 10px rgba(13, 110, 253, 0.5);
+}
+
+/* Animation d'entrée pour les témoignages */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.testimonial-card.active .testimonial-content {
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+/* Animation pour les étoiles */
+.testimonial-card.active .star {
+  animation: starPop 0.4s ease forwards;
+  opacity: 0;
+}
+
+@keyframes starPop {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  70% {
+    transform: scale(1.2);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.testimonial-card.active .star:nth-child(1) {
+  animation-delay: 0.2s;
+}
+
+.testimonial-card.active .star:nth-child(2) {
+  animation-delay: 0.3s;
+}
+
+.testimonial-card.active .star:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+.testimonial-card.active .star:nth-child(4) {
+  animation-delay: 0.5s;
+}
+
+.testimonial-card.active .star:nth-child(5) {
+  animation-delay: 0.6s;
+}
+
+/* Responsive design */
+@media (max-width: 992px) {
+  .testimonial-carousel {
+    max-width: 90%;
+  }
+}
+
+@media (max-width: 768px) {
+  .section-title {
+    font-size: 2rem;
+  }
+  
+  .testimonial-quote {
+    font-size: 1.1rem;
+  }
+  
+  .carousel-arrow {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .prev-arrow {
+    left: -15px;
+  }
+  
+  .next-arrow {
+    right: -15px;
+  }
+}
+
+@media (max-width: 576px) {
+  .testimonial-card {
+    padding: 1.5rem;
+  }
+  
+  .author-avatar {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .carousel-arrow {
+    width: 35px;
+    height: 35px;
+  }
+  
+  .prev-arrow {
+    left: -10px;
+  }
+  
+  .next-arrow {
+    right: -10px;
+  }
+}
+
+/* Animation de glissement pour le changement de témoignage */
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOut {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+}
+
+/* Animation pour l'avatar */
+.testimonial-card.active .author-avatar {
+  animation: bounceIn 0.8s ease forwards;
+  animation-delay: 0.4s;
+  opacity: 0;
+}
+
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
