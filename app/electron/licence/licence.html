@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activation de licence</title>
+    <link rel="stylesheet" href="licence.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="licence-content">
+            <h1>Activation de votre licence</h1>
+            <div class="description">
+                <p>Veuillez entrer votre clé de licence pour activer toutes les fonctionnalités de l'application.</p>
+                <p>Si vous n'avez pas encore de licence, vous pouvez utiliser la version d'essai avec des fonctionnalités limitées.</p>
+            </div>
+            
+            <div class="licence-form">
+                <div class="input-group">
+                    <label for="licence-key">Clé de licence</label>
+                    <input type="text" id="licence-key" placeholder="XXXX-XXXX-XXXX-XXXX" maxlength="19">
+                </div>
+                
+                <div class="action-buttons">
+                    <button id="activate-button" class="primary-button">Activer</button>
+                    <button id="trial-button" class="secondary-button">Version d'essai</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Attendre que le DOM soit chargé
+        document.addEventListener('DOMContentLoaded', () => {
+            // Récupérer les références aux éléments
+            const licenceKeyInput = document.getElementById('licence-key');
+            const activateButton = document.getElementById('activate-button');
+            const trialButton = document.getElementById('trial-button');
+
+            // Formater automatiquement la clé de licence (ajouter des tirets)
+            licenceKeyInput.addEventListener('input', (e) => {
+                let value = e.target.value.replace(/-/g, ''); // Supprimer les tirets existants
+                let formattedValue = '';
+                
+                for (let i = 0; i < value.length; i++) {
+                    if (i > 0 && i % 4 === 0 && formattedValue.length < 19) {
+                        formattedValue += '-';
+                    }
+                    formattedValue += value[i];
+                }
+                
+                e.target.value = formattedValue;
+            });
+
+            // Ajouter les écouteurs d'événements pour les boutons
+            if (activateButton) {
+                activateButton.addEventListener('click', () => {
+                    const licenceKey = licenceKeyInput.value.trim();
+                    if (licenceKey) {
+                        // Envoyer la clé au processus principal pour vérification
+                        window.api.send('verify-licence', licenceKey);
+                    } else {
+                        alert('Veuillez entrer une clé de licence valide.');
+                    }
+                });
+            }
+
+            if (trialButton) {
+                trialButton.addEventListener('click', () => {
+                    // Ouvrir le popup de la version d'essai
+                    window.api.send('open-trial-popup');
+                });
+            }
+
+            // Écouter les réponses du processus principal
+            window.api.receive('licence-valid', () => {
+                // Passer à l'écran principal de l'application
+                window.api.send('navigate-to-main');
+            });
+
+            window.api.receive('licence-invalid', (message) => {
+                alert(message || 'Clé de licence invalide. Veuillez réessayer.');
+            });
+        });
+    </script>
+</body>
+
+</html>

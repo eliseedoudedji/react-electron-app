@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bienvenue</title>
+    <link rel="stylesheet" href="welcome.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="titlebar">
+            <div class="titlebar-drag-region"></div>
+            <div class="window-controls">
+                <button id="minimize-button" class="window-control minimize">‒</button>
+                <button id="close-button" class="window-control close">×</button>
+            </div>
+        </div>
+        <div class="welcome-content">
+            <div class="logo">
+                <img src="light.svg" alt="Logo" width="60" height="60" class="logo-image">
+            </div>
+            <h1>TalismanPro</h1>
+            <div class="description">
+                <p>Simplifiez votre comptabilité d'entreprise dès maintenant. Merci de nous contacter si vous avez
+                    besoin d'aide.</p>
+            </div>
+            <div class="action-buttons">
+                <button id="login-button" class="primary-button">Se connecter</button>
+            </div>
+        </div>
+        <div class="footer">
+            <span class="text-link-default">Vous n'avez pas de compte ?</span>
+            <a href="#" id="create-account-button" class="text-link">Créer un compte</a>
+        </div>
+    </div>
+
+    <script>
+        // Attendre que le DOM soit chargé
+        document.addEventListener('DOMContentLoaded', () => {
+            // Récupérer les références aux boutons
+            const loginButton = document.getElementById('login-button');
+            const createAccountButton = document.getElementById('create-account-button');
+            const minimizeButton = document.getElementById('minimize-button');
+            const closeButton = document.getElementById('close-button');
+
+            // Ajouter les écouteurs d'événements pour les boutons
+            if (loginButton) {
+                loginButton.addEventListener('click', () => {
+                    // Passer directement à l'écran de licence sans ouvrir le navigateur
+                    window.api.send('navigate-to-licence');
+                });
+            }
+
+            if (createAccountButton) {
+                createAccountButton.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    // Utiliser l'API exposée par preload pour ouvrir le navigateur
+                    window.api.openExternalLink('https://talismanpo.vercel.app/#/startweb');
+                });
+            }
+
+            // Écouter l'événement de redirection après connexion
+            window.api.receive('auth-success', () => {
+                // Passer à l'écran de licence
+                window.api.send('navigate-to-licence');
+            });
+
+            // Ajouter les écouteurs d'événements pour les boutons de contrôle de fenêtre
+            if (minimizeButton) {
+                minimizeButton.addEventListener('click', () => {
+                    window.api.send('minimize-window');
+                });
+            }
+
+            if (closeButton) {
+                closeButton.addEventListener('click', () => {
+                    window.api.send('close-window');
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

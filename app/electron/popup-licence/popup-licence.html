@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Version d'essai</title>
+    <link rel="stylesheet" href="popup-licence.css">
+</head>
+
+<body>
+    <div class="popup-container">
+        <div class="popup-header">
+            <h2>Version d'essai - Limitations</h2>
+            <button id="close-button" class="close-button">&times;</button>
+        </div>
+        
+        <div class="popup-content">
+            <div class="info-section">
+                <h3>La version d'essai inclut :</h3>
+                <ul>
+                    <li>Accès limité à 10 projets maximum</li>
+                    <li>Fonctionnalités de base uniquement</li>
+                    <li>Limite de stockage de 500 MB</li>
+                    <li>Pas d'accès aux fonctionnalités avancées</li>
+                    <li>Durée limitée à 30 jours</li>
+                </ul>
+            </div>
+            
+            <div class="info-section">
+                <h3>La version Pro débloque :</h3>
+                <ul>
+                    <li>Projets et tâches illimités</li>
+                    <li>Toutes les fonctionnalités avancées</li>
+                    <li>Stockage illimité</li>
+                    <li>Support prioritaire</li>
+                    <li>Mises à jour gratuites à vie</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="popup-footer">
+            <button id="continue-trial-button" class="secondary-button">Continuer avec la version d'essai</button>
+            <button id="upgrade-button" class="primary-button">Passer à la version Pro</button>
+        </div>
+    </div>
+
+    <script>
+        // Attendre que le DOM soit chargé
+        document.addEventListener('DOMContentLoaded', () => {
+            // Récupérer les références aux boutons
+            const closeButton = document.getElementById('close-button');
+            const continueTrialButton = document.getElementById('continue-trial-button');
+            const upgradeButton = document.getElementById('upgrade-button');
+
+            // Ajouter les écouteurs d'événements pour les boutons
+            if (closeButton) {
+                closeButton.addEventListener('click', () => {
+                    // Fermer la fenêtre popup
+                    window.api.send('close-popup');
+                });
+            }
+
+            if (continueTrialButton) {
+                continueTrialButton.addEventListener('click', () => {
+                    // Passer à l'écran principal de l'application en mode essai
+                    window.api.send('use-trial-version');
+                });
+            }
+
+            if (upgradeButton) {
+                upgradeButton.addEventListener('click', () => {
+                    // Ouvrir le site web pour acheter une licence
+                    window.api.openExternalLink('https://votre-site-de-vente.com/pricing');
+                    // Fermer le popup et rester sur l'écran de licence
+                    window.api.send('close-popup');
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TalismanPro - Onboarding</title>
+    <link rel="stylesheet" href="onboarding.css">
+</head>
+
+<body>
+    <div class="container">
+        <!-- Barre de titre commune -->
+        <div class="titlebar">
+            <div class="titlebar-drag-region"></div>
+            <div class="window-controls">
+                <button id="fullscreen-button" class="window-control fullscreen">⛶</button>
+                <button id="minimize-button" class="window-control minimize">‒</button>
+                <button id="close-button" class="window-control close">×</button>
+            </div>
+        </div>
+
+        <!-- Vue de bienvenue -->
+        <div id="welcome-view" class="view active">
+            <div class="welcome-content">
+                <div class="logo">
+                    <img src="welcome/light.svg" alt="Logo" width="60" height="60" class="logo-image">
+                </div>
+                <h1>TalismanPro</h1>
+                <div class="description">
+                    <p>Simplifiez votre comptabilité d'entreprise dès maintenant. Merci de nous contacter si vous avez
+                        besoin d'aide.</p>
+                </div>
+                <div class="action-buttons">
+                    <button id="login-button" class="primary-button">Se connecter</button>
+                </div>
+            </div>
+            <div class="footer">
+                <span class="text-link-default">Vous n'avez pas de compte ?</span>
+                <a href="#" id="create-account-button" class="text-link">Créer un compte</a>
+            </div>
+        </div>
+
+        <!-- Vue de licence -->
+        <div id="licence-view" class="view">
+            <div class="licence-content">
+                <h1>Activation de votre licence</h1>
+                <div class="description">
+                    <p>Veuillez entrer votre clé de licence pour activer toutes les fonctionnalités de l'application.
+                    </p>
+                </div>
+
+                <div class="licence-steps">
+                    <h3>Comment obtenir une licence</h3>
+                    <ol>
+                        <li>Visitez notre <a href="#" id="visit-website-link" class="inline-link">site web officiel</a>
+                        </li>
+                        <li>Créez un compte ou connectez-vous</li>
+                        <li>Choisissez votre plan d'abonnement</li>
+                        <li>Complétez le paiement sécurisé</li>
+                        <li>Recevez votre clé de licence par email</li>
+                    </ol>
+                    <div class="licence-note">
+                        <p>Vous n'avez pas encore de licence ? Essayez gratuitement pendant 30 jours avec la version
+                            d'essai.</p>
+                    </div>
+                </div>
+
+                <div class="licence-form">
+                    <div class="input-group">
+                        <label for="licence-key">Clé de licence</label>
+                        <input type="text" id="licence-key" placeholder="XXXX-XXXX-XXXX-XXXX" maxlength="19">
+                    </div>
+
+                    <div class="action-buttons">
+                        <button id="activate-button" class="primary-button">Activer</button>
+                        <button id="trial-button" class="secondary-button">Version d'essai</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Popup de licence (version d'essai) -->
+        <div id="popup-licence-view" class="view popup-view">
+            <div class="popup-container">
+                <div class="popup-header">
+                    <h2>Version d'essai - Limitations</h2>
+                    <button id="close-popup-button" class="close-button">&times;</button>
+                </div>
+
+                <div class="popup-content">
+                    <div class="info-section">
+                        <h3>La version d'essai inclut :</h3>
+                        <ul>
+                            <li>Accès limité à 10 projets maximum</li>
+                            <li>Fonctionnalités de base uniquement</li>
+                            <li>Limite de stockage de 500 MB</li>
+                            <li>Pas d'accès aux fonctionnalités avancées</li>
+                            <li>Durée limitée à 30 jours</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-section">
+                        <h3>La version Pro débloque :</h3>
+                        <ul>
+                            <li>Projets et tâches illimités</li>
+                            <li>Toutes les fonctionnalités avancées</li>
+                            <li>Stockage illimité</li>
+                            <li>Support prioritaire</li>
+                            <li>Mises à jour gratuites à vie</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="popup-footer">
+                    <button id="continue-trial-button" class="secondary-button">Continuer avec la version
+                        d'essai</button>
+                    <button id="upgrade-button" class="primary-button">Passer à la version Pro</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Attendre que le DOM soit chargé
+        document.addEventListener('DOMContentLoaded', () => {
+            // Récupérer les références aux boutons et vues
+            const welcomeView = document.getElementById('welcome-view');
+            const licenceView = document.getElementById('licence-view');
+            const popupLicenceView = document.getElementById('popup-licence-view');
+
+            // Boutons de la vue welcome
+            const loginButton = document.getElementById('login-button');
+            const createAccountButton = document.getElementById('create-account-button');
+
+            // Boutons de la vue licence
+            const activateButton = document.getElementById('activate-button');
+            const trialButton = document.getElementById('trial-button');
+
+            // Boutons de la vue popup-licence
+            const closePopupButton = document.getElementById('close-popup-button');
+            const continueTrialButton = document.getElementById('continue-trial-button');
+            const upgradeButton = document.getElementById('upgrade-button');
+
+            // Boutons de contrôle de fenêtre
+            const fullscreenButton = document.getElementById('fullscreen-button');
+            const minimizeButton = document.getElementById('minimize-button');
+            const closeButton = document.getElementById('close-button');
+
+            // Fonction pour changer de vue
+            function showView(viewToShow) {
+                // Cacher toutes les vues
+                welcomeView.classList.remove('active');
+                licenceView.classList.remove('active');
+                popupLicenceView.classList.remove('active');
+
+                // Afficher la vue demandée
+                viewToShow.classList.add('active');
+            }
+
+            // Ajouter les écouteurs d'événements pour les boutons
+            if (loginButton) {
+                loginButton.addEventListener('click', () => {
+                    // Passer à l'écran de licence
+                    showView(licenceView);
+                    window.api.send('view-changed', 'licence');
+                });
+            }
+
+            if (createAccountButton) {
+                createAccountButton.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    // Utiliser l'API exposée par preload pour ouvrir le navigateur
+                    window.api.openExternalLink('http://localhost:5173/#/signup');
+                });
+            }
+
+            if (activateButton) {
+                activateButton.addEventListener('click', () => {
+                    const licenceKey = document.getElementById('licence-key').value.trim();
+                    if (licenceKey) {
+                        // Envoyer la clé au processus principal pour vérification
+                        window.api.send('verify-licence', licenceKey);
+                    } else {
+                        alert('Veuillez entrer une clé de licence valide.');
+                    }
+                });
+            }
+
+            if (trialButton) {
+                trialButton.addEventListener('click', () => {
+                    // Afficher le popup de la version d'essai
+                    showView(popupLicenceView);
+                    window.api.send('view-changed', 'popup-licence');
+                });
+            }
+
+            if (closePopupButton) {
+                closePopupButton.addEventListener('click', () => {
+                    // Revenir à l'écran de licence
+                    showView(licenceView);
+                    window.api.send('view-changed', 'licence');
+                });
+            }
+
+            if (continueTrialButton) {
+                continueTrialButton.addEventListener('click', () => {
+                    // Passer à l'écran principal en mode essai
+                    window.api.send('use-trial-version');
+                });
+            }
+
+            if (upgradeButton) {
+                upgradeButton.addEventListener('click', () => {
+                    // Ouvrir le site web pour acheter une licence
+                    window.api.openExternalLink('https://talismanpo.vercel.app/#/startweb');
+                    // Revenir à l'écran de licence
+                    showView(licenceView);
+                    window.api.send('view-changed', 'licence');
+                });
+            }
+
+            // Ajouter les écouteurs d'événements pour les boutons de contrôle de fenêtre
+            if (fullscreenButton) {
+                fullscreenButton.addEventListener('click', () => {
+                    window.api.send('toggle-fullscreen');
+                });
+            }
+
+            if (minimizeButton) {
+                minimizeButton.addEventListener('click', () => {
+                    window.api.send('minimize-window');
+                });
+            }
+
+            if (closeButton) {
+                closeButton.addEventListener('click', () => {
+                    window.api.send('close-window');
+                });
+            }
+
+            // Lien pour visiter le site web
+            const visitWebsiteLink = document.getElementById('visit-website-link');
+            if (visitWebsiteLink) {
+                visitWebsiteLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    window.api.openExternalLink('https://talismanpo.vercel.app/#/startweb');
+                });
+            }
+
+            // Écouter les réponses du processus principal
+            window.api.receive('licence-valid', () => {
+                // Passer à l'écran principal de l'application
+                window.api.send('navigate-to-main');
+            });
+
+            window.api.receive('licence-invalid', (message) => {
+                alert(message || 'Clé de licence invalide. Veuillez réessayer.');
+            });
+        });
+    </script>
+</body>
+
+</html>
