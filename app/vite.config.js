@@ -21,5 +21,7 @@ export default defineConfig({
       '@': resolve(__dirname, 'src'),
       '@assets': resolve(__dirname, 'src/assets')
     }
-  }
+  },
+  // Traiter les fichiers .lottie comme des assets statiques
+  assetsInclude: ['**/*.lottie', '**/*.part']
 })

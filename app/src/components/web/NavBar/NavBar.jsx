@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 const NavBar = () => {
   return (
-    <nav className="navbar navbar-expand-lg  bg-white bg-opacity-75 backdrop-blur-md">
+    <nav className="navbar navbar-expand-lg   bg-opacity-75 backdrop-blur-md">
       <div className="container-fluid">
         <Link className="navbar-brand" to="/">
           <img src={light} width={50} height={50} alt="light-logo" className="d-inline-block align-text-top" />

@@ -74,7 +74,7 @@ function createWindow() {
     // En développement, connectez-vous au serveur de développement Vite
     startUrl = process.env.ELECTRON_START_URL || 'http://localhost:5173';
     // Ouvrir les DevTools
-    mainWindow.webContents.openDevTools();
+    // mainWindow.webContents.openDevTools();
   } else {
     // Modification du chemin pour la production
     const distPath = path.join(__dirname, '..', 'dist', 'index.html');
@@ -300,6 +300,7 @@ ipcMain.on('use-trial-version', () => {
     onboardingWindow.hide();
   }
   if (mainWindow) {
+    mainWindow.maximize();
     mainWindow.show();
   }
 });
