@@ -136,7 +136,7 @@ const SignUpPage = () => {
                 <p className="text-muted small text-center">
                     En vous inscrivant, vous acceptez les <a href="#">Termes d'utilisation</a> et la <a href="#">Politique de confidentialité</a> de TalismanPro.
                 </p>
-                <button className="btn btn-primary w-100 mb-3">S'inscrire</button>
+                <Link to='/pricing' className="btn btn-primary w-100 mb-3"> S'inscrire</Link>
                 <div className="text-center">
                     <Link to='/login' className="small"> Se connecter</Link>
                 </div>

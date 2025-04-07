@@ -1,11 +1,7 @@
 import React, { useState } from 'react'
 
 // Import logo images
-import desktopLogo from '../../pages/mainpages/assets/images/brand-logos/desktop-logo.png'
-import toggleLogo from '../../pages/mainpages/assets/images/brand-logos/toggle-logo.png'
-import desktopWhite from '../../pages/mainpages/assets/images/brand-logos/desktop-white.png'
-import toggleDark from '../../pages/mainpages/assets/images/brand-logos/toggle-dark.png'
-import toggleWhite from '../../pages/mainpages/assets/images/brand-logos/toggle-white.png'
+import light from "@assets/light.svg";
 
 export default function AppSidebar() {
     // État pour gérer les menus déroulants
@@ -24,32 +20,34 @@ export default function AppSidebar() {
             <div className="main-sidebar-header">
                 <a href="index.html" className="header-logo">
                     <img
-                        src={desktopLogo}
+                        src={light}
                         alt="logo"
                         className="desktop-logo"
+                        width={50}
+                        height={50}
                     />
                     <img
-                        src={toggleLogo}
+                        src={light}
                         alt="logo"
                         className="toggle-logo"
                     />
                     <img
-                        src={desktopWhite}
+                        src={light}
                         alt="logo"
                         className="desktop-dark"
                     />
                     <img
-                        src={toggleDark}
+                        src={light}
                         alt="logo"
                         className="toggle-dark"
                     />
                     <img
-                        src={desktopWhite}
+                        src={light}
                         alt="logo"
                         className="desktop-white"
                     />
                     <img
-                        src={toggleWhite}
+                        src={light}
                         alt="logo"
                         className="toggle-white"
                     />

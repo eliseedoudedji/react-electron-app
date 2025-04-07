@@ -14,7 +14,7 @@ export default function Home() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowPopup(true);
-    }, 1000);
+    }, 200);
     return () => clearTimeout(timer);
   }, []);
 
@@ -24,10 +24,10 @@ export default function Home() {
   return (
     <div>
       {showPopup && isElectron && <QuickstartPopup onClose={handleClose} />}
-      <Header />
-      <AppSidebar />
+   
+     
       <AppContent />
-      <Switcher />
+      
     </div>
   )
 }
