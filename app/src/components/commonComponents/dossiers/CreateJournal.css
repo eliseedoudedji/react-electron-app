@@ -1,0 +1,15 @@
+
+
+/* Assure-toi que le contenu du modal est au-dessus du backdrop */
+.modal-dialog {
+    z-index: 1051;
+    margin: 1.75rem auto;
+    pointer-events: auto;
+}
+
+/* Assure-toi que le contenu du modal est visible et interactif */
+.modal-content {
+    position: relative;
+    background-color: #fff;
+    pointer-events: auto;
+}

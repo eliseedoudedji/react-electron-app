@@ -1,19 +1,36 @@
 import React, { useState } from 'react'
 import { Link } from "react-router-dom";
+import CreateJournalModal from '../dossiers/CreateJournal';
 
 
 export default function ExercicesTable() {
+    // État pour contrôler l'affichage du modal et stocker l'élément sélectionné
+    const [showModal, setShowModal] = useState(false);
+    const [selectedRow, setSelectedRow] = useState(null);
+
+    // Lorsque l'utilisateur clique sur une ligne, on enregistre l'élément et on affiche le modal
+    const handleRowClick = () => {
+        setSelectedRow();
+        setShowModal(true);
+    };
+
+    // Fermer le modal
+    const closeModal = () => {
+        setShowModal(false);
+        setSelectedRow(null);
+    };
 
     return (
         <>
+            {showModal && <CreateJournalModal show={showModal} onClose={closeModal} />}
+
+
             {/* Start::app-content */}
-            <div className="main-content app-content">
+            <div className="" style={{ zIndex: 1000 }}>
                 <div className="p-3 header-secondary row">
                     <div className="col">
-                        <div className="d-flex">
-                            <a className="btn btn-danger d-flex" href="javascript:void(0);">
-                                <i className="fe fe-rotate-cw me-2 mt-1" /> Upgrade{" "}
-                            </a>
+                        <div className="d-flex justify-content-between">
+                            <h6>Dossier en cours : CR004</h6>
                         </div>
                     </div>
                     <div className="col col-auto">
@@ -23,10 +40,13 @@ export default function ExercicesTable() {
                                 href="javascript:void(0);"
                             >
                                 <i className="fe fe-help-circle me-1 mt-1" />
-                                Support
+                                Assistant
                             </a>
-                            <a className="btn btn-success me-0" href="javascript:void(0);">
-                                <i className="fe fe-plus me-1 mt-1" /> Add New
+                            <a
+                                onClick={() => handleRowClick()}
+                                className="btn btn-success me-0"
+                            >
+                                <i className="fe fe-plus me-1 mt-1" /> Nouvel journal
                             </a>
                         </div>
                     </div>
@@ -35,876 +55,46 @@ export default function ExercicesTable() {
                     {/* page-header */}
                     {/* Page Header */}
                     <div className="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
-                        <div className="">
-                            <div className="">
-                                <nav>
-                                    <ol className="breadcrumb mb-1 mb-md-0">
-                                        <li className="breadcrumb-item">
-                                            <a href="javascript:void(0);">Index</a>
-                                        </li>
-                                        <li className="breadcrumb-item active" aria-current="page">
-                                            {" "}
-                                            Dashboard-3
-                                        </li>
-                                    </ol>
-                                </nav>
-                            </div>
-                        </div>
-                        <div className="ms-auto pageheader-btn">
+                        <div>
                             <nav>
-                                <div className="breadcrumb mb-0">
-                                    <div className="d-flex">
-                                        <div className="input-group me-2">
-                                            <div className="input-group-text text-muted bg-primary text-fixed-white me-0 border-0 pe-0">
-                                                {" "}
-                                                <i className="ri-calendar-line mt-1" />{" "}
-                                            </div>
-                                            <input
-                                                type="text"
-                                                className="form-control flatpickr-input bg-primary text-fixed-white border-0 ps-2"
-                                                id="daterange"
-                                                placeholder="Events Settings"
-                                            />
-                                        </div>
-                                        <a
-                                            href="javascript:void(0);"
-                                            className="btn btn-secondary text-fixed-white"
-                                            data-bs-toggle="tooltip"
-                                            title=""
-                                            data-placement="bottom"
-                                            data-original-title="Rating"
-                                        >
-                                            <span>
-                                                <i className="fe fe-star" />
-                                            </span>
-                                        </a>
-                                    </div>
-                                </div>
+                                <ol className="breadcrumb mb-1 mb-md-0">
+                                    <li className="breadcrumb-item">
+                                        <a href="javascript:void(0);">CR004</a>
+                                    </li>
+                                    <li className="breadcrumb-item active" aria-current="page">
+                                        liste des journaux
+                                    </li>
+                                </ol>
                             </nav>
                         </div>
-                    </div>
-                    {/* Page Header Close */}
-                    {/* End page-header */}
-                    {/* ROW-1 */}
-                    <div className="row">
-                        <div className="col-sm-12 col-md-6 col-lg-6 col-xxl-3">
-                            <div className="card custom-card">
-                                <div className="card-header justify-content-between">
-                                    <div>
-                                        <div className="card-title">Projects</div>
-                                    </div>
-                                    <div className="card-options">
-                                        <div className="form-check form-check-md form-switch">
-                                            <input
-                                                className="form-check-input"
-                                                type="checkbox"
-                                                role="switch"
-                                                id="flexSwitchCheckCheckedp"
-                                                defaultChecked=""
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="p-3">
-                                    <div className="d-flex">
-                                        <div>
-                                            <h6 className="text-muted">Total Projects</h6>
-                                            <h3 className="text-dark count mt-0 font-30 mb-0">3,456</h3>
-                                        </div>
-                                        <span className="ms-auto" id="total-projects" />
-                                    </div>
-                                </div>
-                                <div className="card-footer">
-                                    <span className="text-start">
-                                        <i className="fe fe-arrow-up  text-success me-1" /> 24 Uploads
+
+                        <div className="ms-md-4 mt-3 mt-md-0 flex-grow-1">
+                            <div className="d-flex">
+                                <div className="input-group w-100" style={{ border: '1px solid #ccc', borderRadius: '6px', overflow: 'hidden' }}>
+                                    <span className="input-group-text bg-white border-0">
+                                        <i className="fas fa-calendar-alt text-dark" />
                                     </span>
-                                    <span className="float-end">
-                                        <i className="fe fe-arrow-down  text-danger me-1" /> 05 Pendings
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-sm-12 col-md-6 col-lg-6 col-xxl-3">
-                            <div className="card custom-card">
-                                <div className="card-header justify-content-between">
-                                    <div>
-                                        <div className="card-title">Employess</div>
-                                    </div>
-                                    <div className="card-options">
-                                        <div className="form-check form-check-md form-switch">
-                                            <input
-                                                className="form-check-input"
-                                                type="checkbox"
-                                                role="switch"
-                                                id="flexSwitchCheckChecked"
-                                                defaultChecked=""
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="p-3">
-                                    <div className="d-flex">
-                                        <div>
-                                            <h6 className="text-muted">Total Employess</h6>
-                                            <h3 className="text-dark count mt-0 font-30 mb-0">4,738</h3>
-                                        </div>
-                                        <span className="ms-auto" id="total-employee" />
-                                    </div>
-                                </div>
-                                <div className="card-footer">
-                                    <span className="text-start">
-                                        <i className="fe fe-user  text-success me-1" /> 42 Male
-                                    </span>
-                                    <span className="float-end">
-                                        <i className="fe fe-user  text-danger me-1" /> 35 Female
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-sm-12 col-md-6 col-lg-6 col-xxl-3">
-                            <div className="card custom-card">
-                                <div className="card-header justify-content-between">
-                                    <div>
-                                        <div className="card-title">Task</div>
-                                    </div>
-                                    <div className="card-options">
-                                        <div className="form-check form-check-md form-switch">
-                                            <input
-                                                className="form-check-input"
-                                                type="checkbox"
-                                                role="switch"
-                                                id="flexSwitchCheckChecked1"
-                                                defaultChecked=""
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="p-3">
-                                    <div className="d-flex">
-                                        <div>
-                                            <h6 className="text-muted">Total Tasks</h6>
-                                            <h3 className="text-dark count mt-0 font-30 mb-0">6,738</h3>
-                                        </div>
-                                        <span className="ms-auto" id="total-tasks" />
-                                    </div>
-                                </div>
-                                <div className="card-footer">
-                                    <span className="text-start">
-                                        <i className="fe fe-corner-left-up  text-success me-1" /> 08
-                                        Active
-                                    </span>
-                                    <span className="float-end">
-                                        <i className="fe fe-corner-left-down  text-danger me-1" /> 01
-                                        Inactive
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-sm-12 col-md-6 col-lg-6 col-xxl-3">
-                            <div className="card custom-card">
-                                <div className="card-header justify-content-between">
-                                    <div>
-                                        <div className="card-title">Earnings</div>
-                                    </div>
-                                    <div className="card-options">
-                                        <div className="form-check form-check-md form-switch">
-                                            <input
-                                                className="form-check-input"
-                                                type="checkbox"
-                                                role="switch"
-                                                id="flexSwitchCheckCheckede"
-                                                defaultChecked=""
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="p-3">
-                                    <div className="d-flex">
-                                        <div>
-                                            <h6 className="text-muted">Total Earnings</h6>
-                                            <h3 className="text-dark count mt-0 font-30 mb-0">$18,963</h3>
-                                        </div>
-                                        <span className="ms-auto" id="total-earnings" />
-                                    </div>
-                                </div>
-                                <div className="card-footer">
-                                    <span className="text-start">
-                                        <i className="fe fe-dollar-sign  text-success me-1" /> 22%
-                                        Profits
-                                    </span>
-                                    <span className="float-end">
-                                        <i className="fe fe-trending-down  text-danger me-1" /> 5% Loss
-                                    </span>
+                                    <input
+                                        type="text"
+                                        className="form-control border-0 ps-2"
+                                        id="daterange"
+                                        placeholder="Recherche rapide : Choisir une date"
+                                        style={{ outline: 'none' }}
+                                    />
                                 </div>
                             </div>
                         </div>
                     </div>
-                    {/* ROW-1 END */}
-                    {/* ROW-2 START */}
-                    <div className="row">
-                        <div className="col-sm-12 col-lg-12 col-xl-7 col-xxl-8">
-                            <div className="card custom-card">
-                                <div className="card-header justify-content-between">
-                                    <div>
-                                        <div className="card-title">Project Report</div>
-                                    </div>
-                                </div>
-                                <div className="card-body">
-                                    <div className="row py-1">
-                                        <div className="col-3 d-flex align-items-center justify-content-center flex-wrap">
-                                            <p className="text-muted mb-0 me-2">
-                                                <span className="legend bg-primary br-7" />
-                                                Products
-                                            </p>
-                                            <span className="badge bg-danger-transparent">
-                                                <i className="bx bx-trending-down me-1" />
-                                                5%
-                                            </span>
-                                        </div>
-                                        <div className="col-3 d-flex align-items-center justify-content-center flex-wrap">
-                                            <p className="text-muted mb-0 me-2">
-                                                <span className="legend bg-secondary br-7" />
-                                                Sales Month
-                                            </p>
-                                            <span className="badge bg-success-transparent">
-                                                <i className="bx bx-trending-up me-1" />
-                                                22%
-                                            </span>
-                                        </div>
-                                        <div className="col-3 d-flex align-items-center justify-content-center flex-wrap">
-                                            <p className="text-muted mb-0 me-2">
-                                                <span className="legend bg-success br-7" />
-                                                Cost
-                                            </p>
-                                            <span className="badge bg-success-transparent">
-                                                <i className="bx bx-trending-up me-1" />
-                                                33%
-                                            </span>
-                                        </div>
-                                        <div className="col-3 d-flex align-items-center justify-content-center flex-wrap">
-                                            <p className="text-muted mb-0 me-2">
-                                                <span className="legend bg-danger br-7" />
-                                                Revenue
-                                            </p>
-                                            <span className="badge bg-danger-transparent">
-                                                <i className="bx bx-trending-down me-1" />
-                                                13%
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div id="salesOverview" />
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-xxl-4 col-xl-5 col-lg-6">
-                            <div className="card custom-card">
-                                <div className="card-header">
-                                    <div className="card-title">Activity</div>
-                                    <div className="dropdown ms-auto dropdown-menu-end">
-                                        <button
-                                            aria-expanded="false"
-                                            aria-haspopup="true"
-                                            className="btn ripple btn-sm btn-outline-light"
-                                            data-bs-toggle="dropdown"
-                                            id="dropdownMenuButton7"
-                                            type="button"
-                                        >
-                                            View All
-                                            <i className="fa fa-caret-down ms-1" />
-                                        </button>
-                                        <div className="dropdown-menu tx-12">
-                                            <a className="dropdown-item" href="javascript:void(0);">
-                                                Weekly
-                                            </a>
-                                            <a className="dropdown-item" href="javascript:void(0);">
-                                                Monthly
-                                            </a>
-                                            <a className="dropdown-item" href="javascript:void(0);">
-                                                Annually
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="card-body">
-                                    <div className="mb-3">
-                                        <div className="list-group-item d-flex p-0 align-items-center border-0">
-                                            <div className="d-flex">
-                                                <a href="javascript:void(0);">
-                                                    <img
-                                                        className="media-object avatar avatar-md me-3 avatar-rounded"
-                                                        alt="64x64"
-                                                        src="../assets/images/faces/14.jpg"
-                                                    />
-                                                </a>
-                                                <div className="mt-1">
-                                                    <h6 className="mb-1 fs-14">
-                                                        James Paig
-                                                        <span className="fw-normal text-muted">
-                                                            Updated
-                                                        </span>{" "}
-                                                        New project
-                                                    </h6>
-                                                    <span className="clearfix" />
-                                                    <span className="fs-12 text-muted">20 mins ago </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="mb-3">
-                                        <div className="list-group-item d-flex p-0 align-items-center border-0">
-                                            <div className="d-flex">
-                                                <a href="javascript:void(0);">
-                                                    <img
-                                                        className="media-object avatar avatar-md me-3 avatar-rounded"
-                                                        alt="64x64"
-                                                        src="../assets/images/faces/8.jpg"
-                                                    />
-                                                </a>
-                                                <div className="mt-1">
-                                                    <h6 className="mb-1 fs-14">
-                                                        Faith Harrits
-                                                        <span className="fw-normal text-muted">
-                                                            Completed Project
-                                                        </span>
-                                                        Ui Development
-                                                    </h6>
-                                                    <span className="clearfix" />
-                                                    <span className="fs-12 text-muted">Just Now</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="mb-3">
-                                        <div className="list-group-item d-flex p-0 align-items-center border-0">
-                                            <div className="d-flex">
-                                                <a href="javascript:void(0);">
-                                                    <img
-                                                        className="media-object avatar avatar-md me-3 avatar-rounded"
-                                                        alt="64x64"
-                                                        src="../assets/images/faces/7.jpg"
-                                                    />
-                                                </a>
-                                                <div className="mt-1">
-                                                    <h6 className="mb-1 fs-14">
-                                                        Liam Mille
-                                                        <span className="fw-normal text-muted">
-                                                            Attached design file in a project
-                                                        </span>
-                                                    </h6>
-                                                    <span className="clearfix" />
-                                                    <span className="fs-12 text-muted">1 day ago</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="mb-3">
-                                        <div className="list-group-item d-flex p-0 align-items-center border-0">
-                                            <div className="d-flex">
-                                                <a href="javascript:void(0);">
-                                                    <img
-                                                        className="media-object avatar avatar-md me-3 avatar-rounded"
-                                                        alt="64x64"
-                                                        src="../assets/images/faces/5.jpg"
-                                                    />
-                                                </a>
-                                                <div className="mt-1">
-                                                    <h6 className="mb-1 fs-14">
-                                                        Kimberly Berry
-                                                        <span className="fw-normal text-muted">
-                                                            Completed Project
-                                                        </span>
-                                                        Ui Development
-                                                    </h6>
-                                                    <span className="clearfix" />
-                                                    <span className="fs-12 text-muted">Just Now</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="mb-3">
-                                        <div className="list-group-item d-flex p-0 align-items-center border-0">
-                                            <div className="d-flex">
-                                                <a href="javascript:void(0);">
-                                                    <img
-                                                        className="media-object avatar avatar-md me-3 avatar-rounded"
-                                                        alt="64x64"
-                                                        src="../assets/images/faces/11.jpg"
-                                                    />
-                                                </a>
-                                                <div className="mt-1">
-                                                    <h6 className="mb-1 fs-14">
-                                                        Andi Harrits
-                                                        <span className="fw-normal text-muted">
-                                                            html upload New file to server
-                                                        </span>
-                                                    </h6>
-                                                    <span className="clearfix" />
-                                                    <span className="fs-12 text-muted">1 day ago</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="mb-0">
-                                        <div className="list-group-item d-flex p-0 align-items-center border-0">
-                                            <div className="d-flex">
-                                                <a href="javascript:void(0);">
-                                                    <img
-                                                        className="media-object avatar avatar-md me-3 avatar-rounded"
-                                                        alt="64x64"
-                                                        src="../assets/images/faces/10.jpg"
-                                                    />
-                                                </a>
-                                                <div className="mt-1">
-                                                    <h6 className="mb-1 fs-14">
-                                                        Forum Arri
-                                                        <span className="fw-normal text-muted">
-                                                            Theme Design And Styles Updated
-                                                        </span>
-                                                    </h6>
-                                                    <span className="clearfix" />
-                                                    <span className="fs-12 text-muted">2 Days ago</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-xl-4 col-lg-6">
-                            <div className="card custom-card">
-                                <div className="card-header">
-                                    <div className="card-title">Milestones</div>
-                                    <div className="dropdown ms-auto dropdown-menu-end">
-                                        <button
-                                            aria-expanded="false"
-                                            aria-haspopup="true"
-                                            className="btn ripple btn-sm btn-outline-light"
-                                            data-bs-toggle="dropdown"
-                                            id="dropdownMenuButton8"
-                                            type="button"
-                                        >
-                                            View All
-                                            <i className="fa fa-caret-down ms-1" />
-                                        </button>
-                                        <div className="dropdown-menu tx-12">
-                                            <a className="dropdown-item" href="javascript:void(0);">
-                                                Weekly
-                                            </a>
-                                            <a className="dropdown-item" href="javascript:void(0);">
-                                                Monthly
-                                            </a>
-                                            <a className="dropdown-item" href="javascript:void(0);">
-                                                Annually
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="card-body">
-                                    <div className="mb-3">
-                                        <div className="d-flex align-items-center">
-                                            <div className="avatar avatar-md rounded-circle bg-success-transparent text-success me-3">
-                                                <i className="fe fe-airplay fs-14" />
-                                            </div>
-                                            <div className="mt-1">
-                                                <h6 className="mb-1 font-weight-semibold fs-14">
-                                                    Ui Update
-                                                </h6>
-                                                <span className="clearfix" />
-                                                <span className="fs-14 text-muted">
-                                                    <span className="font-weight-semibold">Deadline:</span> To
-                                                    Day 2:30 Pm
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="mb-3">
-                                        <div className="d-flex">
-                                            <div className="avatar avatar-md rounded-circle bg-orange-transparent text-orange me-3">
-                                                <i className="fe fe-file" />
-                                            </div>
-                                            <div className="mt-1">
-                                                <h6 className="mb-1 font-weight-semibold fs-14">
-                                                    Psd Template
-                                                </h6>
-                                                <span className="clearfix" />
-                                                <span className="fs-14 text-muted">
-                                                    <span className="font-weight-semibold">Deadline:</span>{" "}
-                                                    Tomorrow 11:00 Am
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="mb-3">
-                                        <div className="d-flex">
-                                            <div className="avatar avatar-md rounded-circle bg-info-transparent text-info me-3">
-                                                <i className="fe fe-trending-up" />
-                                            </div>
-                                            <div className="mt-1">
-                                                <h6 className="mb-1 font-weight-semibold fs-14">
-                                                    Version Update
-                                                </h6>
-                                                <span className="clearfix" />
-                                                <span className="fs-14 text-muted">
-                                                    <span className="font-weight-semibold">Deadline:</span> 1
-                                                    Week To Left
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="mb-3">
-                                        <div className="d-flex">
-                                            <div className="avatar avatar-md rounded-circle bg-primary-transparent text-primary me-3">
-                                                <i className="fe fe-smartphone" />
-                                            </div>
-                                            <div className="mt-1">
-                                                <h6 className="mb-1 font-weight-semibold fs-14">
-                                                    Mobile App
-                                                </h6>
-                                                <span className="clearfix" />
-                                                <span className="fs-14 text-muted">
-                                                    <span className="font-weight-semibold">Deadline:</span> 3
-                                                    days To Left
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="mb-0">
-                                        <div className="d-flex">
-                                            <div className="avatar avatar-md rounded-circle bg-danger-transparent text-danger me-3">
-                                                <i className="fe fe-trending-down" />
-                                            </div>
-                                            <div className="mt-1">
-                                                <h6 className="mb-1 font-weight-semibold fs-14">
-                                                    Androide Update
-                                                </h6>
-                                                <span className="clearfix" />
-                                                <span className="fs-14 text-muted">
-                                                    <span className="font-weight-semibold">Deadline:</span> 3
-                                                    days To Left
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-xl-4 col-lg-6">
-                            <div className="card custom-card">
-                                <div className="card-header">
-                                    <div className="card-title">Tasks</div>
-                                    <div className="dropdown ms-auto dropdown-menu-end">
-                                        <button
-                                            aria-expanded="false"
-                                            aria-haspopup="true"
-                                            className="btn ripple btn-sm btn-outline-light"
-                                            data-bs-toggle="dropdown"
-                                            id="dropdownMenuButton9"
-                                            type="button"
-                                        >
-                                            View All
-                                            <i className="fa fa-caret-down ms-1" />
-                                        </button>
-                                        <div className="dropdown-menu tx-12">
-                                            <a className="dropdown-item" href="javascript:void(0);">
-                                                Weekly
-                                            </a>
-                                            <a className="dropdown-item" href="javascript:void(0);">
-                                                Monthly
-                                            </a>
-                                            <a className="dropdown-item" href="javascript:void(0);">
-                                                Annually
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="card-body">
-                                    <ul className="list-group list-item-spacing1">
-                                        <li className="list-group-item px-0 pt-0 d-sm-flex align-items-center border-0">
-                                            <img
-                                                className="avatar avatar-lg avatar-rounded me-1 my-auto"
-                                                src="../assets/images/faces/11.jpg"
-                                                alt="Image description"
-                                            />
-                                            <div className="ms-sm-3 flex-grow-1">
-                                                <h6 className="fw-senibold mb-0 mt-1 fs-14">
-                                                    Nathaniel Bustos
-                                                </h6>
-                                                <span className="text-muted">Manager</span>
-                                                <a href="" className="text-primary tx-13">
-                                                    Reply
-                                                </a>
-                                            </div>
-                                            <span className="badge bg-primary">pending</span>
-                                        </li>
-                                        <li className="list-group-item px-0  d-sm-flex align-items-center border-0">
-                                            <img
-                                                className="avatar avatar-lg avatar-rounded me-1 my-auto"
-                                                src="../assets/images/faces/1.jpg"
-                                                alt="Image description"
-                                            />
-                                            <div className="ms-sm-3 flex-grow-1">
-                                                <h6 className="fw-senibold mb-0 mt-1 fs-14">
-                                                    Latanya Kinard
-                                                </h6>
-                                                <span className="text-muted">Web Designer</span>
-                                                <a href="" className="text-primary tx-13">
-                                                    Reply
-                                                </a>
-                                            </div>
-                                            <span className="badge bg-secondary">Completed</span>
-                                        </li>
-                                        <li className="list-group-item px-0 d-sm-flex align-items-center border-0">
-                                            <img
-                                                className="avatar avatar-lg avatar-rounded me-1 my-auto"
-                                                src="../assets/images/faces/2.jpg"
-                                                alt="Image description"
-                                            />
-                                            <div className="ms-sm-3 flex-grow-1">
-                                                <h6 className="fw-senibold mb-0 mt-1 fs-14">
-                                                    George Lujan
-                                                </h6>
-                                                <span className="text-muted">Founder</span>
-                                                <a href="" className="text-primary tx-13">
-                                                    Reply
-                                                </a>
-                                            </div>
-                                            <span className="badge bg-success">Completed</span>
-                                        </li>
-                                        <li className="list-group-item px-0  d-sm-flex align-items-center border-0">
-                                            <img
-                                                className="avatar avatar-lg avatar-rounded me-1 my-auto"
-                                                src="../assets/images/faces/3.jpg"
-                                                alt="Image description"
-                                            />
-                                            <div className="ms-sm-3 flex-grow-1">
-                                                <h6 className="fw-senibold mb-0 mt-1 fs-14">
-                                                    Lujan arijan
-                                                </h6>
-                                                <span className="text-muted">Founder</span>
-                                                <a href="" className="text-primary tx-13">
-                                                    Reply
-                                                </a>
-                                            </div>
-                                            <span className="badge bg-info">pending</span>
-                                        </li>
-                                        <li className="list-group-item px-0 pb-0 d-sm-flex align-items-center border-0">
-                                            <img
-                                                className="avatar avatar-lg avatar-rounded me-1 my-auto"
-                                                src="../assets/images/faces/4.jpg"
-                                                alt="Image description"
-                                            />
-                                            <div className="ms-sm-3 flex-grow-1">
-                                                <h6 className="fw-senibold mb-0 mt-1 fs-14">
-                                                    Varinel arijan
-                                                </h6>
-                                                <span className="text-muted">Sales Manager</span>
-                                                <a href="" className="text-primary tx-13">
-                                                    Reply
-                                                </a>
-                                            </div>
-                                            <span className="badge bg-success">completed</span>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-xl-4 col-lg-6">
-                            <div className="card custom-card">
-                                <div className="card-header">
-                                    <div className="card-title">Upcoming Updates</div>
-                                    <div className="dropdown ms-auto dropdown-menu-end">
-                                        <button
-                                            aria-expanded="false"
-                                            aria-haspopup="true"
-                                            className="btn ripple btn-sm btn-outline-light"
-                                            data-bs-toggle="dropdown"
-                                            id="dropdownMenuButton10"
-                                            type="button"
-                                        >
-                                            View All
-                                            <i className="fa fa-caret-down ms-1" />
-                                        </button>
-                                        <div className="dropdown-menu tx-12">
-                                            <a className="dropdown-item" href="javascript:void(0);">
-                                                Weekly
-                                            </a>
-                                            <a className="dropdown-item" href="javascript:void(0);">
-                                                Monthly
-                                            </a>
-                                            <a className="dropdown-item" href="javascript:void(0);">
-                                                Annually
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="card-body py-4">
-                                    <div className="mb-4">
-                                        <div className="d-sm-flex justify-content-between flex-wrap">
-                                            <div className="d-flex">
-                                                <div className="avatar rounded-circle bg-primary-transparent me-2">
-                                                    <i className="bi bi-people fs-16" />
-                                                </div>
-                                                <div className="">
-                                                    <h5 className="mb-1 mb-0 fs-14 font-weight-semibold">
-                                                        Meeting with client
-                                                    </h5>
-                                                    <span className="text-muted">video conference</span>
-                                                </div>
-                                            </div>
-                                            <div className="d-flex justify-content-between">
-                                                <div className="min-w-fit-content font-weight-semibold d-inline-flex">
-                                                    <span className="text-muted">
-                                                        <i className="fe fe-clock d-inline-block me-1 tx-13" />
-                                                        09:00
-                                                    </span>
-                                                    <span className="mx-2">To</span>
-                                                    <span className="text-muted">
-                                                        <i className="fe fe-clock d-inline-block me-1 tx-13" />
-                                                        12:00
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="mb-4">
-                                        <div className="d-sm-flex justify-content-between flex-wrap">
-                                            <div className="d-flex">
-                                                <div className="avatar rounded-circle bg-secondary-transparent me-2">
-                                                    <i className="bi bi-gift  fs-16" />
-                                                </div>
-                                                <div className="">
-                                                    <h5 className="mb-1 mb-0 fs-14 font-weight-semibold">
-                                                        Jack's Birthday
-                                                    </h5>
-                                                    <span className="text-muted">Down Town</span>
-                                                </div>
-                                            </div>
-                                            <div className="d-flex justify-content-between">
-                                                <div className="min-w-fit-content font-weight-semibold d-inline-flex">
-                                                    <span className="text-muted">
-                                                        <i className="fe fe-clock d-inline-block me-1 tx-13" />
-                                                        08:00
-                                                    </span>
-                                                    <span className="mx-2">To</span>
-                                                    <span className="text-muted">
-                                                        <i className="fe fe-clock d-inline-block me-1 tx-13" />
-                                                        12:00
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="mb-4">
-                                        <div className="d-sm-flex justify-content-between flex-wrap">
-                                            <div className="d-flex">
-                                                <div className="avatar rounded-circle bg-orange-transparent me-2">
-                                                    <i className="bi bi-camera-video  fs-16" />
-                                                </div>
-                                                <div className="">
-                                                    <h5 className="mb-1 mb-0 fs-14 font-weight-semibold">
-                                                        Video Conference
-                                                    </h5>
-                                                    <span className="text-muted">Labore nonumy eos</span>
-                                                </div>
-                                            </div>
-                                            <div className="d-flex justify-content-between">
-                                                <div className="min-w-fit-content font-weight-semibold d-inline-flex">
-                                                    <span className="text-muted">
-                                                        <i className="fe fe-clock d-inline-block me-1 tx-13" />
-                                                        12:00
-                                                    </span>
-                                                    <span className="mx-2">To</span>
-                                                    <span className="text-muted">
-                                                        <i className="fe fe-clock d-inline-block me-1 tx-13" />
-                                                        10:00
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="mb-4">
-                                        <div className="d-sm-flex justify-content-between flex-wrap">
-                                            <div className="d-flex">
-                                                <div className="avatar rounded-circle bg-info-transparent me-2">
-                                                    <i className="bi bi-calendar  fs-16" />
-                                                </div>
-                                                <div className="">
-                                                    <h5 className="mb-1 mb-0 fs-14 font-weight-semibold">
-                                                        Appointment With Client
-                                                    </h5>
-                                                    <span className="text-muted">video conference</span>
-                                                </div>
-                                            </div>
-                                            <div className="d-flex justify-content-between">
-                                                <div className="min-w-fit-content font-weight-semibold d-inline-flex">
-                                                    <span className="text-muted">
-                                                        <i className="fe fe-clock d-inline-block me-1 tx-13" />
-                                                        12:00
-                                                    </span>
-                                                    <span className="mx-2">To</span>
-                                                    <span className="text-muted">
-                                                        <i className="fe fe-clock d-inline-block me-1 tx-13" />
-                                                        10:00
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="mb-0">
-                                        <div className="d-sm-flex justify-content-between flex-wrap">
-                                            <div className="d-flex">
-                                                <div className="avatar rounded-circle bg-warning-transparent me-2">
-                                                    <i className="bi bi-megaphone  fs-16" />
-                                                </div>
-                                                <div className="">
-                                                    <h5 className="mb-1 mb-0 fs-14 font-weight-semibold">
-                                                        Important Announcements
-                                                    </h5>
-                                                    <span className="text-muted">Golden Park</span>
-                                                </div>
-                                            </div>
-                                            <div className="d-flex justify-content-between">
-                                                <div className="min-w-fit-content font-weight-semibold d-inline-flex">
-                                                    <span className="text-muted">
-                                                        <i className="fe fe-clock d-inline-block me-1 tx-13" />
-                                                        12:00
-                                                    </span>
-                                                    <span className="mx-2">To</span>
-                                                    <span className="text-muted">
-                                                        <i className="fe fe-clock d-inline-block me-1 tx-13" />
-                                                        10:00
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    {/* ROW-2 END */}
-                    {/* ROW-3  Start*/}
+
+
                     <div className="row">
                         <div className="col-xl-12">
                             <div className="card custom-card">
-                                <div className="card-header justify-content-between">
-                                    <div className="card-title">Product Summary</div>
-                                    <div className="btn-group btn-sm">
-                                        <button type="button" className="btn btn-light btn-sm">
-                                            <span className="">Today</span>
-                                        </button>
-                                        <button type="button" className="btn btn-light btn-sm">
-                                            <span className="">Month</span>
-                                        </button>
-                                        <button type="button" className="btn btn-light btn-sm">
-                                            <span className="">Year</span>
-                                        </button>
-                                    </div>
-                                </div>
+
                                 <div className="card-body">
                                     <div className="d-sm-flex mb-4 justify-content-between">
                                         <div>
-                                            <span className="">Show</span>
+                                            <span className="">Nombre de ligne par page </span>
                                             <div className="btn-group">
                                                 <button
                                                     type="button"
@@ -932,230 +122,132 @@ export default function ExercicesTable() {
                                                     </li>
                                                 </ul>
                                             </div>
-                                            <span className="">Entries</span>
                                         </div>
                                         <div className="d-flex gap-2 mt-1 mt-sm-0">
-                                            <div>
-                                                <input
-                                                    className="form-control form-control-sm"
-                                                    type="text"
-                                                    placeholder="Search Here"
-                                                    aria-label=".form-control-sm example"
-                                                />
-                                            </div>
-                                            <div className="dropdown">
+                                            <div className="">
                                                 <a
                                                     href="javascript:void(0);"
-                                                    className="btn btn-primary btn-sm btn-wave waves-effect waves-light"
-                                                    data-bs-toggle="dropdown"
-                                                    aria-expanded="false"
+                                                    className="btn btn-danger btn-sm btn-wave waves-effect waves-light"
                                                 >
-                                                    Sort By
-                                                    <i className="ri-arrow-down-s-line align-middle ms-1 d-inline-block" />
+                                                    Exporter vers PDF
                                                 </a>
-                                                <ul className="dropdown-menu" role="menu">
-                                                    <li>
-                                                        <a className="dropdown-item" href="javascript:void(0);">
-                                                            New
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a className="dropdown-item" href="javascript:void(0);">
-                                                            Popular
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a className="dropdown-item" href="javascript:void(0);">
-                                                            Relevant
-                                                        </a>
-                                                    </li>
-                                                </ul>
+
+                                            </div>
+                                            <div className="">
+                                                <a
+                                                    href="javascript:void(0);"
+                                                    className="btn btn-success btn-sm btn-wave waves-effect waves-light"
+                                                >
+                                                    Exporter vers Excel
+                                                </a>
+
                                             </div>
                                         </div>
                                     </div>
                                     <div className="table-responsive">
-                                        <table
-                                            className="table table-bordered text-nowrap mb-0"
-                                            id="projectSummary"
-                                        >
+                                        <table className="table table-bordered text-nowrap mb-0" id="journalTable">
                                             <thead>
                                                 <tr>
-                                                    <th className="wd-5p tx-center fw-bold">S.No.</th>
-                                                    <th className="wd-25p fw-bold">Title</th>
-                                                    <th className="text-center fw-bold">Progress</th>
-                                                    <th className="text-center fw-bold">Status</th>
-                                                    <th className="fw-bold">Start Date</th>
-                                                    <th className="fw-bold">End Date</th>
+                                                    <th className="wd-5p text-center fw-bold">No.</th>
+                                                    <th className="wd-20p fw-bold">Intitulé</th>
+                                                    <th className="fw-bold text-center">Notes</th>
+                                                    <th className="text-center fw-bold">Nombre de pièces</th>
+                                                    <th className="fw-bold text-end">Débit</th>
+                                                    <th className="fw-bold text-end">Crédit</th>
+                                                    <th className="fw-bold text-center">Dernière pièce</th>
+                                                    <th className="fw-bold text-center">Clôture</th>
+                                                    <th className="fw-bold text-center">Actions</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <tr>
-                                                    <td className="tx-center">1</td>
-                                                    <td>
-                                                        <span className="tx-14">Home Page</span>
-                                                    </td>
-                                                    <td>
-                                                        <div className="text-center">
-                                                            <span className="btn btn-outline-primary btn-sm">
-                                                                76%
-                                                            </span>
-                                                        </div>
+                                                    <td className="text-center">1</td>
+                                                    <td>Journal des ventes</td>
+                                                    <td className="text-center">Mensuel</td>
+                                                    <td className="text-center">12</td>
+                                                    <td className="text-end">12 450,00 €</td>
+                                                    <td className="text-end">12 450,00 €</td>
+                                                    <td className="text-center">05/04/2025</td>
+                                                    <td className="text-center">
+                                                        <span className="badge bg-success-transparent text-success">Oui</span>
                                                     </td>
                                                     <td className="text-center">
-                                                        <span className="badge badge-sm rounded-pill bg-info-transparent text-info">
-                                                            in progress
-                                                        </span>
+                                                        <button className="btn btn-sm btn-primary me-1"><i className="fas fa-eye" /></button>
+                                                        <button className="btn btn-sm btn-secondary"><i className="fas fa-edit" /></button>
                                                     </td>
-                                                    <td>14-04-2022</td>
-                                                    <td>20-07-2022</td>
                                                 </tr>
+
                                                 <tr>
-                                                    <td className="tx-center">2</td>
-                                                    <td>
-                                                        <span className="tx-14">Landing Design</span>
-                                                    </td>
-                                                    <td>
-                                                        <div className="text-center">
-                                                            <span className="btn btn-outline-warning btn-sm">
-                                                                76%
-                                                            </span>
-                                                        </div>
+                                                    <td className="text-center">2</td>
+                                                    <td>Journal des achats</td>
+                                                    <td className="text-center">Trimestriel</td>
+                                                    <td className="text-center">8</td>
+                                                    <td className="text-end">5 900,00 €</td>
+                                                    <td className="text-end">5 900,00 €</td>
+                                                    <td className="text-center">03/04/2025</td>
+                                                    <td className="text-center">
+                                                        <span className="badge bg-danger-transparent text-danger">Non</span>
                                                     </td>
                                                     <td className="text-center">
-                                                        <span className="badge badge-sm rounded-pill bg-info-transparent text-info">
-                                                            in progress
-                                                        </span>
+                                                        <button className="btn btn-sm btn-primary me-1"><i className="fas fa-eye" /></button>
+                                                        <button className="btn btn-sm btn-secondary"><i className="fas fa-edit" /></button>
                                                     </td>
-                                                    <td>20-04-2022</td>
-                                                    <td>15-08-2022</td>
                                                 </tr>
+
                                                 <tr>
-                                                    <td className="tx-center">3</td>
-                                                    <td>
-                                                        <span className="tx-14">New Template Design</span>
-                                                    </td>
-                                                    <td>
-                                                        <div className="text-center">
-                                                            <span className="btn btn-outline-info btn-sm">
-                                                                96%
-                                                            </span>
-                                                        </div>
+                                                    <td className="text-center">3</td>
+                                                    <td>Journal de caisse</td>
+                                                    <td className="text-center">Caisse principale</td>
+                                                    <td className="text-center">15</td>
+                                                    <td className="text-end">3 100,00 €</td>
+                                                    <td className="text-end">3 100,00 €</td>
+                                                    <td className="text-center">06/04/2025</td>
+                                                    <td className="text-center">
+                                                        <span className="badge bg-success-transparent text-success">Oui</span>
                                                     </td>
                                                     <td className="text-center">
-                                                        <span className="badge badge-sm rounded-pill bg-danger-transparent text-danger">
-                                                            pending
-                                                        </span>
+                                                        <button className="btn btn-sm btn-primary me-1"><i className="fas fa-eye" /></button>
+                                                        <button className="btn btn-sm btn-secondary"><i className="fas fa-edit" /></button>
                                                     </td>
-                                                    <td>29-05-2022</td>
-                                                    <td>20-09-2022</td>
                                                 </tr>
+
                                                 <tr>
-                                                    <td className="tx-center">4</td>
-                                                    <td>
-                                                        <span className="tx-14">
-                                                            HR Management Template Design
-                                                        </span>
-                                                    </td>
-                                                    <td>
-                                                        <div className="text-center">
-                                                            <span className="btn btn-outline-success btn-sm">
-                                                                76%
-                                                            </span>
-                                                        </div>
+                                                    <td className="text-center">4</td>
+                                                    <td>Journal de banque</td>
+                                                    <td className="text-center">Opérations bancaires</td>
+                                                    <td className="text-center">22</td>
+                                                    <td className="text-end">8 780,00 €</td>
+                                                    <td className="text-end">8 780,00 €</td>
+                                                    <td className="text-center">04/04/2025</td>
+                                                    <td className="text-center">
+                                                        <span className="badge bg-danger-transparent text-danger">Non</span>
                                                     </td>
                                                     <td className="text-center">
-                                                        <span className="badge badge-sm rounded-pill bg-info-transparent text-info">
-                                                            in progress
-                                                        </span>
+                                                        <button className="btn btn-sm btn-primary me-1"><i className="fas fa-eye" /></button>
+                                                        <button className="btn btn-sm btn-secondary"><i className="fas fa-edit" /></button>
                                                     </td>
-                                                    <td>18-04-2022</td>
-                                                    <td>14-09-2022</td>
                                                 </tr>
+
                                                 <tr>
-                                                    <td className="tx-center">5</td>
-                                                    <td>
-                                                        <span className="tx-14">Designing New Template</span>
-                                                    </td>
-                                                    <td>
-                                                        <div className="text-center">
-                                                            <span className="btn btn-outline-primary btn-sm">
-                                                                53%
-                                                            </span>
-                                                        </div>
+                                                    <td className="text-center">5</td>
+                                                    <td>Journal des opérations diverses</td>
+                                                    <td className="text-center">OD salaires / régul</td>
+                                                    <td className="text-center">10</td>
+                                                    <td className="text-end">2 500,00 €</td>
+                                                    <td className="text-end">2 500,00 €</td>
+                                                    <td className="text-center">02/04/2025</td>
+                                                    <td className="text-center">
+                                                        <span className="badge bg-success-transparent text-success">Oui</span>
                                                     </td>
                                                     <td className="text-center">
-                                                        <span className="badge badge-sm rounded-pill bg-success-transparent text-success">
-                                                            completed
-                                                        </span>
+                                                        <button className="btn btn-sm btn-primary me-1"><i className="fas fa-eye" /></button>
+                                                        <button className="btn btn-sm btn-secondary"><i className="fas fa-edit" /></button>
                                                     </td>
-                                                    <td>11-04-2022</td>
-                                                    <td>10-07-2022</td>
-                                                </tr>
-                                                <tr>
-                                                    <td className="tx-center">6</td>
-                                                    <td>
-                                                        <span className="tx-14">Documentation Project</span>
-                                                    </td>
-                                                    <td>
-                                                        <div className="text-center">
-                                                            <span className="btn btn-outline-danger btn-sm text-dsnger">
-                                                                96%
-                                                            </span>
-                                                        </div>
-                                                    </td>
-                                                    <td className="text-center">
-                                                        <span className="badge badge-sm rounded-pill bg-info-transparent text-info">
-                                                            in progress
-                                                        </span>
-                                                    </td>
-                                                    <td>18-04-2022</td>
-                                                    <td>12-10-2022</td>
-                                                </tr>
-                                                <tr>
-                                                    <td className="tx-center">7</td>
-                                                    <td>
-                                                        <span className="tx-14">Developing Backend</span>
-                                                    </td>
-                                                    <td>
-                                                        <div className="text-center">
-                                                            <span className="btn btn-outline-info btn-sm">
-                                                                49%
-                                                            </span>
-                                                        </div>
-                                                    </td>
-                                                    <td className="text-center">
-                                                        <span className="badge badge-sm rounded-pill bg-success-transparent text-success">
-                                                            completed
-                                                        </span>
-                                                    </td>
-                                                    <td>12-04-2022</td>
-                                                    <td>17-10-2022</td>
-                                                </tr>
-                                                <tr>
-                                                    <td className="tx-center">8</td>
-                                                    <td>
-                                                        <span className="tx-14">
-                                                            Multipurpose Dashboard Template
-                                                        </span>
-                                                    </td>
-                                                    <td>
-                                                        <div className="text-center">
-                                                            <span className="btn btn-outline-success btn-sm text-seccess">
-                                                                82%
-                                                            </span>
-                                                        </div>
-                                                    </td>
-                                                    <td className="text-center">
-                                                        <span className="badge badge-sm rounded-pill bg-danger-transparent text-danger">
-                                                            pending
-                                                        </span>
-                                                    </td>
-                                                    <td>16-05-2022</td>
-                                                    <td>27-10-2022</td>
                                                 </tr>
                                             </tbody>
                                         </table>
                                     </div>
+
                                 </div>
                                 <div className="card-footer">
                                     <div className="d-flex align-items-center">
