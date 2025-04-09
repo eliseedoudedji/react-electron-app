@@ -1,40 +1,91 @@
-import React from "react";
+import React, { useState } from "react";
 import { FaEnvelope, FaLock } from "react-icons/fa";
+import { useNavigate, Link } from "react-router-dom";
 import light from "@assets/light.svg";
-import { Link } from "react-router-dom";
+
 const LoginPage = () => {
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
+    const navigate = useNavigate();
+
+    const handleLogin = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        setError("");
+
+        try {
+            const response = await fetch("https://talisman-pro-apis.onrender.com/api/v1/auth/login/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ email, password }),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message || "Erreur de connexion");
+            }
+
+            // Stocke le token ou utilisateur
+            localStorage.setItem("token", data.access);
+            // Redirige vers le dashboard
+            navigate("/dashboard");
+
+        } catch (err) {
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return (
         <div className="d-flex justify-content-center align-items-center vh-100 bg-light">
             <div className="card shadow-sm p-4" style={{ width: "400px", borderRadius: "12px" }}>
                 <div className="text-center mb-3">
                     <img src={light} alt="TalismanPro" width={75} />
                 </div>
-                <p className="text-center text-muted small">
-                    ESPACE DE CONNEXION
-                </p>
-                <div className="mb-3">
-                    <div className="input-group">
-                        <span className="input-group-text bg-white">
-                            <FaEnvelope className="text-muted" />
-                        </span>
-                        <input type="text" className="form-control" placeholder="Adresse email" />
+                <p className="text-center text-muted small">ESPACE DE CONNEXION</p>
+                {error && <div className="alert alert-danger">{error}</div>}
+
+                <form onSubmit={handleLogin}>
+                    <div className="mb-3">
+                        <div className="input-group">
+                            <span className="input-group-text bg-white"><FaEnvelope className="text-muted" /></span>
+                            <input
+                                type="email"
+                                className="form-control"
+                                placeholder="Adresse email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                required
+                            />
+                        </div>
                     </div>
-                </div>
-                <div className="mb-3">
-                    <div className="input-group">
-                        <span className="input-group-text bg-white">
-                            <FaLock className="text-muted" />
-                        </span>
-                        <input type="password" className="form-control" placeholder="Mot de passe" />
-                        <span className="input-group-text bg-white">
-                            <i className="bi bi-eye"></i>
-                        </span>
+                    <div className="mb-3">
+                        <div className="input-group">
+                            <span className="input-group-text bg-white"><FaLock className="text-muted" /></span>
+                            <input
+                                type="password"
+                                className="form-control"
+                                placeholder="Mot de passe"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                            />
+                        </div>
                     </div>
-                </div>
-                <p className="text-muted small text-center">
-                    En vous inscrivant ou en vous connectant, vous acceptez les <Link to="/terms" className="small">Termes d'utilisation</Link> et la <Link to="/privacy" className="small">Politique de confidentialité</Link> de TalismanPro.
-                </p>
-                <Link to="/dashboard" className="btn btn-primary w-100 mb-3">Se connecter</Link>
+                    <p className="text-muted small text-center">
+                        En vous inscrivant ou en vous connectant, vous acceptez les <Link to="/terms">Termes</Link> et la <Link to="/privacy">Confidentialité</Link>.
+                    </p>
+                    <button type="submit" className="btn btn-primary w-100 mb-3" disabled={loading}>
+                        {loading ? "Connexion..." : "Se connecter"}
+                    </button>
+                </form>
+
                 <div className="d-flex justify-content-between">
                     <Link to="/forgot-password" className="small">Mot de passe oublié?</Link>
                     <Link to="/signup" className="small">S'inscrire</Link>
