@@ -32,11 +32,14 @@ function createWindow() {
   splash = new BrowserWindow({
     width: 600,
     height: 400,
-    transparent: true,
+    transparent: false,
     frame: false,
     alwaysOnTop: true,
     center: true,
-    skipTaskbar: true,
+    resizable: false,
+    autoHideMenuBar: true, // Masquer la barre de menu
+
+
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
@@ -59,6 +62,10 @@ function createWindow() {
     width: 800,
     height: 600,
     show: false, // Ne pas afficher immédiatement
+    center: true,
+    resizable: false,
+    frame: false, // Fenêtre sans cadre pour une apparence desktop native
+    transparent: false,
     autoHideMenuBar: true, // Masquer la barre de menu
     webPreferences: {
       nodeIntegration: false,

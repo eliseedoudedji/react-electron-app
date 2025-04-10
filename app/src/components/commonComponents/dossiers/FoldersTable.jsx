@@ -63,10 +63,10 @@ export default function FoldersTable() {
                                 <thead>
                                     <tr>
                                         <th className="wd-5p tx-center fw-bold">Code</th>
-                                        <th className="wd-25p fw-bold">Reference</th>
+                                        <th className="wd-25p fw-bold">Référentiel</th>
                                         <th className="text-center fw-bold">Société</th>
                                         <th className="text-center fw-bold">Dossiers/société</th>
-                                        <th className="text-center fw-bold">Périodes</th>
+                                        <th className="text-center fw-bold">Exercice</th>
                                         <th className="fw-bold">Sessions</th>
                                         <th className="fw-bold">Mode</th>
                                         <th className="fw-bold">Dernière modification</th>

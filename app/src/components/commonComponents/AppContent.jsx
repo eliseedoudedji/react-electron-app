@@ -149,7 +149,7 @@ export default function AppContent() {
                                         <thead>
                                             <tr>
                                                 <th className="wd-5p tx-center fw-bold">Numéro</th>
-                                                <th className="wd-25p fw-bold">References</th>
+                                                <th className="wd-25p fw-bold">Référentiel</th>
                                                 <th className="text-center fw-bold">Société</th>
                                                 <th className="text-center fw-bold">Dossiers/société</th>
                                                 <th className="fw-bold">Mode</th>
@@ -261,10 +261,10 @@ export default function AppContent() {
                         tabIndex="-1"
                         style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
                     >
-                        <div className="modal-dialog modal-lg" style={{ maxWidth: '800px', width: '90%' }}>
+                        <div className="modal-dialog" style={{ minHeight: '100%', minWidth: '90vw', justifyContent: 'center' }}>
                             <div className="modal-content">
                                 <div className="modal-header">
-                                    <h5 className="modal-title">Dossiers  de l'entreprise :  {selectedRow}</h5>
+                                    <h5 className="modal-title">Dossier {selectedRow}</h5>
                                     <button type="button" className="btn-close" onClick={closeModal}></button>
                                 </div>
                                 <div className="modal-body">

@@ -20,26 +20,49 @@
             </div>
         </div>
 
-        <!-- Vue de bienvenue -->
+
+
+        <!-- Vue de bienvenue avec formulaire -->
         <div id="welcome-view" class="view active">
             <div class="welcome-content">
                 <div class="logo">
                     <img src="welcome/light.svg" alt="Logo" width="60" height="60" class="logo-image">
                 </div>
-                <h1>TalismanPro</h1>
+
                 <div class="description">
-                    <p>Simplifiez votre comptabilité d'entreprise dès maintenant. Merci de nous contacter si vous avez
-                        besoin d'aide.</p>
+                    <p>Votre solution tout-en-un pour une comptabilité simple, rapide et sécurisée.</p>
+                    <p>Connectez-vous pour démarrer ou créez un compte si vous êtes nouveau.</p>
                 </div>
-                <div class="action-buttons">
-                    <button id="login-button" class="primary-button">Se connecter</button>
-                </div>
+
+                <!-- Formulaire de connexion -->
+
+                <form id="login-form" class="login-form">
+                    <div class="input-group">
+                        <label for="email">Adresse email</label>
+                        <input type="email" id="email" name="email" placeholder="contact@entreprise.com" required />
+                    </div>
+                    <div class="input-group">
+                        <label for="password">Mot de passe</label>
+                        <input type="password" id="password" name="password" placeholder="********" required />
+                    </div>
+                    <div class="action-buttons">
+                        <button type="submit" id="login-button" class="btn primary-button w-100 mb-3">
+                            Se connecter
+                        </button>
+                    </div>
+                </form>
+
+
             </div>
+
+            <!-- Footer -->
             <div class="footer">
-                <span class="text-link-default">Vous n'avez pas de compte ?</span>
+                <span class="text-link-default">Pas encore inscrit ?</span>
                 <a href="#" id="create-account-button" class="text-link">Créer un compte</a>
             </div>
         </div>
+
+
 
         <!-- Vue de licence -->
         <div id="licence-view" class="view">
@@ -131,6 +154,7 @@
 
             // Boutons de la vue welcome
             const loginButton = document.getElementById('login-button');
+            const loginForm = document.getElementById('login-form');
             const createAccountButton = document.getElementById('create-account-button');
 
             // Boutons de la vue licence
@@ -147,31 +171,73 @@
             const minimizeButton = document.getElementById('minimize-button');
             const closeButton = document.getElementById('close-button');
 
+
             // Fonction pour changer de vue
-            function showView(viewToShow) {
+            function showView(viewId) {
                 // Cacher toutes les vues
                 welcomeView.classList.remove('active');
                 licenceView.classList.remove('active');
                 popupLicenceView.classList.remove('active');
 
-                // Afficher la vue demandée
-                viewToShow.classList.add('active');
+                // Récupérer la vue à afficher
+                const viewToShow = document.getElementById(viewId);
+                if (viewToShow) {
+                    viewToShow.classList.add('active');
+                } else {
+                    console.error('Vue non trouvée :', viewId);
+                }
             }
 
+
+
             // Ajouter les écouteurs d'événements pour les boutons
-            if (loginButton) {
-                loginButton.addEventListener('click', () => {
-                    // Passer à l'écran de licence
-                    showView(licenceView);
-                    window.api.send('view-changed', 'licence');
+            if (loginForm && loginButton) {
+                loginForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+
+                    // Mettre le bouton en mode chargement
+                    loginButton.disabled = true;
+                    loginButton.textContent = "Connexion...";
+
+                    const email = document.getElementById('email').value;
+                    const password = document.getElementById('password').value;
+
+                    try {
+                        const response = await fetch('https://talisman-pro-apis.onrender.com/api/v1/auth/login/', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ email, password })
+                        });
+
+                        if (!response.ok) {
+                            throw new Error('Identifiants incorrects');
+                        }
+
+                        const data = await response.json();
+
+                        localStorage.setItem('token', data.access);
+                        localStorage.setItem('isAuthenticated', 'true');
+
+                        showView('licence-view');
+
+                    } catch (error) {
+                        alert("Échec de la connexion : " + error.message);
+                    } finally {
+                        // Réinitialiser le bouton
+                        loginButton.disabled = false;
+                        loginButton.textContent = "Se connecter";
+                    }
                 });
             }
+
 
             if (createAccountButton) {
                 createAccountButton.addEventListener('click', (e) => {
                     e.preventDefault();
                     // Utiliser l'API exposée par preload pour ouvrir le navigateur
-                    window.api.openExternalLink('http://localhost:5173/#/signup');
+                    window.api.openExternalLink('https://talismanpo.vercel.app/#/signup');
                 });
             }
 
@@ -190,7 +256,7 @@
             if (trialButton) {
                 trialButton.addEventListener('click', () => {
                     // Afficher le popup de la version d'essai
-                    showView(popupLicenceView);
+                    showView('popup-licence-view');
                     window.api.send('view-changed', 'popup-licence');
                 });
             }
@@ -198,7 +264,7 @@
             if (closePopupButton) {
                 closePopupButton.addEventListener('click', () => {
                     // Revenir à l'écran de licence
-                    showView(licenceView);
+                    showView('licence-view');
                     window.api.send('view-changed', 'licence');
                 });
             }
@@ -215,7 +281,7 @@
                     // Ouvrir le site web pour acheter une licence
                     window.api.openExternalLink('https://talismanpo.vercel.app/#/startweb');
                     // Revenir à l'écran de licence
-                    showView(licenceView);
+                    showView('licence-view');
                     window.api.send('view-changed', 'licence');
                 });
             }

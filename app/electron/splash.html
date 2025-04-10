@@ -18,6 +18,7 @@
             color: white;
             overflow: hidden;
             position: relative;
+            user-select: none;
         }
 
         .container {
@@ -33,6 +34,9 @@
             width: 100%;
             max-width: 100%;
             margin-bottom: 30px;
+            user-select: none;
+            pointer-events: none;
+            -webkit-user-drag: none;
         }
 
         .progress-container {
@@ -79,15 +83,14 @@
         const statusText = document.getElementById('status-text');
 
         const loadingSteps = [
-            { progress: 10, text: "Initializing application..." },
-            { progress: 25, text: "Loading resources..." },
-            { progress: 40, text: "Preparing environment..." },
-            { progress: 60, text: "Loading modules..." },
-            { progress: 75, text: "Configuring settings..." },
-            { progress: 90, text: "Almost ready..." },
-            { progress: 100, text: "Starting application..." }
+            { progress: 10, text: "Initialisation de l'application..." },
+            { progress: 25, text: "Chargement des ressources..." },
+            { progress: 40, text: "Préparation de l'environnement..." },
+            { progress: 60, text: "Chargement des modules..." },
+            { progress: 75, text: "Configuration des paramètres..." },
+            { progress: 90, text: "Presque prêt..." },
+            { progress: 100, text: "Démarrage de l'application..." }
         ];
-
         let currentStep = 0;
 
         // Fonction pour mettre à jour la barre de progression
@@ -120,6 +123,21 @@
         // Démarrer la simulation de chargement après un court délai
         setTimeout(updateProgress, 500);
     </script>
+    <script>
+        // Empêche le glissement/déplacement d'images
+        window.addEventListener('dragstart', (e) => {
+            e.preventDefault();
+        });
+
+        window.addEventListener('dragover', (e) => {
+            e.preventDefault();
+        });
+
+        window.addEventListener('drop', (e) => {
+            e.preventDefault();
+        });
+    </script>
+
 </body>
 
 </html>
