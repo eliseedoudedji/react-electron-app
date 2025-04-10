@@ -13,8 +13,7 @@ export const webRoutes = [
   <Route key="signup" path="/signup" element={<SignUpPage />} />,
   <Route key="forgot-password" path="/forgot-password" element={<ForgotPass />} />,
   <Route key="pricing" path="/pricing" element={<PricingPage />} />,
-  <Route key="confirm-mail" path="/confirm-mail" element={<ConfirmMail />} />,
-
+<Route key="confirm-mail" path="/confirm-mail/:id" element={<ConfirmMail />} />,
   ...commonRoutes,
   <Route key="default" path="*" element={<Navigate to="/startweb" />} />
 ]; 

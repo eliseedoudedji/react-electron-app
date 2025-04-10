@@ -1,23 +1,24 @@
 import { useEffect, useState } from "react";
-
+import { useParams } from "react-router-dom";
 export default function EmailConfirmationPage() {
   const [loading, setLoading] = useState(true);
   const [confirmed, setConfirmed] = useState(false);
   const [showModal, setShowModal] = useState(false);
-
+ // Récupérer l'ID à partir de l'URL
+ const { id } = useParams();
   useEffect(() => {
-     // Récupérer l'ID de l'entreprise stocké dans localStorage
-     const companyId = localStorage.getItem('companyId');
-     console.log(companyId);
-     
+
+
+    if (!id) {
+      console.error("ID manquant dans l'URL.");
+      return;
+    }
+
+
+
     
-     if (!companyId) {
-       // Si l'ID n'existe pas, il y a une erreur
-       console.error("Aucun ID d'entreprise trouvé");
-       return;
-     }
     // 🔁 Appel automatique de l’API à l’arrivée sur la page
-    fetch(`https://talisman-pro-apis.onrender.com/api/v1/companies/confirm-company-email/${companyId}/`)
+    fetch(`https://talisman-pro-apis.onrender.com/api/v1/companies/confirm-company-email/${id}/`)
       .then((res) => res.json())
       .then((data) => {
         setConfirmed(true);
