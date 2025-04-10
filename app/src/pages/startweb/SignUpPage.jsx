@@ -1,5 +1,12 @@
 import React, { useState, useRef } from "react";
-import { FaEnvelope, FaUser, FaCloudUploadAlt, FaSortNumericDown, FaAddressBook, FaAddressCard } from "react-icons/fa";
+import {
+    FaEnvelope,
+    FaUser,
+    FaCloudUploadAlt,
+    FaSortNumericDown,
+    FaAddressBook,
+    FaAddressCard,
+} from "react-icons/fa";
 import light from "@assets/light.svg";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -10,7 +17,7 @@ const SignUpPage = () => {
         name: "",
         email: "",
         address: "",
-        contact: "",
+        phone: "",
         ifu: "",
     });
     const [selectedImage, setSelectedImage] = useState(null);
@@ -39,13 +46,21 @@ const SignUpPage = () => {
         form.append("name", formData.name);
         form.append("email", formData.email);
         form.append("address", formData.address);
-        form.append("contact", formData.contact);
+        form.append("phone", formData.phone);
         form.append("ifu", formData.ifu);
+
         if (selectedImage) {
-            form.append("logo", selectedImage);
+            form.append("log_url", selectedImage);
+        } else {
+            setError("Veuillez sélectionner un logo.");
+            setLoading(false);
+            return;
         }
 
         try {
+            for (let [key, value] of form.entries()) {
+                console.log(`${key}:`, value);
+            }
             const response = await fetch("https://talisman-pro-apis.onrender.com/api/v1/companies/create/", {
                 method: "POST",
                 body: form,
@@ -55,13 +70,15 @@ const SignUpPage = () => {
             console.log(data);
 
             if (!response.ok) {
-                throw new Error(data.message || "Erreur lors de l'inscription.");
+                const errorMsg = data.message || "Erreur lors de l'inscription.";
+                setError(errorMsg);
+            } else {
+                // Stocker l'ID de l'entreprise dans localStorage
+                localStorage.setItem('companyId', data.company.id);
+                navigate("/login");
             }
-
-            // Redirection après succès
-            navigate("/pricing");
         } catch (err) {
-            setError(err.message);
+            setError("Une erreur réseau est survenue.");
         } finally {
             setLoading(false);
         }
@@ -79,7 +96,6 @@ const SignUpPage = () => {
 
                 <form onSubmit={handleSubmit}>
                     <div className="row">
-                        {/* Colonne gauche - Image + Nom */}
                         <div className="col-md-5">
                             <div className="mb-4">
                                 <label className="form-label small text-muted">Logo de l'entreprise</label>
@@ -90,7 +106,7 @@ const SignUpPage = () => {
                                         backgroundColor: '#f8f9fa',
                                         minHeight: '180px',
                                         borderStyle: 'dashed',
-                                        borderColor: '#dee2e6'
+                                        borderColor: '#dee2e6',
                                     }}
                                     onClick={() => fileInputRef.current.click()}
                                 >
@@ -148,7 +164,6 @@ const SignUpPage = () => {
                             </div>
                         </div>
 
-                        {/* Colonne droite - Email, adresse, contact, ifu */}
                         <div className="col-md-7">
                             <div className="ps-md-4">
                                 <div className="mb-3">
@@ -182,15 +197,15 @@ const SignUpPage = () => {
                                     </div>
                                 </div>
                                 <div className="mb-3">
-                                    <label className="form-label small text-muted">Contact</label>
+                                    <label className="form-label small text-muted">phone</label>
                                     <div className="input-group">
                                         <span className="input-group-text bg-white"><FaAddressBook /></span>
                                         <input
                                             type="text"
-                                            name="contact"
+                                            name="phone"
                                             className="form-control"
                                             placeholder="Numéro de téléphone"
-                                            value={formData.contact}
+                                            value={formData.phone}
                                             onChange={handleInputChange}
                                             required
                                         />
