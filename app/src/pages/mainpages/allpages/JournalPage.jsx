@@ -8,8 +8,11 @@ export default function DossierPage() {
   const { id } = useParams();
   return (
     <div>
-      <FolderHeader />
-      
+      <div>
+        <FolderHeader />
+        <AppSidebar />
+      </div>
+
       <ExercicesTable />
     </div>
   )

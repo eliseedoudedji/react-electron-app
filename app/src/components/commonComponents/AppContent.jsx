@@ -171,13 +171,13 @@ export default function AppContent() {
                                                         05
                                                     </span>
                                                 </td>
-                                               
+
                                                 <td className="text-center">
                                                     <span className="badge badge-sm rounded-pill bg-info-transparent text-success">
                                                         Active
                                                     </span>
                                                 </td>
-                                                
+
                                                 <td className="text-center">20-04-2022 à 14:30</td>
                                                 <td className="text-center">
                                                     <div className="btn btn-sm" onClick={() => handleRowClick("EPITECH")}>
@@ -198,13 +198,13 @@ export default function AppContent() {
                                                         01
                                                     </span>
                                                 </td>
-                                              
+
                                                 <td className="text-center">
                                                     <span className="badge badge-sm rounded-pill bg-danger-transparent text-danger">
                                                         Accès interdit
                                                     </span>
                                                 </td>
-                                              
+
                                                 <td className="text-center">20-04-2022 à 14:30</td>
                                                 <td className="text-center">
                                                     <div className="btn btn-sm" onClick={() => handleRowClick("Design SA")}>
@@ -263,9 +263,10 @@ export default function AppContent() {
                     >
                         <div className="modal-dialog" style={{ minHeight: '100%', minWidth: '90vw', justifyContent: 'center' }}>
                             <div className="modal-content">
-                                <div className="modal-header">
-                                    <h5 className="modal-title">Dossier {selectedRow}</h5>
-                                    <button type="button" className="btn-close" onClick={closeModal}></button>
+                                <div className="modal-header d-flex justify-content-between">
+                                    <h5 className="modal-title">Societé {selectedRow}</h5>
+                                    <h5 className='me-3'>Référentiel : SYSCOHADA révisé</h5>
+
                                 </div>
                                 <div className="modal-body">
                                     <FoldersTable />
