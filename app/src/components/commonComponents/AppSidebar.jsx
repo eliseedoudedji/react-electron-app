@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
-
+import FolderHeader from './dossiers/header/FolderHeader'
 // Import logo images
 import light from "@assets/light.svg";
 
-export default function AppSidebar() {
+export default function     AppSidebar() {
     // État pour gérer les menus déroulants
     const [openMenus, setOpenMenus] = useState({});
     
@@ -15,46 +15,11 @@ export default function AppSidebar() {
         }));
     };
     return (
+        
         <aside className="app-sidebar sticky" id="sidebar">
-            {/* Start::main-sidebar-header */}
-            <div className="main-sidebar-header">
-                <a href="index.html" className="header-logo">
-                    <img
-                        src={light}
-                        alt="logo"
-                        className="desktop-logo"
-                        width={50}
-                        height={50}
-                    />
-                    <img
-                        src={light}
-                        alt="logo"
-                        className="toggle-logo"
-                    />
-                    <img
-                        src={light}
-                        alt="logo"
-                        className="desktop-dark"
-                    />
-                    <img
-                        src={light}
-                        alt="logo"
-                        className="toggle-dark"
-                    />
-                    <img
-                        src={light}
-                        alt="logo"
-                        className="desktop-white"
-                    />
-                    <img
-                        src={light}
-                        alt="logo"
-                        className="toggle-white"
-                    />
-                </a>
-            </div>
-            {/* End::main-sidebar-header */}
-            {/* Start::main-sidebar */}
+            <FolderHeader />
+           
+         
             <div className="main-sidebar" id="sidebar-scroll">
                 {/* Start::nav */}
                 <nav className="main-menu-container nav nav-pills flex-column sub-open">

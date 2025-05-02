@@ -94,7 +94,7 @@ export default function FolderHeader() {
     const menuStyles = {
         header: {
             borderBottom: "1px solid #ddd",
-            backgroundColor: "#f5f5f5",
+            backgroundColor: "#ffffff",
             padding: "4px 0",
             height: "36px",
             display: "flex",

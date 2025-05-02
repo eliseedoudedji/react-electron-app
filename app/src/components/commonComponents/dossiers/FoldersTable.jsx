@@ -1,3 +1,4 @@
+//popup
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
 
@@ -10,13 +11,11 @@ export default function FoldersTable() {
     };
     // Styles pour l'effet de hover
     const styles = `
-        .hover-row {
-            transition: all 0.2s ease;
-        }
+      
         .hover-row:hover {
-            background-color: #f8f9fa;
-            transform: translateY(-1px);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            background-color:rgb(0, 0, 0);
+          
+           
         }
     `;
 
@@ -62,16 +61,17 @@ export default function FoldersTable() {
                             <table className="table table-bordered text-nowrap mb-0" id="projectSummary">
                                 <thead>
                                     <tr>
-                                        <th className="wd-5p tx-center fw-bold">Code</th>
+                                        <th className="wd-5p tx-center" >Code</th>
                                       
                                       
-                                        <th className="text-center fw-bold">Exercice</th>
-                                        <th className="text-center fw-bold">Dossiers/société</th>
+                                        <th className="text-center" >Exercice</th>
+                                      
 
-                                        <th className="fw-bold">Sessions</th>
-                                        <th className="fw-bold">Mode</th>
-                                        <th className="fw-bold">Dernière modification</th>
-                                        <th className="fw-bold">Dernière sauvegarde</th>
+                                        <th className="text-center">Sessions</th>
+                                        <th className="text-center">Statut</th>
+                                        <th className="text-center">Dernière modification</th>
+                                        <th className="text-center">Dernière sauvegarde</th>
+                                        <th className="text-center">Action</th>
 
                                     </tr>
                                 </thead>
@@ -82,18 +82,10 @@ export default function FoldersTable() {
                                         className="hover-row"
                                     >
                                         <td className="tx-center">CR000-3</td>
-                                        <td>
-                                            <span className="tx-14">SYSCOHADA révisé</span>
-                                        </td>
-                                        <td>
-                                            <div className="text-center">EPITECH</div>
-                                        </td>
-                                        <td className="text-center" >
-                                            <span className="badge badge-sm rounded-pill bg-info-transparent text-info">
-                                                05
-                                            </span>
-                                        </td>
-                                        <td>01-04-2022 à 31-12-2022</td>
+                                       
+                                        
+                                        
+                                        <td className="text-center">01-04-2022 à 31-12-2022</td>
                                         <td className="text-center">3</td>
                                         <td className="text-center">
                                             <span className="badge badge-sm rounded-pill bg-info-transparent text-success">
@@ -101,7 +93,8 @@ export default function FoldersTable() {
                                             </span>
                                         </td>
                                         <td className="text-center">20-04-2022 à 14:30</td>
-                                        <td className="text-center">20-04-2022 à 14:30</td>
+                                        <td className="text-center">20-04-2022 à 14:30</td> 
+                                        <td className="text-center"  style={{ textDecoration: "underline", color: "blue", cursor:"pointer" }}>Ouvrir</td>
 
                                     </tr>
                                     <tr
@@ -110,18 +103,10 @@ export default function FoldersTable() {
                                         className="hover-row"
                                     >
                                         <td className="tx-center">CR000-2</td>
-                                        <td>
-                                            <span className="tx-14">SYSCOHADA révisé</span>
-                                        </td>
-                                        <td>
-                                            <div className="text-center">Design SA</div>
-                                        </td>
-                                        <td className="text-center" >
-                                            <span className="badge badge-sm rounded-pill bg-info-transparent text-info">
-                                                01
-                                            </span>
-                                        </td>
-                                        <td>20-04-2022 à 20-04-2022</td>
+                                       
+                                      
+                                      
+                                        <td className="text-center">20-04-2022 à 20-04-2022</td>
                                         <td className="text-center">2</td>
                                         <td className="text-center">
                                             <span className="badge badge-sm rounded-pill bg-danger-transparent text-danger">
@@ -130,6 +115,8 @@ export default function FoldersTable() {
                                         </td>
                                         <td className="text-center">20-04-2022 à 14:30</td>
                                         <td className="text-center">20-04-2022 à 14:30</td>
+                                        <td className="text-center"  style={{ textDecoration: "underline", color: "blue", cursor:"pointer" }}>Ouvrir</td>
+
 
                                     </tr>
                                 </tbody>

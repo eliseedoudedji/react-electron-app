@@ -92,11 +92,7 @@ const LoginPage = () => {
                     <Link to="/forgot-password" className="small">Mot de passe oublié?</Link>
                     <Link to="/signup" className="small">S'inscrire</Link>
                 </div>
-                <div className="text-center my-3 text-muted">OU</div>
-                <button className="btn btn-light w-100 border d-flex align-items-center justify-content-center">
-                    <i className="bi bi-google me-2 text-danger"></i>
-                    Se connecter avec Google
-                </button>
+               
             </div>
         </div>
     );

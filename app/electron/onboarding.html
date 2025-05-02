@@ -147,6 +147,8 @@
     <script>
         // Attendre que le DOM soit chargé
         document.addEventListener('DOMContentLoaded', () => {
+
+
             // Récupérer les références aux boutons et vues
             const welcomeView = document.getElementById('welcome-view');
             const licenceView = document.getElementById('licence-view');
@@ -188,7 +190,12 @@
                 }
             }
 
-
+            // Rediriger automatiquement vers la vue de licence si l'utilisateur est déjà authentifié
+            if (localStorage.getItem('token') && localStorage.getItem('isAuthenticated') === 'true') {
+                showView('licence-view');
+                window.api.send('view-changed', 'licence');
+               // on arrête ici pour ne pas lancer les autres écouteurs inutiles
+            }
 
             // Ajouter les écouteurs d'événements pour les boutons
             if (loginForm && loginButton) {
