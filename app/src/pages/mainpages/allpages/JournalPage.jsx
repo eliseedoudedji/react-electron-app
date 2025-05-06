@@ -20,12 +20,12 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 export default function DossierPage() {
-  const { id } = useParams();
-  return (
-    <div>
-      <div style={{backgroundColor: "#ffffff", paddingBottom: "10px"}}>
-        <FolderHeader />
-        <div className="d-md-flex d-block align-items-center justify-content-between page-header-breadcrumb" style={{ marginLeft: "40px", marginTop: "10px" }}>
+    const { id } = useParams();
+    return (
+        <div>
+            <div style={{ backgroundColor: "#ffffff", paddingBottom: "10px" }}>
+                <FolderHeader />
+                <div className="d-md-flex d-block align-items-center justify-content-between page-header-breadcrumb" style={{ marginLeft: "40px", marginTop: "10px" }}>
                     <div>
                         <nav>
                             <ol className="breadcrumb mb-1 mb-md-0">
@@ -78,9 +78,9 @@ export default function DossierPage() {
                     </div>
 
                 </div>
-      </div>
+            </div>
 
-      <ExercicesTable />
-    </div>
-  )
+            <ExercicesTable />
+        </div>
+    )
 }
