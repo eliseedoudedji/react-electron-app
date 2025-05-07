@@ -1,146 +1,164 @@
-
-import React, { useState } from 'react'
-
+import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrash, faHome, faFileAlt, faCog, faChartBar, faUsers, faBars, faChevronLeft, faBook, faFolderOpen, faTruck, faUserTie, faUser, faExchangeAlt, faList, faBolt, faBuilding, faMapMarkerAlt, faMapPin, faThLarge, faUserShield, faFileSignature } from '@fortawesome/free-solid-svg-icons';
+import {
+  faBook, faFolderOpen, faUsers, faTruck, faUserTie, faUser,
+  faExchangeAlt, faFileAlt, faList, faBolt, faBuilding,
+  faMapMarkerAlt, faMapPin, faThLarge, faUserShield, faFileSignature,
+  faBars, faChevronLeft, faChevronDown, faChevronRight
+} from '@fortawesome/free-solid-svg-icons';
+
+const SidebarItem = ({ icon, label, isCollapsed, onClick, isOpen, hasSubmenu }) => (
+  <li
+    className="nav-item mb-2 d-flex align-items-center justify-content-between"
+    title={label}
+    style={{ cursor: 'pointer', padding: '4px 0' }}
+    onClick={onClick}
+  >
+    <div className="d-flex align-items-center">
+      <FontAwesomeIcon icon={icon} className="me-2" style={{ fontSize: isCollapsed ? '18px' : '14px' }} />
+      {!isCollapsed && <span>{label}</span>}
+    </div>
+    {!isCollapsed && hasSubmenu && (
+      <FontAwesomeIcon icon={isOpen ? faChevronDown : faChevronRight} className="me-2" />
+    )}
+  </li>
+);
 
 export default function Sidebar() {
-    const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
-    
-    const toggleSidebar = () => {
-        setIsSidebarCollapsed(!isSidebarCollapsed);
+    const [isCollapsed, setIsCollapsed] = useState(false);
+    const [openMenus, setOpenMenus] = useState({
+      auxiliaires: true,
+      journaux: true,
+      immobilisations: true
+    });
+  
+    const toggleSidebar = () => setIsCollapsed(!isCollapsed);
+    const toggleSubmenu = (menu) => {
+      setOpenMenus(prev => ({ ...prev, [menu]: !prev[menu] }));
     };
+  
+    const handleMonthClick = (month) => {
+      console.log(`Mois cliqué : ${month}`);
+    };
+  
+    const months = ['Jan.', 'Fév.', 'Mar.', 'Avr.', 'Mai.', 'Jui.', 'Juil.', 'Aoû.', 'Sep.', 'Oct.', 'Nov.', 'Déc.'];
+  
     return (
-        <div>
-            {/* Sidebar */}
-            <div className="text-dark position-relative"
-                style={{
-                    width: isSidebarCollapsed ? '60px' : '200px',
-                    minHeight: '100vh',
-                    backgroundColor: 'white',
-                    transition: 'width 0.3s ease'
-                }}>
-                <div className="" style={{ paddingLeft: "20px", paddingTop: "10px" }}>
-                    <div className="d-flex justify-content-between align-items-center mb-4">
-                        {!isSidebarCollapsed && <h6 className="text-center mb-0">Menu rapide</h6>}
-                        <button
-                            className="btn btn-link p-0"
-                            onClick={toggleSidebar}
-                            style={{ color: 'black' }}
-                        >
-                            <FontAwesomeIcon icon={isSidebarCollapsed ? faBars : faChevronLeft} />
-                        </button>
-                    </div>
-                    <ul className="nav flex-column sidebar-menu">
-                        <li className="nav-item mb-3">
-                            <span className="fw-bold d-flex align-items-center">
-                                <FontAwesomeIcon icon={faBook} className="me-2" />
-                                {!isSidebarCollapsed && 'Plan comptable'}
-                            </span>
-                        </li>
-                        <li className="nav-item mb-3">
-                            <span className="fw-bold d-flex align-items-center">
-                                <FontAwesomeIcon icon={faFolderOpen} className="me-2" />
-                                {!isSidebarCollapsed && 'Comptes généraux'}
-                            </span>
-                        </li>
-                        <li className="nav-item mb-3">
-                            {!isSidebarCollapsed &&
-                                <span className="fw-bold d-flex align-items-center">
-                                    <FontAwesomeIcon icon={faUsers} className="me-2" />
-                                    Comptes auxiliaires
-                                </span>}
-                            {!isSidebarCollapsed && (
-                                <ul className="nav flex-column ms-4">
-                                    <li className="nav-item d-flex align-items-center mb-3 mt-3"><FontAwesomeIcon icon={faTruck} className="me-2" /><span>Fournisseurs</span></li>
-                                    <li className="nav-item d-flex align-items-center mb-3"><FontAwesomeIcon icon={faUserTie} className="me-2" /><span>Clients</span></li>
-                                    <li className="nav-item d-flex align-items-center mb-3"><FontAwesomeIcon icon={faUser} className="me-2" /><span>Personnel</span></li>
-                                    <li className="nav-item d-flex align-items-center"><FontAwesomeIcon icon={faExchangeAlt} className="me-2" /><span>Débiteurs/Créditeurs divers</span></li>
-                                </ul>
-                            )}
-                            {isSidebarCollapsed && (
-                                <ul className="nav flex-column">
-                                    <li className="nav-item d-flex align-items-center mb-3 mt-3"><FontAwesomeIcon icon={faTruck} className="me-2" /></li>
-                                    <li className="nav-item d-flex align-items-center mb-3"><FontAwesomeIcon icon={faUserTie} className="me-2" /></li>
-                                    <li className="nav-item d-flex align-items-center mb-3"><FontAwesomeIcon icon={faUser} className="me-2" /></li>
-                                    <li className="nav-item d-flex align-items-center"><FontAwesomeIcon icon={faExchangeAlt} className="me-2" /></li>
-                                </ul>
-                            )}
-                        </li>
-                        <li className="nav-item mb-2">
-                            {!isSidebarCollapsed &&
-                                <span className="fw-bold d-flex align-items-center">
-                                    <FontAwesomeIcon icon={faFileAlt} className="me-2" />
-                                    Journaux
-                                </span>}
-                            {(!isSidebarCollapsed) ? (
-                                <ul className="nav flex-column ms-4">
-                                    <li className="nav-item d-flex align-items-center mb-2 mt-2"><FontAwesomeIcon icon={faList} className="me-2" /><span>Tous les journaux</span></li>
-                                    <li className="nav-item">
-                                        <span className="fw-bold d-flex align-items-center mb-2"><FontAwesomeIcon icon={faBolt} className="me-2" />Saisies rapides</span>
-                                        <div className="d-flex flex-wrap gap-1 mt-1 ms-4 mb-2" style={{ maxWidth: '140px', backgroundColor: "#D9D9D9", alignContent: "center", borderRadius: "4px", paddingLeft: "3px", }}>
-                                            {['Jan.', 'Fév.', 'Mar.', 'Avr.', 'Mai.', 'Jui.', 'Juil.', 'Aoû.', 'Sep.', 'Oct.', 'Nov.', 'Déc.'].map((mois, idx) => (
-                                                <li>
-                                                    <span key={idx} style={{ fontSize: '12px', minWidth: '32px', fontWeight: 'bold' }}>{mois}</span>
-                                                </li>
-                                            ))}
-                                        </div>
-                                    </li>
-                                </ul>
-                            ) : (
-
-                                <div className="d-flex flex-column mt-2" >
-                                    <li className="nav-item d-flex align-items-center mb-3 mt-2"><FontAwesomeIcon icon={faList} className="me-2" /></li>
-
-                                    <div className="d-flex flex-column gap-1" style={{ backgroundColor: "#D9D9D9", paddingLeft: "3px", borderRadius: "4px 0px 0px 4px" }}>
-                                        <ul style={{ listStyleType: 'none', paddingLeft: '0px' }}>
-                                            {['Jan.', 'Fév.', 'Mar.', 'Avr.', 'Mai.', 'Jui.', 'Juil.', 'Aoû.', 'Sep.', 'Oct.', 'Nov.', 'Déc.'].map((mois, idx) => (
-                                                <li key={idx} className="nav-item d-flex align-items-center mb-1">{mois}</li>
-                                            ))}
-                                        </ul>
-                                    </div>
-                                </div>
-                            )}
-                        </li>
-                        <li className="nav-item mb-2">
-                            {!isSidebarCollapsed &&
-                                <span className="fw-bold d-flex align-items-center">
-                                    <FontAwesomeIcon icon={faBuilding} className="me-2" />
-                                    Immobilisations
-                                </span>}
-                            {!isSidebarCollapsed && (
-                                <ul className="nav flex-column ms-4">
-                                    <li className="nav-item fw-bold d-flex align-items-center mb-1"><FontAwesomeIcon icon={faMapMarkerAlt} className="me-2" />Localisations</li>
-                                    <li className="nav-item ms-4">
-                                        <ul className="nav flex-column">
-                                            <li className="nav-item d-flex align-items-center mb-1"><FontAwesomeIcon icon={faMapPin} className="me-2" />site</li>
-                                            <li className="nav-item d-flex align-items-center mb-1"><FontAwesomeIcon icon={faThLarge} className="me-2" />Emplacements</li>
-                                            <li className="nav-item d-flex align-items-center mb-1"><FontAwesomeIcon icon={faUserShield} className="me-2" />Utilisateurs responsables</li>
-                                            <li className="nav-item d-flex align-items-center"><FontAwesomeIcon icon={faFileSignature} className="me-2" />Editions</li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            )}
-
-                        </li>
-                        {isSidebarCollapsed && (
-                            <div>
-
-                                <li className="nav-item fw-bold   mb-2"><FontAwesomeIcon icon={faMapMarkerAlt} className="me-2" /></li>
-
-
-                                <li className="nav-item   mb-2"><FontAwesomeIcon icon={faMapPin} className="" /></li>
-                                <li className="nav-item   mb-2"><FontAwesomeIcon icon={faThLarge} className="" /></li>
-                                <li className="nav-item   mb-2"><FontAwesomeIcon icon={faUserShield} className="" /> </li>
-                                <li className="nav-item  "><FontAwesomeIcon icon={faFileSignature} className="" /></li>
-                            </div>
-
-
-
-                        )}
-                    </ul>
-                </div>
-            </div>
+      <div
+        style={{
+          width: isCollapsed ? '60px' : '240px',
+          height: '100vh',
+          backgroundColor: '#fff',
+          transition: 'width 0.3s ease',
+          borderRight: '1px solid #ddd',
+          fontFamily: "'Segoe UI', 'Roboto', sans-serif",
+          fontSize: '14px',
+          display: 'flex',
+          flexDirection: 'column'
+        }}
+      >
+        {/* Header fixe */}
+        <div className="d-flex justify-content-between align-items-center p-3 border-bottom">
+          {!isCollapsed && <h6 className="mb-0">Menu rapide</h6>}
+          <button
+            className="btn btn-link p-0"
+            onClick={toggleSidebar}
+            style={{ color: '#333', fontSize: '16px' }}
+          >
+            <FontAwesomeIcon icon={isCollapsed ? faBars : faChevronLeft} />
+          </button>
         </div>
-    )
-}
+  
+        {/* Zone scrollable */}
+        <div style={{ overflowY: 'auto', flexGrow: 1, padding: '12px' }}>
+          <ul className="nav flex-column">
+            <SidebarItem icon={faBook} label="Plan comptable" isCollapsed={isCollapsed} />
+            <SidebarItem icon={faFolderOpen} label="Comptes généraux" isCollapsed={isCollapsed} />
+  
+            <SidebarItem
+              icon={faUsers}
+              label="Comptes auxiliaires"
+              isCollapsed={isCollapsed}
+              onClick={() => toggleSubmenu('auxiliaires')}
+              hasSubmenu
+              isOpen={openMenus.auxiliaires}
+            />
+            {openMenus.auxiliaires && (
+              <ul className="nav flex-column" style={{ paddingLeft: isCollapsed ? '0px' : '20px' }}>
+                <SidebarItem icon={faTruck} label="Fournisseurs" isCollapsed={isCollapsed} />
+                <SidebarItem icon={faUserTie} label="Clients" isCollapsed={isCollapsed} />
+                <SidebarItem icon={faUser} label="Personnel" isCollapsed={isCollapsed} />
+                <SidebarItem icon={faExchangeAlt} label="Débiteurs/Créditeurs" isCollapsed={isCollapsed} />
+              </ul>
+            )}
+  
+            <SidebarItem
+              icon={faFileAlt}
+              label="Journaux"
+              isCollapsed={isCollapsed}
+              onClick={() => toggleSubmenu('journaux')}
+              hasSubmenu
+              isOpen={openMenus.journaux}
+            />
+            {openMenus.journaux && (
+              <ul className="nav flex-column" style={{ paddingLeft: isCollapsed ? '0px' : '20px' }}>
+                <SidebarItem icon={faList} label="Tous les journaux" isCollapsed={isCollapsed} />
+                <div
+                  className="d-flex flex-wrap mt-2"
+                  style={{
+                    backgroundColor: '#f1f1f1',
+                    borderRadius: '4px',
+                    padding: '2px',
+                    marginBottom: "6px",
+                    justifyContent: 'flex-start',
+                    alignItems: 'center'
+                  }}
+                >
+                  {months.map((mois, idx) => (
+                    <button
+                      key={idx}
+                      className="btn btn-light btn-sm"
+                      onClick={() => handleMonthClick(mois)}
+                      title={mois}
+                      style={{
+                        fontSize: '12px',
+                        fontWeight: 'bold',
+                        margin: '2px 0px',
+                        minWidth: isCollapsed ? '90%' : '32px',
+                        textAlign: isCollapsed ? 'right' : 'left',
+                        padding: '2px 6px',
+                        border: '1px solid #ccc'
+                      }}
+                    >
+                      {mois}
+                    </button>
+                  ))}
+                </div>
+              </ul>
+            )}
+  
+            <SidebarItem
+              icon={faBuilding}
+              label="Immobilisations"
+              isCollapsed={isCollapsed}
+              onClick={() => toggleSubmenu('immobilisations')}
+              hasSubmenu
+              isOpen={openMenus.immobilisations}
+            />
+            {openMenus.immobilisations && (
+              <ul className="nav flex-column" style={{ paddingLeft: isCollapsed ? '0px' : '20px' }}>
+                <SidebarItem icon={faMapMarkerAlt} label="Localisations" isCollapsed={isCollapsed} />
+                <ul className="nav flex-column" style={{ paddingLeft: isCollapsed ? '0px' : '20px' }}>
+                  <SidebarItem icon={faMapPin} label="Sites" isCollapsed={isCollapsed} />
+                  <SidebarItem icon={faThLarge} label="Emplacements" isCollapsed={isCollapsed} />
+                  <SidebarItem icon={faUserShield} label="Responsables" isCollapsed={isCollapsed} />
+                  <SidebarItem icon={faFileSignature} label="Éditions" isCollapsed={isCollapsed} />
+                </ul>
+              </ul>
+            )}
+          </ul>
+        </div>
+      </div>
+    );
+  }
+  

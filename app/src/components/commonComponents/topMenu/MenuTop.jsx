@@ -14,8 +14,10 @@ import {
     faLock,
     faSave,
     faFileExport,
-    faCalendar
+    faCalendar,
+    faBuilding
 } from '@fortawesome/free-solid-svg-icons';
+import { Link } from 'react-router-dom';
 export default function MenuTop() {
   return (
     
@@ -28,6 +30,10 @@ export default function MenuTop() {
                         <li className="me-3 menu-item">
                             <FontAwesomeIcon icon={faFolder} className="me-1" />
                             <a href="#" className="small">Dossier</a>
+                        </li>
+                        <li className="me-3 menu-item">
+                            <FontAwesomeIcon icon={faBuilding} className="me-1" />
+                            <Link to="/society" className="small">Société</Link>
                         </li>
                         <li className="me-3 menu-item">
                             <FontAwesomeIcon icon={faPlusCircle} className="me-1" />

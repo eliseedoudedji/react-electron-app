@@ -9,6 +9,7 @@ import { useEnvironment } from "../../Environement";
 export default function Home() {
   const [showPopup, setShowPopup] = useState(false);
   const { isElectron } = useEnvironment();
+  const [selectedRow, setSelectedRow] = useState(null);
 
   // Affiche le popup après 1 seconde
   useEffect(() => {
@@ -21,10 +22,15 @@ export default function Home() {
   const handleClose = () => {
     setShowPopup(false);
   };
+    // Fermer le modal
+    const closeModal = () => {
+      setShowModal(false);
+      setSelectedRow(null);
+  };
   return (
     <div>
       {showPopup && isElectron && <QuickstartPopup onClose={handleClose} />}
-   
+
      
       <AppContent />
       

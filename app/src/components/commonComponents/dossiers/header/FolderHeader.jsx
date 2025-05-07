@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 
 export default function FolderHeader() {
     const [dropdownOpenJournaux, setDropdownOpenJournaux] = useState(false);
@@ -266,10 +267,10 @@ export default function FolderHeader() {
                                     <i className="bi bi-journal-text" style={menuStyles.icon} />
                                     Comptes généraux
                                 </a>
-                                <a href="#" style={menuStyles.dropdownItem}>
+                                <Link to="/society" style={menuStyles.dropdownItem}>
                                     <i className="bi bi-building" style={menuStyles.icon} />
                                     Sociétés
-                                </a>
+                                </Link>
                                 <a href="#" style={menuStyles.dropdownItem}>
                                     <i className="bi bi-folder" style={menuStyles.icon} />
                                     Dossiers

@@ -14,10 +14,16 @@ import {
     faLock,
     faSave,
     faFileExport,
-    faCalendar
+    faCalendar,
+    faEllipsisH,
+    faEye,
+    faEdit,
+    faArchive,
+    faTrash
 } from '@fortawesome/free-solid-svg-icons';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
+import CreateSociety from '../commonComponents/society/CreateSociety';
 
 const styles = `
     .menu-item {
@@ -97,6 +103,7 @@ export default function AppContent() {
     ];
 
     const sublistData = selectedRow ? getSublistData(selectedRow) : [];
+    const [showModal, setShowModal] = useState(false);
 
     const formatDate = (date) => {
         return date.toLocaleDateString('fr-FR', {
@@ -106,8 +113,60 @@ export default function AppContent() {
         });
     };
 
+
+const [form, setForm] = useState({
+  referentiel: 'SYSCOHADA Révisé',
+  societe: 'CE2IG',
+  note: ''
+});
+
+    const handleRowClick = () => {
+        setSelectedRow({
+            title: "",
+            code: "",
+            type: "Ventes",
+            description: "",
+            currency: "EUR",
+            isDefault: false,
+            closed: false
+        });
+        setShowModal(true);
+    };
+    // Fermer le modal
+    const closeModal = () => {
+        setShowModal(false);
+        setSelectedRow(null);
+    };
+    const handleBackdropClick = (e) => {
+        if (e.target === e.currentTarget) {
+          closeModal2();
+        }
+      };
+      const handleSubmit = (e) => {
+        e.preventDefault();
+      
+        // Exemple de traitement : affichage du formulaire dans la console
+        console.log("Données du formulaire :", form);
+      
+        // Ici tu peux ajouter la logique d'enregistrement ou d'appel API
+      
+        // Puis fermer la modale
+        closeModal2();
+      };
+      const handleChange = (e) => {
+        const { name, value, type, checked } = e.target;
+        setForm((prevForm) => ({
+          ...prevForm,
+          [name]: type === 'checkbox' ? checked : value
+        }));
+      };
+      
+      
+
     return (
+
         <div>
+            {showModal && <CreateSociety show={showModal} onClose={closeModal} initialData={selectedRow} />}
             <div style={{ backgroundColor: "white", marginTop: "0px", paddingBottom: "2px", marginBottom: "20px" }}>
                 <div className="d-md-flex d-block align-items-center justify-content-between page-header-breadcrumb" style={{ marginLeft: "20px", marginTop: "5px" }}>
                     <div>
@@ -207,9 +266,13 @@ export default function AppContent() {
 
 
 
-                            <div className="d-flex me-2 align-items-center justify-content-center bg-dark  pe-3 ps-3 rounded py-2" style={{ width: "150.24px" }}>
+                            <div className="d-flex me-2 align-items-center justify-content-center bg-dark  pe-3 ps-3  py-2" style={{ width: "150.24px",borderRadius:"4px" }}>
 
-                                <Link className="text-fixed-white border-0 ps-2 me-2" to="#" style={{ whiteSpace: "nowrap", fontSize: "11px" }}>
+                                <Link className="text-fixed-white border-0 ps-2 me-2" to="#" style={{ whiteSpace: "nowrap", fontSize: "11px" }} onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    handleRowClick();
+                                }}>
                                     Creer une société
                                 </Link>
                             </div>
@@ -263,7 +326,7 @@ export default function AppContent() {
                                             <nav>
                                                 <div className="breadcrumb mb-0">
                                                     <div className="d-flex" style={{ flexWrap: "nowrap", overflowX: "auto" }}>
-                                                        <div className="d-flex me-4 align-items-center justify-content-center bg-danger ps-3 pe-3 rounded py-1" style={{ width: "150.24px" }}>
+                                                        <div className="d-flex me-4 align-items-center justify-content-center bg-danger ps-3 pe-3  py-1" style={{ width: "150.24px", borderRadius:"4px" }}>
                                                             <div className="-text text-muted text-fixed-white me-0 border-0 pe-0">
                                                                 <i className="fa fa-trash mt-1" />
                                                             </div>
@@ -271,7 +334,7 @@ export default function AppContent() {
                                                                 Supprimer
                                                             </Link>
                                                         </div>
-                                                        <div className="d-flex me-4 align-items-center justify-content-center bg-primary pe-3 ps-3 rounded py-1" style={{ width: "150.24px" }}>
+                                                        <div className="d-flex me-4 align-items-center justify-content-center bg-primary pe-3 ps-3  py-1" style={{ width: "150.24px",borderRadius:"4px" }}>
                                                             <div className="-text text-muted bg-primary text-fixed-white me-0 border-0 pe-0">
                                                                 <i className="fa fa-clone mt-1" />
                                                             </div>
@@ -279,7 +342,7 @@ export default function AppContent() {
                                                                 Dupliquer
                                                             </Link>
                                                         </div>
-                                                        <div className="d-flex me-2 align-items-center justify-content-center bg-success pe-3 ps-3 rounded " style={{ cursor: "pointer" }}>
+                                                        <div className="d-flex me-2 align-items-center justify-content-center bg-success pe-3 ps-3  " style={{ cursor: "pointer",borderRadius:"4px" }}>
                                                             <div className="-text text-muted text-fixed-white me-0 border-0 pe-0">
                                                                 <i className="fa fa-plus mt-1" />
                                                             </div>
@@ -329,8 +392,41 @@ export default function AppContent() {
 
                                                 <td className="text-center">20-04-2022 à 14:30</td>
                                                 <td className="text-center">
-                                                    <div className="" onClick={() => handleRowClick1("EPITECH")}>
-                                                        <span className='' style={{ textDecoration: "underline", color: "blue", cursor: "pointer" }}>Consulter</span>
+                                                    <div className="dropdown">
+                                                        <button 
+                                                            className="btn btn-sm dropdown-toggle" 
+                                                            type="button" 
+                                                            data-bs-toggle="dropdown" 
+                                                            aria-expanded="false"
+                                                        >
+                                                            <FontAwesomeIcon icon={faEllipsisH} />
+                                                        </button>
+                                                        <ul className="dropdown-menu">
+                                                            <li>
+                                                                <a className="dropdown-item" href="#">
+                                                                    <FontAwesomeIcon icon={faEye} className="me-2" />
+                                                                    Voir plus de détails
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a className="dropdown-item" href="#">
+                                                                    <FontAwesomeIcon icon={faEdit} className="me-2" />
+                                                                    Modifier
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a className="dropdown-item" href="#">
+                                                                    <FontAwesomeIcon icon={faArchive} className="me-2" />
+                                                                    Archiver
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a className="dropdown-item text-danger" href="#">
+                                                                    <FontAwesomeIcon icon={faTrash} className="me-2" />
+                                                                    Supprimer
+                                                                </a>
+                                                            </li>
+                                                        </ul>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -356,8 +452,41 @@ export default function AppContent() {
 
                                                 <td className="text-center">20-04-2022 à 14:30</td>
                                                 <td className="text-center">
-                                                    <div className="" onClick={() => handleRowClick1("EPITECH")}>
-                                                        <span className=' ' style={{ textDecoration: "underline", color: "blue", cursor: "pointer" }}>Consulter</span>
+                                                    <div className="dropdown">
+                                                        <button 
+                                                            className="btn btn-sm dropdown-toggle" 
+                                                            type="button" 
+                                                            data-bs-toggle="dropdown" 
+                                                            aria-expanded="false"
+                                                        >
+                                                            <FontAwesomeIcon icon={faEllipsisH} />
+                                                        </button>
+                                                        <ul className="dropdown-menu">
+                                                            <li>
+                                                                <a className="dropdown-item" href="#">
+                                                                    <FontAwesomeIcon icon={faEye} className="me-2" />
+                                                                    Voir plus de détails
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a className="dropdown-item" href="#">
+                                                                    <FontAwesomeIcon icon={faEdit} className="me-2" />
+                                                                    Modifier
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a className="dropdown-item" href="#">
+                                                                    <FontAwesomeIcon icon={faArchive} className="me-2" />
+                                                                    Archiver
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a className="dropdown-item text-danger" href="#">
+                                                                    <FontAwesomeIcon icon={faTrash} className="me-2" />
+                                                                    Supprimer
+                                                                </a>
+                                                            </li>
+                                                        </ul>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -451,398 +580,202 @@ export default function AppContent() {
                 )}
 
                 {showModal2 && (
-                    <>
-                        <div
-                            id="popup-overlay"
-                            style={{
-                                backgroundColor: "rgba(0,0,0,0.5)",
-                                position: "fixed",
-                                top: 0,
-                                left: 0,
-                                right: 0,
-                                bottom: 0,
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                zIndex: 1050
-                            }}
-                        >
-                            <div
-                                style={{
-                                    display: "flex",
-                                    background: "white",
-                                    borderRadius: 6,
-                                    width: "60vw",
-                                    height: "80vh",
-                                    overflow: "hidden",
-                                    position: "relative",
-                                    margin: "0 auto"
-                                }}
-                            >
-                                <div
-                                    style={{
-                                        backgroundColor: "#2979ff",
-                                        width: "20%",
-                                        display: "flex",
-                                        flexDirection: "column",
-                                        justifyContent: "flex-end",
-                                        alignItems: "center",
-                                        padding: "1rem"
-                                    }}
-                                >
-                                    <div
-                                        style={{ marginBottom: "1rem", textAlign: "center", color: "white" }}
-                                    >
-                                        <div
-                                            style={{
-                                                backgroundColor: "white",
-                                                borderRadius: "50%",
-                                                width: 40,
-                                                height: 40,
-                                                display: "flex",
-                                                justifyContent: "center",
-                                                alignItems: "center",
-                                                marginBottom: 8
-                                            }}
-                                        >
-                                            <span style={{ color: "#2979ff", fontWeight: "bold" }}>T</span>
-                                        </div>
-                                        <small>TalismanPro 0.0.1</small>
-                                    </div>
-                                </div>
-                                <div
-                                    style={{
-                                        width: "80%",
-                                        padding: "2rem 3rem",
-                                        display: "flex",
-                                        flexDirection: "column",
-                                        justifyContent: "space-between"
-                                    }}
-                                >
-                                    <div>
-                                        <h4 style={{ color: "#1976d2", fontWeight: 600 }}>
-                                            Créer un nouveau dossier
-                                        </h4>
-                                        <div style={{ marginTop: "2rem" }}>
-                                            <label style={{ color: "#aaa", fontSize: "0.9rem" }}>
-                                                Référentiel
-                                            </label>
-                                            <div style={{ borderBottom: "1px solid #ccc", position: "relative" }}>
-                                                <select
-                                                    style={{
-                                                        width: "100%",
-                                                        border: "none",
-                                                        padding: "0.5rem 0",
-                                                        fontSize: "1rem",
-                                                        appearance: "none",
-                                                        background: "transparent",
-                                                        paddingRight: "2rem"
-                                                    }}
-                                                >
-                                                    <option>SYSCOHADA Révisé</option>
-                                                    <option>IFRS</option>
-                                                </select>
-                                                <span style={{
-                                                    position: "absolute",
-                                                    right: "0.5rem",
-                                                    top: "50%",
-                                                    transform: "translateY(-50%)",
-                                                    pointerEvents: "none"
-                                                }}>▼</span>
-                                            </div>
-                                        </div>
-                                        <div style={{ marginTop: "2rem" }}>
-                                            <label style={{ color: "#aaa", fontSize: "0.9rem" }}>Société</label>
-                                            <div
-                                                style={{
-                                                    borderBottom: "1px solid #ccc",
-                                                    display: "flex",
-                                                    justifyContent: "space-between",
-                                                    alignItems: "center",
-                                                    position: "relative"
-                                                }}
-                                            >
-                                                <select
-                                                    style={{
-                                                        border: "none",
-                                                        flex: 1,
-                                                        padding: "0.5rem 0",
-                                                        fontSize: "1rem",
-                                                        appearance: "none",
-                                                        background: "transparent",
-                                                        paddingRight: "2rem"
-                                                    }}
-                                                >
-                                                    <option>CE2IG</option>
-                                                    <option>Nouvelle société</option>
-                                                </select>
-                                                <span style={{
-                                                    position: "absolute",
-                                                    right: "2.5rem",
-                                                    top: "50%",
-                                                    transform: "translateY(-50%)",
-                                                    pointerEvents: "none"
-                                                }}>▼</span>
-                                                <button
-                                                    onClick={openSocietePopup}
-                                                    style={{
-                                                        backgroundColor: "#2979ff",
-                                                        border: "none",
-                                                        color: "white",
-                                                        padding: "0.2rem 0.5rem",
-                                                        borderRadius: 4,
-                                                        marginLeft: "0.5rem",
-                                                        cursor: "pointer"
-                                                    }}
-                                                >
-                                                    +
-                                                </button>
-                                            </div>
-                                        </div>
-                                        <div
-                                            style={{
-                                                display: "flex",
-                                                justifyContent: "space-between",
-                                                marginTop: "2rem"
-                                            }}
-                                        >
-                                            <div style={{ width: "48%" }}>
-                                                <label style={{ color: "#aaa", fontSize: "0.9rem" }}>
-                                                    Période de début
-                                                </label>
-                                                <div
-                                                    style={{
-                                                        borderBottom: "1px solid #ccc",
-                                                        display: "flex",
-                                                        justifyContent: "space-between",
-                                                        alignItems: "center",
-                                                        position: "relative"
-                                                    }}
-                                                >
-                                                    <input
-                                                        type="text"
-                                                        value={formatDate(startDate)}
-                                                        readOnly
-                                                        style={{
-                                                            border: "none",
-                                                            width: "100%",
-                                                            padding: "0.5rem 0",
-                                                            fontSize: "1rem",
-                                                            background: "transparent"
-                                                        }}
-                                                        onClick={() => setShowStartDatePicker(true)}
-                                                    />
-                                                    <FontAwesomeIcon
-                                                        icon={faCalendar}
-                                                        style={{
-                                                            position: "absolute",
-                                                            right: "0.5rem",
-                                                            top: "50%",
-                                                            transform: "translateY(-50%)",
-                                                            color: "#666",
-                                                            cursor: "pointer"
-                                                        }}
-                                                        onClick={() => setShowStartDatePicker(true)}
-                                                    />
-                                                    {showStartDatePicker && (
-                                                        <div style={{
-                                                            position: "absolute",
-                                                            top: "100%",
-                                                            left: 0,
-                                                            zIndex: 1000,
-                                                            background: "white",
-                                                            border: "1px solid #ccc",
-                                                            borderRadius: "4px",
-                                                            padding: "10px",
-                                                            boxShadow: "0 2px 5px rgba(0,0,0,0.2)"
-                                                        }}>
-                                                            <input
-                                                                type="date"
-                                                                value={startDate.toISOString().split('T')[0]}
-                                                                onChange={(e) => {
-                                                                    setStartDate(new Date(e.target.value));
-                                                                    setShowStartDatePicker(false);
-                                                                }}
-                                                                style={{
-                                                                    border: "1px solid #ccc",
-                                                                    padding: "5px",
-                                                                    borderRadius: "4px"
-                                                                }}
-                                                            />
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            </div>
-                                            <div style={{ width: "48%" }}>
-                                                <label style={{ color: "#aaa", fontSize: "0.9rem" }}>
-                                                    Période de fin
-                                                </label>
-                                                <div
-                                                    style={{
-                                                        borderBottom: "1px solid #ccc",
-                                                        display: "flex",
-                                                        justifyContent: "space-between",
-                                                        alignItems: "center",
-                                                        position: "relative"
-                                                    }}
-                                                >
-                                                    <input
-                                                        type="text"
-                                                        value={formatDate(endDate)}
-                                                        readOnly
-                                                        style={{
-                                                            border: "none",
-                                                            width: "100%",
-                                                            padding: "0.5rem 0",
-                                                            fontSize: "1rem",
-                                                            background: "transparent"
-                                                        }}
-                                                        onClick={() => setShowEndDatePicker(true)}
-                                                    />
-                                                    <FontAwesomeIcon
-                                                        icon={faCalendar}
-                                                        style={{
-                                                            position: "absolute",
-                                                            right: "0.5rem",
-                                                            top: "50%",
-                                                            transform: "translateY(-50%)",
-                                                            color: "#666",
-                                                            cursor: "pointer"
-                                                        }}
-                                                        onClick={() => setShowEndDatePicker(true)}
-                                                    />
-                                                    {showEndDatePicker && (
-                                                        <div style={{
-                                                            position: "absolute",
-                                                            top: "100%",
-                                                            left: 0,
-                                                            zIndex: 1000,
-                                                            background: "white",
-                                                            border: "1px solid #ccc",
-                                                            borderRadius: "4px",
-                                                            padding: "10px",
-                                                            boxShadow: "0 2px 5px rgba(0,0,0,0.2)"
-                                                        }}>
-                                                            <input
-                                                                type="date"
-                                                                value={endDate.toISOString().split('T')[0]}
-                                                                onChange={(e) => {
-                                                                    setEndDate(new Date(e.target.value));
-                                                                    setShowEndDatePicker(false);
-                                                                }}
-                                                                style={{
-                                                                    border: "1px solid #ccc",
-                                                                    padding: "5px",
-                                                                    borderRadius: "4px"
-                                                                }}
-                                                            />
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div
-                                        style={{
-                                            borderTop: "1px solid #ccc",
-                                            paddingTop: "1rem",
-                                            display: "flex",
-                                            justifyContent: "space-between",
-                                            gap: "1rem"
-                                        }}
-                                    >
-                                        <button
-                                            style={{
-                                                flex: 1,
-                                                backgroundColor: "#4caf50",
-                                                color: "white",
-                                                border: "none",
-                                                padding: "0.75rem 0",
-                                                borderRadius: 4
-                                            }}
-                                        >
-                                            Valider
-                                        </button>
-                                        <button
-                                            onClick={closeModal2}
-                                            style={{
-                                                flex: 1,
-                                                backgroundColor: "#f44336",
-                                                color: "white",
-                                                border: "none",
-                                                padding: "0.75rem 0",
-                                                borderRadius: 4,
-                                                cursor: "pointer"
-                                            }}
-                                        >
-                                            Annuler
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        {showSocietePopup && (
-                            <div
-                                style={{
-                                    position: "fixed",
-                                    top: 0,
-                                    left: 0,
-                                    right: 0,
-                                    bottom: 0,
-                                    background: "rgba(0,0,0,0.5)",
-                                    zIndex: 2000,
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center"
-                                }}
-                            >
-                                <div
-                                    style={{
-                                        background: "white",
-                                        padding: "2rem",
-                                        borderRadius: 8,
-                                        minWidth: 300,
-                                        textAlign: "center"
-                                    }}
-                                >
-                                    <p style={{ marginBottom: "2rem", fontSize: "1.1rem" }}>
-                                        Créer une nouvelle société ?
-                                    </p>
-                                    <div style={{ display: "flex", gap: "1rem", justifyContent: "center" }}>
-                                        <button
-                                            onClick={closeSocietePopup}
-                                            style={{
-                                                backgroundColor: "#f44336",
-                                                border: "none",
-                                                color: "white",
-                                                padding: "0.5rem 1rem",
-                                                borderRadius: 4,
-                                                cursor: "pointer"
-                                            }}
-                                        >
-                                            Fermer
-                                        </button>
-                                        <button
-                                            onClick={() => {
-                                                // Ajouter ici la logique pour créer une nouvelle société
-                                                closeSocietePopup();
-                                            }}
-                                            style={{
-                                                backgroundColor: "#4caf50",
-                                                border: "none",
-                                                color: "white",
-                                                padding: "0.5rem 1rem",
-                                                borderRadius: 4,
-                                                cursor: "pointer"
-                                            }}
-                                        >
-                                            Valider
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-                    </>
+                   <>
+                 <div
+  style={{
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 1050
+  }}
+  onClick={handleBackdropClick}
+>
+  <div
+    style={{
+      backgroundColor: 'white',
+      borderRadius: '0.5rem',
+      boxShadow: '0 0.5rem 1rem rgba(0, 0, 0, 0.15)',
+      width: '90%',
+      maxWidth: '800px',
+      maxHeight: '90vh',
+      overflowY: 'auto',
+      position: 'relative',
+      zIndex: 1051
+    }}
+    onClick={e => e.stopPropagation()}
+  >
+    <div style={{
+      padding: '1rem',
+      borderBottom: '1px solid #dee2e6',
+      position: 'relative'
+    }}>
+      <h5 style={{ margin: 0, fontWeight: 'bold' }}>Créer un nouveau dossier</h5>
+      <button
+        type="button"
+        onClick={closeModal2}
+        style={{
+          position: 'absolute',
+          right: '1rem',
+          top: '1rem',
+          background: 'none',
+          border: 'none',
+          fontSize: '1.5rem',
+          cursor: 'pointer'
+        }}
+      >
+        ×
+      </button>
+    </div>
+
+    <form onSubmit={handleSubmit} style={{ padding: '1rem' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+        {/* Référentiel */}
+        <div style={{ gridColumn: '1 / -1' }}>
+          <label style={{ display: 'block', marginBottom: '0.5rem' }}>Référentiel</label>
+          <select
+            name="referentiel"
+            value={form.referentiel}
+            onChange={handleChange}
+            style={{
+              width: '100%',
+              padding: '0.375rem 0.75rem',
+              border: '1px solid #ced4da',
+              borderRadius: '0.25rem'
+            }}
+          >
+            <option value="SYSCOHADA Révisé">SYSCOHADA Révisé</option>
+            <option value="IFRS">IFRS</option>
+          </select>
+        </div>
+
+        {/* Société */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', gridColumn: '1 / -1' }}>
+          <div style={{ flex: 1 }}>
+            <label style={{ display: 'block', marginBottom: '0.5rem' }}>Société</label>
+            <select
+              name="societe"
+              value={form.societe}
+              onChange={handleChange}
+              style={{
+                width: '100%',
+                padding: '0.375rem 0.75rem',
+                border: '1px solid #ced4da',
+                borderRadius: '0.25rem'
+              }}
+            >
+              <option value="CE2IG">CE2IG</option>
+              <option value="Nouvelle société">Nouvelle société</option>
+            </select>
+          </div>
+          <button
+            type="button"
+            onClick={openSocietePopup}
+            style={{
+              marginTop: '1.5rem',
+              padding: '0.375rem 0.75rem',
+              backgroundColor: '#0d6efd',
+              border: '1px solid #0d6efd',
+              borderRadius: '0.25rem',
+              color: 'white',
+              height: '38px',
+              cursor: 'pointer'
+            }}
+          >
+            +
+          </button>
+        </div>
+
+        {/* Note */}
+        <div style={{ gridColumn: '1 / -1' }}>
+          <label style={{ display: 'block', marginBottom: '0.5rem' }}>Note</label>
+          <textarea
+            name="note"
+            value={form.note}
+            onChange={handleChange}
+            placeholder="Ajoutez une note sur le dossier..."
+            style={{
+              width: '100%',
+              padding: '0.375rem 0.75rem',
+              border: '1px solid #ced4da',
+              borderRadius: '0.25rem',
+              minHeight: '100px'
+            }}
+          />
+        </div>
+      </div>
+
+      <div style={{
+        marginTop: '1rem',
+        paddingTop: '1rem',
+        borderTop: '1px solid #dee2e6',
+        display: 'flex',
+        justifyContent: 'flex-end',
+        gap: '0.5rem'
+      }}>
+        <button
+          type="button"
+          onClick={closeModal2}
+          style={{
+            padding: '0.375rem 0.75rem',
+            border: '1px solid #6c757d',
+            borderRadius: '0.25rem',
+            backgroundColor: 'transparent',
+            color: '#6c757d'
+          }}
+        >
+          Annuler
+        </button>
+        <button
+          type="submit"
+          style={{
+            padding: '0.375rem 0.75rem',
+            border: '1px solid #0d6efd',
+            borderRadius: '0.25rem',
+            backgroundColor: '#0d6efd',
+            color: 'white'
+          }}
+        >
+          Enregistrer
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+                 
+                   {/* Popup nouvelle société */}
+                   {showSocietePopup && (
+                     <div
+                       style={{
+                        
+                       }}
+                     >
+                       <div
+                         style={{
+                           background: "white",
+                           padding: "2rem",
+                           borderRadius: 8,
+                           minWidth: 300,
+                           textAlign: "center"
+                         }}
+                       >
+                         <CreateSociety 
+                           show={showSocietePopup} 
+                           onClose={closeSocietePopup} 
+                           initialData={selectedRow} 
+                         />
+                       </div>
+                     </div>
+                   )}
+                 </>
+                 
                 )}
             </div>
         </div>
