@@ -181,7 +181,7 @@ export default function SaisiePage() {
 
                                                         <div className="" onClick={() => toShowMonthly()}>
                                                             <span
-                                                                className="btn boder border-dark  btn-sm" style={{backgroundColor:"#BDBDBD"}}
+                                                                className="btn boder border-dark  btn-sm" style={{ backgroundColor: "#BDBDBD" }}
                                                             >
                                                                 Nouvelle pièce
                                                             </span>
@@ -190,7 +190,7 @@ export default function SaisiePage() {
                                                             <span
                                                                 className="btn border border-dark btn-sm"
                                                             >
-                                                               Editer la fiche
+                                                                Editer la fiche
                                                             </span>
                                                         </div>
 
@@ -213,7 +213,7 @@ export default function SaisiePage() {
 
                                                         <div className="" >
                                                             <span
-                                                                className="btn  btn-sm" style={{backgroundColor:"#22C03C"}}
+                                                                className="btn  btn-sm" style={{ backgroundColor: "#22C03C" }}
                                                             >
                                                                 Modifier
                                                             </span>
@@ -238,53 +238,44 @@ export default function SaisiePage() {
                                                         <thead style={{ position: 'sticky', top: 0, zIndex: 1, }}>
                                                             <tr>
                                                                 <th className="text-center text-light bg-primary">Date</th>
-                                                                <th className="text-light bg-primary">Intitulé</th>
-                                                                <th className="text-center text-light bg-primary">Pièces</th>
-                                                                <th className="text-end text-light bg-primary">Débit</th>
-                                                                <th className="text-end text-light bg-primary">Crédit</th>
-                                                                <th className="text-center text-light bg-primary">Dernière saisie</th>
-                                                                <th className="text-center text-light bg-primary">Clôture</th>
-                                                                <th className="text-center text-light bg-primary">Actions</th>
+                                                                <th className="text-light bg-primary">Pièces</th>
+                                                                <th className="text-center text-light bg-primary">Reférence</th>
+                                                                <th className="text-end text-light bg-primary">N° Compte</th>
+                                                                <th className="text-end text-light bg-primary">Tiers</th>
+                                                                <th className="text-center text-light bg-primary">libellé</th>
+                                                                <th className="text-center text-light bg-primary">Date d’échéance</th>
+                                                                <th className="text-center text-light bg-primary">Débit</th>
+                                                                <th className="text-center text-light bg-primary">Crédit</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
                                                             <tr>
-                                                                <td className="text-center">V001</td>
-                                                                <td>Ventes</td>
-                                                                <td className="text-center">2</td>
-                                                                <td className="text-end">12 450,00</td>
-                                                                <td className="text-end">12 450,00</td>
-                                                                <td className="text-center">05/04/2025</td>
-                                                                <td className="text-center">
-                                                                    <span className="badge bg-success-transparent text-success">Oui</span>
-                                                                </td>
-                                                                <td className="text-center">
-                                                                    <Link to='/saisie/1'><button className="btn btn-sm me-1">
-                                                                        <FontAwesomeIcon icon={faEdit} />
-                                                                    </button></Link>
-                                                                    <button className="btn btn-sm">
-                                                                        <FontAwesomeIcon icon={faTrash} />
-                                                                    </button>
-                                                                </td>
+                                                                <td className="text-center">08-12-2025</td>
+                                                                <td>00001</td>
+                                                                <td className="text-center">M. Thomas</td>
+                                                                <td className="text-end">608</td>
+                                                                <td className="text-end">---</td>
+                                                                <td className="text-center">---</td>
+                                                                <td className="text-center">02-03-25</td>
+                                                                <td className="text-center">10.000.000</td>
+                                                                <td className="text-center">---</td>
+
                                                             </tr>
                                                             <tr>
-                                                                <td className="text-center">C001</td>
-                                                                <td>Achats</td>
-                                                                <td className="text-center">12</td>
-                                                                <td className="text-end">5 900,00</td>
-                                                                <td className="text-end">5 900,00 </td>
-                                                                <td className="text-center">03/04/2025</td>
-                                                                <td className="text-center">
-                                                                    <span className="badge bg-danger-transparent text-danger">Non</span>
-                                                                </td>
-                                                                <td className="text-center">
-                                                                    <button className="btn btn-sm me-1">
-                                                                        <FontAwesomeIcon icon={faEdit} />
-                                                                    </button>
-                                                                    <button className="btn btn-sm">
-                                                                        <FontAwesomeIcon icon={faTrash} />
-                                                                    </button>
-                                                                </td>
+                                                                <td className="text-center">08-12-2025</td>
+                                                                <td>00002</td>
+                                                                <td className="text-center">Carburant</td>
+                                                                <td className="text-end">508</td>
+                                                                <td className="text-end">---</td>
+                                                                <td className="text-center">---</td>
+                                                                <td className="text-center">02-03-26</td>
+                                                                <td className="text-center">---</td>
+                                                                <td className="text-center">10.000.000</td>
+                                                            </tr>
+                                                            <tr style={{ backgroundColor: "#b9fbc0", }}>
+                                                                <td colSpan="7">Total(Équilibre)</td>
+                                                                <td className="text-center">10.000.000</td>
+                                                                <td className="text-center">10.000.000</td>
                                                             </tr>
                                                         </tbody>
                                                     </table>

@@ -63,8 +63,9 @@ function createWindow() {
     height: 600,
     show: false, // Ne pas afficher immédiatement
     center: true,
+    minimizable: true,
     resizable: false,
-    frame: false, // Fenêtre sans cadre pour une apparence desktop native
+    frame: true, // Fenêtre sans cadre pour une apparence desktop native
     transparent: false,
     autoHideMenuBar: true, // Masquer la barre de menu
     webPreferences: {

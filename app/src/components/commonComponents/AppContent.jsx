@@ -24,6 +24,7 @@ import {
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import CreateSociety from '../commonComponents/society/CreateSociety';
+import MenuTop from './topMenu/MenuTop';
 
 const styles = `
     .menu-item {
@@ -167,92 +168,13 @@ const [form, setForm] = useState({
 
         <div>
             {showModal && <CreateSociety show={showModal} onClose={closeModal} initialData={selectedRow} />}
+            <MenuTop/>
             <div style={{ backgroundColor: "white", marginTop: "0px", paddingBottom: "2px", marginBottom: "20px" }}>
-                <div className="d-md-flex d-block align-items-center justify-content-between page-header-breadcrumb" style={{ marginLeft: "20px", marginTop: "5px" }}>
-                    <div>
-                        <nav>
-                            <ol className="breadcrumb mb-1 mb-md-0">
-                                <li className="me-3">
-                                    <a href="#">Fichier</a>
-                                </li>
-                                <li className="me-3">
-                                    <a href="#">Définition</a>
-                                </li>
-                                <li className="me-3">
-                                    <a href="#">Saisir</a>
-                                </li>
-                                <li className="me-3">
-                                    <a href="#">Editions</a>
-                                </li> <li className="me-3">
-                                    <a href="#">Outils</a>
-                                </li> <li className="me-3">
-                                    <a href="#">Paramètres</a>
-                                </li>
-                                <li className="me-3">
-                                    <a href="#">Aides</a>
-                                </li>
+                
 
-                            </ol>
-                        </nav>
-                    </div>
+               
 
-                </div>
-
-                <div className="d-md-flex d-block align-items-center justify-content-between page-header-breadcrumb" style={{ marginLeft: "40px", marginTop: "10px" }}>
-                    <div>
-                        <nav>
-                            <ol className="breadcrumb mb-1 mb-md-0">
-                                <li className="me-3 menu-item">
-                                    <FontAwesomeIcon icon={faFolder} className="me-1" />
-                                    <a href="#" className="small">Dossier</a>
-                                </li>
-                                <li className="me-3 menu-item">
-                                    <FontAwesomeIcon icon={faPlusCircle} className="me-1" />
-                                    <a href="#" className="small">Nouvelle écriture</a>
-                                </li>
-                                <li className="me-3 menu-item">
-                                    <FontAwesomeIcon icon={faKeyboard} className="me-1" />
-                                    <a href="#" className="small">Saisir rapide</a>
-                                </li>
-                                <li className="me-3 menu-item">
-                                    <FontAwesomeIcon icon={faLink} className="me-1" />
-                                    <a href="#" className="small">Lettrage</a>
-                                </li>
-                                <li className="me-3 menu-item">
-                                    <FontAwesomeIcon icon={faUniversity} className="me-1" />
-                                    <a href="#" className="small">Rapprochement bancaire</a>
-                                </li>
-                                <li className="me-3 menu-item">
-                                    <FontAwesomeIcon icon={faPrint} className="me-1" />
-                                    <a href="#" className="small">Impression journal</a>
-                                </li>
-                                <li className="me-3 menu-item">
-                                    <FontAwesomeIcon icon={faBook} className="me-1" />
-                                    <a href="#" className="small">Grand livre</a>
-                                </li>
-                                <li className="me-3 menu-item">
-                                    <FontAwesomeIcon icon={faSearch} className="me-1" />
-                                    <a href="#" className="small">Recherche écriture</a>
-                                </li>
-                                <li className="me-3 menu-item">
-                                    <FontAwesomeIcon icon={faLock} className="me-1" />
-                                    <a href="#" className="small">Clôturer période</a>
-                                </li>
-                                <li className="me-3 menu-item">
-                                    <FontAwesomeIcon icon={faSave} className="me-1" />
-                                    <a href="#" className="small">Sauvegarde rapide</a>
-                                </li>
-                                <li className="me-3 menu-item">
-                                    <FontAwesomeIcon icon={faFileExport} className="me-1" />
-                                    <a href="#" className="small">Exporter PDF / Excel</a>
-                                </li>
-                            </ol>
-                        </nav>
-                    </div>
-
-                </div>
-
-                <div className="d-sm-flex mb-4 justify-content-between" style={{ marginLeft: "40px", marginTop: "40px", marginRight: "40px" }}>
+                <div className="d-sm-flex mb-4 justify-content-between" style={{ marginLeft: "40px", marginRight: "40px" }}>
                     <div className="d-flex gap-2 mt-1 mt-sm-0">
 
                         <div>
@@ -391,43 +313,8 @@ const [form, setForm] = useState({
                                                 </td>
 
                                                 <td className="text-center">20-04-2022 à 14:30</td>
-                                                <td className="text-center">
-                                                    <div className="dropdown">
-                                                        <button 
-                                                            className="btn btn-sm dropdown-toggle" 
-                                                            type="button" 
-                                                            data-bs-toggle="dropdown" 
-                                                            aria-expanded="false"
-                                                        >
-                                                            <FontAwesomeIcon icon={faEllipsisH} />
-                                                        </button>
-                                                        <ul className="dropdown-menu">
-                                                            <li>
-                                                                <a className="dropdown-item" href="#">
-                                                                    <FontAwesomeIcon icon={faEye} className="me-2" />
-                                                                    Voir plus de détails
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a className="dropdown-item" href="#">
-                                                                    <FontAwesomeIcon icon={faEdit} className="me-2" />
-                                                                    Modifier
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a className="dropdown-item" href="#">
-                                                                    <FontAwesomeIcon icon={faArchive} className="me-2" />
-                                                                    Archiver
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a className="dropdown-item text-danger" href="#">
-                                                                    <FontAwesomeIcon icon={faTrash} className="me-2" />
-                                                                    Supprimer
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
+                                                <td className="text-center" onClick={() => handleRowClick1()} style={{textDecoration:"underline", color:'blue', cursor:"pointer"}}>
+                                                   Consulter
                                                 </td>
                                             </tr>
                                             <tr>
@@ -451,43 +338,11 @@ const [form, setForm] = useState({
                                                 </td>
 
                                                 <td className="text-center">20-04-2022 à 14:30</td>
-                                                <td className="text-center">
-                                                    <div className="dropdown">
-                                                        <button 
-                                                            className="btn btn-sm dropdown-toggle" 
-                                                            type="button" 
-                                                            data-bs-toggle="dropdown" 
-                                                            aria-expanded="false"
-                                                        >
-                                                            <FontAwesomeIcon icon={faEllipsisH} />
-                                                        </button>
-                                                        <ul className="dropdown-menu">
-                                                            <li>
-                                                                <a className="dropdown-item" href="#">
-                                                                    <FontAwesomeIcon icon={faEye} className="me-2" />
-                                                                    Voir plus de détails
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a className="dropdown-item" href="#">
-                                                                    <FontAwesomeIcon icon={faEdit} className="me-2" />
-                                                                    Modifier
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a className="dropdown-item" href="#">
-                                                                    <FontAwesomeIcon icon={faArchive} className="me-2" />
-                                                                    Archiver
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a className="dropdown-item text-danger" href="#">
-                                                                    <FontAwesomeIcon icon={faTrash} className="me-2" />
-                                                                    Supprimer
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
+                                                <td className="text-center" onClick={() => handleRowClick1()} style={{textDecoration:"underline", color:'blue',  cursor:"pointer"}}>
+
+   
+
+                                                   Consulter
                                                 </td>
                                             </tr>
                                         </tbody>

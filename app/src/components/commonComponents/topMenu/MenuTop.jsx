@@ -27,14 +27,18 @@ export default function MenuTop() {
             <div>
                 <nav>
                     <ol className="breadcrumb mb-1 mb-md-0">
+                        <Link to="/dashboard">
                         <li className="me-3 menu-item">
                             <FontAwesomeIcon icon={faFolder} className="me-1" />
-                            <a href="#" className="small">Dossier</a>
+                            <sapn className="small">Dossier</sapn>
                         </li>
+                        </Link>
+                        <Link to="/society">
                         <li className="me-3 menu-item">
                             <FontAwesomeIcon icon={faBuilding} className="me-1" />
-                            <Link to="/society" className="small">Société</Link>
+                            <span to="/" className="small">Société</span>
                         </li>
+                        </Link>
                         <li className="me-3 menu-item">
                             <FontAwesomeIcon icon={faPlusCircle} className="me-1" />
                             <a href="#" className="small">Nouvelle écriture</a>

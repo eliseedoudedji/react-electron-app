@@ -28,7 +28,7 @@ export default function Home() {
       setSelectedRow(null);
   };
   return (
-    <div>
+    <div style={{userSelect:"none"}}>
       {showPopup && isElectron && <QuickstartPopup onClose={handleClose} />}
 
      

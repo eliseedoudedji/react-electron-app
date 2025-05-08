@@ -4,12 +4,10 @@ import Dashboard from '../pages/mainpages/Dashboard';
 import JournalPage from '../pages/mainpages/allpages/JournalPage';
 import SaisiePage from '../pages/mainpages/allpages/saisie/SaisiePage';
 import SociatyPage from '../pages/mainpages/allpages/society/SociatyPage';
-
 export const commonRoutes = [
   <Route key="home" path="/mainpages" element={<Home />} />,
   <Route key="dashboard" path="/dashboard" element={<Dashboard />} />,
   <Route key="dossier" path="/dossier/:id" element={<JournalPage />} />,
   <Route key="saisie" path="/saisie/:id" element={<SaisiePage />} />,
   <Route key="society" path="/society" element={<SociatyPage />} />
-
 ]; 
