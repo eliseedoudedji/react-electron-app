@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 import FoldersTable from './dossiers/FoldersTable';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -25,6 +25,8 @@ import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import CreateSociety from '../commonComponents/society/CreateSociety';
 import MenuTop from './topMenu/MenuTop';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const styles = `
     .menu-item {
@@ -53,13 +55,113 @@ export default function AppContent() {
     const [endDate, setEndDate] = useState(new Date());
     const [showStartDatePicker, setShowStartDatePicker] = useState(false);
     const [showEndDatePicker, setShowEndDatePicker] = useState(false);
+    const [societies, setSocieties] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
 
-    const handleClick2 = () => {
-        setShowModal2(true);
+    const [form, setForm] = useState({
+        intitule: 'SYSCOHADA Révisé',
+        societyId: '',
+        notes: ''
+    });
+
+    // Vérifier la connexion au backend
+    useEffect(() => {
+        const checkBackendConnection = async () => {
+            try {
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    throw new Error('Non authentifié');
+                }
+
+                const response = await fetch('https://talisman-pro-apis.onrender.com/api/v1/societies/', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                if (!response.ok) {
+                    throw new Error('Le serveur backend n\'est pas accessible');
+                }
+                toast.success('Connexion au serveur établie', {
+                    position: "top-right",
+                    autoClose: 3000,
+                });
+            } catch (err) {
+                toast.error(err.message === 'Non authentifié' ?
+                    'Veuillez vous connecter pour accéder à cette fonctionnalité' :
+                    'Impossible de se connecter au serveur backend', {
+                    position: "top-right",
+                    autoClose: 5000,
+                });
+                console.error('Erreur de connexion:', err);
+            }
+        };
+
+        checkBackendConnection();
+    }, []);
+
+    const handleClick2 = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                toast.error('Veuillez vous connecter pour accéder à cette fonctionnalité', {
+                    position: "top-right",
+                    autoClose: 5000,
+                });
+                return;
+            }
+
+            setLoading(true);
+            const response = await fetch('https://talisman-pro-apis.onrender.com/api/v1/societies/', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            if (!response.ok) {
+                throw new Error('Erreur lors de la récupération des sociétés');
+            }
+            const data = await response.json();
+            console.log('Données reçues:', data); // Debug log
+
+            // Vérifier si data est un tableau ou si les sociétés sont dans une propriété
+            const societiesList = Array.isArray(data) ? data : (data.societies || data.results || []);
+            setSocieties(societiesList);
+
+            if (!societiesList || societiesList.length === 0) {
+                toast.info('Veuillez d\'abord créer une société avant de créer un dossier', {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                });
+                setShowSocietePopup(true);
+                return;
+            }
+
+            setShowModal2(true);
+        } catch (err) {
+            console.error('Erreur lors de la récupération des sociétés:', err);
+            toast.error(err.message, {
+                position: "top-right",
+                autoClose: 5000,
+            });
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
     };
 
     const closeModal2 = () => {
         setShowModal2(false);
+        setError(null);
+        // Réinitialiser le formulaire
+        setForm({
+            intitule: 'SYSCOHADA Révisé',
+            societyId: '',
+            notes: ''
+        });
     };
 
     const handleRowClick1 = (row) => {
@@ -114,13 +216,6 @@ export default function AppContent() {
         });
     };
 
-
-const [form, setForm] = useState({
-  referentiel: 'SYSCOHADA Révisé',
-  societe: 'CE2IG',
-  note: ''
-});
-
     const handleRowClick = () => {
         setSelectedRow({
             title: "",
@@ -140,39 +235,90 @@ const [form, setForm] = useState({
     };
     const handleBackdropClick = (e) => {
         if (e.target === e.currentTarget) {
-          closeModal2();
+            closeModal2();
         }
-      };
-      const handleSubmit = (e) => {
+    };
+    const handleSubmit = async (e) => {
         e.preventDefault();
-      
-        // Exemple de traitement : affichage du formulaire dans la console
-        console.log("Données du formulaire :", form);
-      
-        // Ici tu peux ajouter la logique d'enregistrement ou d'appel API
-      
-        // Puis fermer la modale
-        closeModal2();
-      };
-      const handleChange = (e) => {
-        const { name, value, type, checked } = e.target;
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                toast.error('Veuillez vous connecter pour accéder à cette fonctionnalité', {
+                    position: "top-right",
+                    autoClose: 5000,
+                });
+                return;
+            }
+
+            setLoading(true);
+            console.log('Envoi des données au backend:', form);
+
+            const response = await fetch('https://talisman-pro-apis.onrender.com/api/v1/folders/create/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    intitule: form.intitule,
+                    societyId: form.societyId,
+                    notes: form.notes
+                })
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Erreur lors de la création du dossier');
+            }
+
+            const data = await response.json();
+            console.log('Réponse du serveur:', data);
+
+            toast.success('Dossier créé avec succès !', {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+            });
+            closeModal2();
+        } catch (err) {
+            console.error('Erreur lors de la création:', err);
+            toast.error(err.message || 'Une erreur est survenue lors de la création du dossier', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+            });
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+    const handleChange = (e) => {
+        const { name, value } = e.target;
         setForm((prevForm) => ({
-          ...prevForm,
-          [name]: type === 'checkbox' ? checked : value
+            ...prevForm,
+            [name]: value
         }));
-      };
-      
-      
+        console.log('Champ modifié:', name, value); // Debug log
+    };
+
+
 
     return (
 
         <div>
+            <ToastContainer />
             {showModal && <CreateSociety show={showModal} onClose={closeModal} initialData={selectedRow} />}
-            <MenuTop/>
+            <MenuTop />
             <div style={{ backgroundColor: "white", marginTop: "0px", paddingBottom: "2px", marginBottom: "20px" }}>
-                
 
-               
+
+
 
                 <div className="d-sm-flex mb-4 justify-content-between" style={{ marginLeft: "40px", marginRight: "40px" }}>
                     <div className="d-flex gap-2 mt-1 mt-sm-0">
@@ -188,7 +334,7 @@ const [form, setForm] = useState({
 
 
 
-                            <div className="d-flex me-2 align-items-center justify-content-center bg-dark  pe-3 ps-3  py-2" style={{ width: "150.24px",borderRadius:"4px" }}>
+                            <div className="d-flex me-2 align-items-center justify-content-center bg-dark  pe-3 ps-3  py-2" style={{ width: "150.24px", borderRadius: "4px" }}>
 
                                 <Link className="text-fixed-white border-0 ps-2 me-2" to="#" style={{ whiteSpace: "nowrap", fontSize: "11px" }} onClick={(e) => {
                                     e.preventDefault();
@@ -213,42 +359,25 @@ const [form, setForm] = useState({
                             <div className="card-body">
                                 <div className="d-sm-flex mb-4 justify-content-between">
                                     <div className="d-flex gap-2 mt-1 mt-sm-0">
-
-                                        <div className="dropdown">
-                                            <a
-                                                href="#"
-                                                className="btn btn-primary btn-sm btn-wave waves-effect waves-light"
-                                                data-bs-toggle="dropdown"
-                                                aria-expanded="false"
-                                            >
-                                                Tri par société
-                                                <i className="ri-arrow-down-s-line align-middle ms-1 d-inline-block" />
-                                            </a>
-                                            <ul className="dropdown-menu" role="menu">
-                                                <li>
-                                                    <a className="dropdown-item" href="#">
-                                                        OA
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a className="dropdown-item" href="#">
-                                                        UAC
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a className="dropdown-item" href="#">
-                                                        EPITECH
-                                                    </a>
-                                                </li>
-                                            </ul>
+                                        <div className="input-group input-group-sm" style={{ maxWidth: '250px' }}>
+                                            <span className="input-group-text bg-primary text-white border-0">
+                                                <i className="ri-search-line"></i>
+                                            </span>
+                                            <input
+                                                type="text"
+                                                className="form-control border-0"
+                                                placeholder="Rechercher une société..."
+                                                onChange={(e) => console.log(e.target.value)} 
+                                            />
                                         </div>
                                     </div>
+
                                     <div>
                                         <div className="pageheader-btn">
                                             <nav>
                                                 <div className="breadcrumb mb-0">
                                                     <div className="d-flex" style={{ flexWrap: "nowrap", overflowX: "auto" }}>
-                                                        <div className="d-flex me-4 align-items-center justify-content-center bg-danger ps-3 pe-3  py-1" style={{ width: "150.24px", borderRadius:"4px" }}>
+                                                        <div className="d-flex me-4 align-items-center justify-content-center bg-danger ps-3 pe-3  py-1" style={{ width: "150.24px", borderRadius: "4px" }}>
                                                             <div className="-text text-muted text-fixed-white me-0 border-0 pe-0">
                                                                 <i className="fa fa-trash mt-1" />
                                                             </div>
@@ -256,7 +385,7 @@ const [form, setForm] = useState({
                                                                 Supprimer
                                                             </Link>
                                                         </div>
-                                                        <div className="d-flex me-4 align-items-center justify-content-center bg-primary pe-3 ps-3  py-1" style={{ width: "150.24px",borderRadius:"4px" }}>
+                                                        <div className="d-flex me-4 align-items-center justify-content-center bg-primary pe-3 ps-3  py-1" style={{ width: "150.24px", borderRadius: "4px" }}>
                                                             <div className="-text text-muted bg-primary text-fixed-white me-0 border-0 pe-0">
                                                                 <i className="fa fa-clone mt-1" />
                                                             </div>
@@ -264,7 +393,7 @@ const [form, setForm] = useState({
                                                                 Dupliquer
                                                             </Link>
                                                         </div>
-                                                        <div className="d-flex me-2 align-items-center justify-content-center bg-success pe-3 ps-3  " style={{ cursor: "pointer",borderRadius:"4px" }}>
+                                                        <div className="d-flex me-2 align-items-center justify-content-center bg-success pe-3 ps-3  " style={{ cursor: "pointer", borderRadius: "4px" }}>
                                                             <div className="-text text-muted text-fixed-white me-0 border-0 pe-0">
                                                                 <i className="fa fa-plus mt-1" />
                                                             </div>
@@ -313,8 +442,8 @@ const [form, setForm] = useState({
                                                 </td>
 
                                                 <td className="text-center">20-04-2022 à 14:30</td>
-                                                <td className="text-center" onClick={() => handleRowClick1()} style={{textDecoration:"underline", color:'blue', cursor:"pointer"}}>
-                                                   Consulter
+                                                <td className="text-center" onClick={() => handleRowClick1()} style={{ textDecoration: "underline", color: 'blue', cursor: "pointer" }}>
+                                                    Consulter
                                                 </td>
                                             </tr>
                                             <tr>
@@ -338,11 +467,11 @@ const [form, setForm] = useState({
                                                 </td>
 
                                                 <td className="text-center">20-04-2022 à 14:30</td>
-                                                <td className="text-center" onClick={() => handleRowClick1()} style={{textDecoration:"underline", color:'blue',  cursor:"pointer"}}>
+                                                <td className="text-center" onClick={() => handleRowClick1()} style={{ textDecoration: "underline", color: 'blue', cursor: "pointer" }}>
 
-   
 
-                                                   Consulter
+
+                                                    Consulter
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -435,202 +564,214 @@ const [form, setForm] = useState({
                 )}
 
                 {showModal2 && (
-                   <>
-                 <div
-  style={{
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    zIndex: 1050
-  }}
-  onClick={handleBackdropClick}
->
-  <div
-    style={{
-      backgroundColor: 'white',
-      borderRadius: '0.5rem',
-      boxShadow: '0 0.5rem 1rem rgba(0, 0, 0, 0.15)',
-      width: '90%',
-      maxWidth: '800px',
-      maxHeight: '90vh',
-      overflowY: 'auto',
-      position: 'relative',
-      zIndex: 1051
-    }}
-    onClick={e => e.stopPropagation()}
-  >
-    <div style={{
-      padding: '1rem',
-      borderBottom: '1px solid #dee2e6',
-      position: 'relative'
-    }}>
-      <h5 style={{ margin: 0, fontWeight: 'bold' }}>Créer un nouveau dossier</h5>
-      <button
-        type="button"
-        onClick={closeModal2}
-        style={{
-          position: 'absolute',
-          right: '1rem',
-          top: '1rem',
-          background: 'none',
-          border: 'none',
-          fontSize: '1.5rem',
-          cursor: 'pointer'
-        }}
-      >
-        ×
-      </button>
-    </div>
+                    <>
+                        <div
+                            style={{
+                                position: 'fixed',
+                                top: 0,
+                                left: 0,
+                                right: 0,
+                                bottom: 0,
+                                backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                zIndex: 1050
+                            }}
+                            onClick={handleBackdropClick}
+                        >
+                            <div
+                                style={{
+                                    backgroundColor: 'white',
+                                    borderRadius: '0.5rem',
+                                    boxShadow: '0 0.5rem 1rem rgba(0, 0, 0, 0.15)',
+                                    width: '90%',
+                                    maxWidth: '800px',
+                                    maxHeight: '90vh',
+                                    overflowY: 'auto',
+                                    position: 'relative',
+                                    zIndex: 1051
+                                }}
+                                onClick={e => e.stopPropagation()}
+                            >
+                                <div style={{
+                                    padding: '1rem',
+                                    borderBottom: '1px solid #dee2e6',
+                                    position: 'relative'
+                                }}>
+                                    <h5 style={{ margin: 0, fontWeight: 'bold' }}>Créer un nouveau dossier</h5>
+                                    <button
+                                        type="button"
+                                        onClick={closeModal2}
+                                        style={{
+                                            position: 'absolute',
+                                            right: '1rem',
+                                            top: '1rem',
+                                            background: 'none',
+                                            border: 'none',
+                                            fontSize: '1.5rem',
+                                            cursor: 'pointer'
+                                        }}
+                                    >
+                                        ×
+                                    </button>
+                                </div>
 
-    <form onSubmit={handleSubmit} style={{ padding: '1rem' }}>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-        {/* Référentiel */}
-        <div style={{ gridColumn: '1 / -1' }}>
-          <label style={{ display: 'block', marginBottom: '0.5rem' }}>Référentiel</label>
-          <select
-            name="referentiel"
-            value={form.referentiel}
-            onChange={handleChange}
-            style={{
-              width: '100%',
-              padding: '0.375rem 0.75rem',
-              border: '1px solid #ced4da',
-              borderRadius: '0.25rem'
-            }}
-          >
-            <option value="SYSCOHADA Révisé">SYSCOHADA Révisé</option>
-            <option value="IFRS">IFRS</option>
-          </select>
-        </div>
+                                <form onSubmit={handleSubmit} style={{ padding: '1rem' }}>
+                                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                                        {/* Référentiel */}
+                                        <div style={{ gridColumn: '1 / -1' }}>
+                                            <label style={{ display: 'block', marginBottom: '0.5rem' }}>Référentiel</label>
+                                            <select
+                                                name="intitule"
+                                                value={form.intitule}
+                                                onChange={handleChange}
+                                                style={{
+                                                    width: '100%',
+                                                    padding: '0.375rem 0.75rem',
+                                                    border: '1px solid #ced4da',
+                                                    borderRadius: '0.25rem'
+                                                }}
+                                            >
+                                                <option value="SYSCOHADA Révisé">SYSCOHADA Révisé</option>
+                                                <option value="IFRS">IFRS</option>
+                                            </select>
+                                        </div>
 
-        {/* Société */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', gridColumn: '1 / -1' }}>
-          <div style={{ flex: 1 }}>
-            <label style={{ display: 'block', marginBottom: '0.5rem' }}>Société</label>
-            <select
-              name="societe"
-              value={form.societe}
-              onChange={handleChange}
-              style={{
-                width: '100%',
-                padding: '0.375rem 0.75rem',
-                border: '1px solid #ced4da',
-                borderRadius: '0.25rem'
-              }}
-            >
-              <option value="CE2IG">CE2IG</option>
-              <option value="Nouvelle société">Nouvelle société</option>
-            </select>
-          </div>
-          <button
-            type="button"
-            onClick={openSocietePopup}
-            style={{
-              marginTop: '1.5rem',
-              padding: '0.375rem 0.75rem',
-              backgroundColor: '#0d6efd',
-              border: '1px solid #0d6efd',
-              borderRadius: '0.25rem',
-              color: 'white',
-              height: '38px',
-              cursor: 'pointer'
-            }}
-          >
-            +
-          </button>
-        </div>
+                                        {/* Société */}
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', gridColumn: '1 / -1' }}>
+                                            <div style={{ flex: 1 }}>
+                                                <label style={{ display: 'block', marginBottom: '0.5rem' }}>Société</label>
+                                                <select
+                                                    name="societyId"
+                                                    value={form.societyId}
+                                                    onChange={handleChange}
+                                                    style={{
+                                                        width: '100%',
+                                                        padding: '0.375rem 0.75rem',
+                                                        border: '1px solid #ced4da',
+                                                        borderRadius: '0.25rem'
+                                                    }}
+                                                >
+                                                    <option value="">Sélectionnez une société</option>
+                                                    {Array.isArray(societies) && societies.map((society) => (
+                                                        <option key={society.id} value={society.id}>
+                                                            {society.name}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            </div>
+                                            <button
+                                                type="button"
+                                                onClick={openSocietePopup}
+                                                style={{
+                                                    marginTop: '1.5rem',
+                                                    padding: '0.375rem 0.75rem',
+                                                    backgroundColor: '#0d6efd',
+                                                    border: '1px solid #0d6efd',
+                                                    borderRadius: '0.25rem',
+                                                    color: 'white',
+                                                    height: '38px',
+                                                    cursor: 'pointer'
+                                                }}
+                                            >
+                                                +
+                                            </button>
+                                        </div>
 
-        {/* Note */}
-        <div style={{ gridColumn: '1 / -1' }}>
-          <label style={{ display: 'block', marginBottom: '0.5rem' }}>Note</label>
-          <textarea
-            name="note"
-            value={form.note}
-            onChange={handleChange}
-            placeholder="Ajoutez une note sur le dossier..."
-            style={{
-              width: '100%',
-              padding: '0.375rem 0.75rem',
-              border: '1px solid #ced4da',
-              borderRadius: '0.25rem',
-              minHeight: '100px'
-            }}
-          />
-        </div>
-      </div>
+                                        {/* Note */}
+                                        <div style={{ gridColumn: '1 / -1' }}>
+                                            <label style={{ display: 'block', marginBottom: '0.5rem' }}>Note</label>
+                                            <textarea
+                                                name="notes"
+                                                value={form.notes}
+                                                onChange={handleChange}
+                                                placeholder="Ajoutez une note sur le dossier..."
+                                                style={{
+                                                    width: '100%',
+                                                    padding: '0.375rem 0.75rem',
+                                                    border: '1px solid #ced4da',
+                                                    borderRadius: '0.25rem',
+                                                    minHeight: '100px'
+                                                }}
+                                            />
+                                        </div>
+                                    </div>
 
-      <div style={{
-        marginTop: '1rem',
-        paddingTop: '1rem',
-        borderTop: '1px solid #dee2e6',
-        display: 'flex',
-        justifyContent: 'flex-end',
-        gap: '0.5rem'
-      }}>
-        <button
-          type="button"
-          onClick={closeModal2}
-          style={{
-            padding: '0.375rem 0.75rem',
-            border: '1px solid #6c757d',
-            borderRadius: '0.25rem',
-            backgroundColor: 'transparent',
-            color: '#6c757d'
-          }}
-        >
-          Annuler
-        </button>
-        <button
-          type="submit"
-          style={{
-            padding: '0.375rem 0.75rem',
-            border: '1px solid #0d6efd',
-            borderRadius: '0.25rem',
-            backgroundColor: '#0d6efd',
-            color: 'white'
-          }}
-        >
-          Enregistrer
-        </button>
-      </div>
-    </form>
-  </div>
-</div>
+                                    {error && (
+                                        <div style={{ color: 'red', marginTop: '1rem' }}>
+                                            {error}
+                                        </div>
+                                    )}
+
+                                    <div style={{
+                                        marginTop: '1rem',
+                                        paddingTop: '1rem',
+                                        borderTop: '1px solid #dee2e6',
+                                        display: 'flex',
+                                        justifyContent: 'flex-end',
+                                        gap: '0.5rem'
+                                    }}>
+                                        <button
+                                            type="button"
+                                            onClick={closeModal2}
+                                            style={{
+                                                padding: '0.375rem 0.75rem',
+                                                border: '1px solid #6c757d',
+                                                borderRadius: '0.25rem',
+                                                backgroundColor: 'transparent',
+                                                color: '#6c757d'
+                                            }}
+                                        >
+                                            Annuler
+                                        </button>
+                                        <button
+                                            type="submit"
+                                            disabled={loading}
+                                            style={{
+                                                padding: '0.375rem 0.75rem',
+                                                border: '1px solid #0d6efd',
+                                                borderRadius: '0.25rem',
+                                                backgroundColor: '#0d6efd',
+                                                color: 'white',
+                                                opacity: loading ? 0.7 : 1
+                                            }}
+                                        >
+                                            {loading ? 'Enregistrement...' : 'Enregistrer'}
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
 
 
-                 
-                   {/* Popup nouvelle société */}
-                   {showSocietePopup && (
-                     <div
-                       style={{
-                        
-                       }}
-                     >
-                       <div
-                         style={{
-                           background: "white",
-                           padding: "2rem",
-                           borderRadius: 8,
-                           minWidth: 300,
-                           textAlign: "center"
-                         }}
-                       >
-                         <CreateSociety 
-                           show={showSocietePopup} 
-                           onClose={closeSocietePopup} 
-                           initialData={selectedRow} 
-                         />
-                       </div>
-                     </div>
-                   )}
-                 </>
-                 
+
+                        {/* Popup nouvelle société */}
+                        {showSocietePopup && (
+                            <div
+                                style={{
+
+                                }}
+                            >
+                                <div
+                                    style={{
+                                        background: "white",
+                                        padding: "2rem",
+                                        borderRadius: 8,
+                                        minWidth: 300,
+                                        textAlign: "center"
+                                    }}
+                                >
+                                    <CreateSociety
+                                        show={showSocietePopup}
+                                        onClose={closeSocietePopup}
+                                        initialData={selectedRow}
+                                    />
+                                </div>
+                            </div>
+                        )}
+                    </>
+
                 )}
             </div>
         </div>

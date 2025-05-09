@@ -2,3 +2,23 @@
     background-color: #b9fbc0 !important;
     font-weight: bold;
 } 
+
+/* Styles pour le tableau */
+#journalTable {
+    font-size: 10px;
+}
+
+#journalTable thead tr th {
+    font-size: 10px;
+    padding: 8px;
+}
+
+#journalTable tbody tr td {
+    font-size: 10px;
+    padding: 8px;
+}
+
+/* Style pour la ligne de total */
+#journalTable tbody tr:last-child {
+    font-weight: bold;
+}

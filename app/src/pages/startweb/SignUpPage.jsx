@@ -50,7 +50,7 @@ const SignUpPage = () => {
         form.append("ifu", formData.ifu);
 
         if (selectedImage) {
-            form.append("log_url", selectedImage);
+            form.append("logo_url", selectedImage);
         } else {
             setError("Veuillez sélectionner un logo.");
             setLoading(false);

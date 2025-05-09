@@ -7,6 +7,7 @@ import { faEdit, faTrash, faHome, faFileAlt, faCog, faChartBar, faUsers, faBars,
 import { Link } from "react-router-dom";
 import Sidebar from '../../../../components/commonComponents/sidebar/Sidebar'
 import MenuTop from '../../../../components/commonComponents/topMenu/MenuTop'
+import './SaisiePage.css'
 
 export default function SaisiePage() {
     const [showModal, setShowModal] = useState(false);
@@ -14,6 +15,8 @@ export default function SaisiePage() {
     const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
     const [showMonthly, setShowMonthly] = useState(false);
     const [showGenerally, setShowGenerally] = useState(true);
+    const [debit, setDebit] = useState('');
+    const [credit, setCredit] = useState('');
 
 
     const toggleSidebar = () => {
@@ -49,6 +52,16 @@ export default function SaisiePage() {
         setShowGenerally(true)
         setShowMonthly(false)
     }
+
+    const handleDebitChange = (e) => {
+        setDebit(e.target.value);
+        setCredit(''); // Clear credit when debit is filled
+    };
+
+    const handleCreditChange = (e) => {
+        setCredit(e.target.value);
+        setDebit(''); // Clear debit when credit is filled
+    };
 
     return (
         <div>
@@ -98,76 +111,95 @@ export default function SaisiePage() {
                                     marginTop: "20px",
                                     gap: "1rem"
                                 }}>
-                                    <h4 style={{ fontWeight: "600" }}>Solde du compte</h4>
-                                    <input
+                                    <div>
+                                       
+                                        <div className=''>
+                                            <span style={{paddingRight:"3px", fontSize:"10px", fontWeight:"bold"}}>Solde du compte : </span>
+                                            <input
                                         type="text"
                                         placeholder="---"
-                                        style={{ backgroundColor: "#b9fbc0", border: "1px solid #ccc", borderRadius: 4, padding: "0.5rem" }}
+                                        style={{ backgroundColor: "#b9fbc0", border: "1px solid #ccc",fontSize:"9px", borderRadius: 4,width:"71%",padding:"3px 1px 3px 7px" }}
                                         readOnly
-                                    />
+                                    /></div>
+                                    </div>
 
                                     <div style={{ display: "flex", gap: "1rem" }}>
                                         <div style={{ flex: 1 }}>
                                             <label>Date</label>
-                                            <input type="date" style={{ width: "100%", padding: "0.5rem", borderRadius: 4, border: "1px solid #ccc" }} />
+                                            <input type="date" style={{ width: "100%", fontSize:"9px", padding:"3px 1px 3px 7px", borderRadius: 4, border: "1px solid #ccc" }} />
                                         </div>
                                         <div style={{ flex: 1 }}>
                                             <label>Pièces</label>
-                                            <input type="text" placeholder="00003" style={{ width: "100%", padding: "0.5rem", borderRadius: 4, border: "1px solid #ccc" }} />
+                                            <input type="text" placeholder="00003" style={{ width: "100%", fontSize:"9px", padding:"3px 1px 3px 7px", borderRadius: 4, border: "1px solid #ccc" }} />
                                         </div>
                                     </div>
 
                                     <div style={{ display: "flex", gap: "1rem" }}>
                                         <div style={{ flex: 1 }}>
-                                            <label>Référence</label>
-                                            <input type="text" placeholder="10-25-25" style={{ width: "100%", padding: "0.5rem", borderRadius: 4, border: "1px solid #ccc" }} />
+                                        <label>Date d'échéance</label>
+                                            <input type="text" placeholder="10-25-25" style={{ width: "100%", fontSize:"9px", padding:"3px 1px 3px 7px", borderRadius: 4, border: "1px solid #ccc" }} />
                                         </div>
                                         <div style={{ flex: 1 }}>
-                                            <label>N° de compte</label>
-                                            <input type="text" placeholder="00003" style={{ width: "100%", padding: "0.5rem", borderRadius: 4, border: "1px solid #ccc" }} />
+                                            <label>Rérérence</label>
+                                            <input type="text" placeholder="00003" style={{ width: "100%", fontSize:"9px", padding:"3px 1px 3px 7px", borderRadius: 4, border: "1px solid #ccc" }} />
+                                        </div>
+                                    </div>
+                                    <div style={{ display: "flex", gap: "1rem" }}>
+                                        <div style={{ flex: 1 }}>
+                                        <label>Numéro de compte</label>
+                                            <input type="text" placeholder="---" style={{ width: "100%", fontSize:"9px", padding:"3px 1px 3px 7px", borderRadius: 4, border: "1px solid #ccc" }} />
+                                        </div>
+                                        <div style={{ flex: 1 }}>
+                                            <label>Tiers</label>
+                                            <input type="text" placeholder="---" style={{ width: "100%", fontSize:"9px", padding:"3px 1px 3px 7px", borderRadius: 4, border: "1px solid #ccc" }} />
                                         </div>
                                     </div>
 
                                     <div>
                                         <label>Libellé</label>
-                                        <input type="text" placeholder="---" style={{ width: "100%", padding: "0.5rem", borderRadius: 4, border: "1px solid #ccc" }} />
+                                        <input type="text" placeholder="---" style={{ width: "100%", fontSize:"9px", padding:"3px 1px 3px 7px", borderRadius: 4, border: "1px solid #ccc" }} />
                                     </div>
 
-                                    <div>
-                                        <label>Tiers</label>
-                                        <input type="text" placeholder="---" style={{ width: "100%", padding: "0.5rem", borderRadius: 4, border: "1px solid #ccc" }} />
-                                    </div>
-
-                                    <div>
-                                        <label>Date d’échéance</label>
-                                        <input type="date" placeholder="---" style={{ width: "100%", padding: "0.5rem", borderRadius: 4, border: "1px solid #ccc" }} />
-                                    </div>
+                                  
 
                                     <div>
                                         <label>Débit</label>
-                                        <input type="text" placeholder="---" style={{ width: "100%", padding: "0.5rem", borderRadius: 4, border: "1px solid #ccc" }} />
+                                        <input 
+                                            type="number" 
+                                            placeholder="---" 
+                                            style={{ width: "100%", fontSize:"9px", padding:"3px 1px 3px 7px", borderRadius: 4, border: "1px solid #ccc" }}
+                                            value={debit}
+                                            onChange={handleDebitChange}
+                                        />
                                     </div>
 
                                     <div>
                                         <label>Crédit</label>
-                                        <input type="text" placeholder="---" style={{ width: "100%", padding: "0.5rem", borderRadius: 4, border: "1px solid #ccc" }} />
+                                        <input 
+                                            type="number" 
+                                            placeholder="---" 
+                                            style={{ width: "100%", fontSize:"9px", padding:"3px 1px 3px 7px", borderRadius: 4, border: "1px solid #ccc" }}
+                                            value={credit}
+                                            onChange={handleCreditChange}
+                                        />
                                     </div>
 
                                     <button style={{
-                                        backgroundColor: "#374151",
+                                        backgroundColor: "green",
                                         color: "white",
                                         border: "none",
-                                        padding: "0.75rem",
+                                        padding:"5px 0px 5px 0px",
                                         borderRadius: 6,
-                                        marginTop: "1rem"
+                                        marginTop: "1rem",
+                                        fontSize:"10px"
                                     }}>
-                                        Validé
+                                        Valider
                                     </button>
                                 </div>
                             </div>
 
                             <div className='col-9'>
-                                <div className="row" style={{ marginTop: "20px" }}>
+                                <div className="row" style={{ marginTop: "20px",}}>
                                     <div className="col-xl-12">
                                         <div className="card custom-card">
                                             <div className="card-body" >
@@ -181,14 +213,14 @@ export default function SaisiePage() {
 
                                                         <div className="" onClick={() => toShowMonthly()}>
                                                             <span
-                                                                className="btn boder border-dark  btn-sm" style={{ backgroundColor: "#BDBDBD" }}
+                                                                className="btn boder border-dark  btn-sm" style={{ backgroundColor: "#BDBDBD", fontSize:"10px"  }}
                                                             >
                                                                 Nouvelle pièce
                                                             </span>
                                                         </div>
                                                         <div className="" onClick={() => toShowMonthly()}>
                                                             <span
-                                                                className="btn border border-dark btn-sm"
+                                                                className="btn border border-dark btn-sm" style={{ fontSize:"10px" }}
                                                             >
                                                                 Editer la fiche
                                                             </span>
@@ -196,14 +228,14 @@ export default function SaisiePage() {
 
                                                         <div className="" onClick={() => toShowGenerally()}>
                                                             <span
-                                                                className="btn  bg-dark text-white btn-sm"
+                                                                className="btn  bg-dark text-white btn-sm"style={{ fontSize:"10px" }}
                                                             >
                                                                 Recupérer
                                                             </span>
                                                         </div>
                                                         <div className="" onClick={() => toShowGenerally()}>
                                                             <span
-                                                                className="btn bg-danger text-white btn-sm"
+                                                                className="btn bg-danger text-white btn-sm"style={{ fontSize:"10px" }}
                                                             >
                                                                 Supprimer
                                                             </span>
@@ -213,7 +245,7 @@ export default function SaisiePage() {
 
                                                         <div className="" >
                                                             <span
-                                                                className="btn  btn-sm" style={{ backgroundColor: "#22C03C" }}
+                                                                className="btn  btn-sm" style={{ backgroundColor: "#22C03C" , fontSize:"10px"}}
                                                             >
                                                                 Modifier
                                                             </span>
@@ -223,19 +255,9 @@ export default function SaisiePage() {
 
 
                                                 {/* Table dynamique selon la vue */}
-
-
-
-
-
-
-
-
-
-
                                                 <div className="table-responsive" style={{ maxHeight: '500px', overflowY: 'auto' }}>
                                                     <table className="table table-bordered text-nowrap mb-0" id="journalTable">
-                                                        <thead style={{ position: 'sticky', top: 0, zIndex: 1, }}>
+                                                        <thead style={{ position: 'sticky', top: 0, zIndex: 1,}}>
                                                             <tr>
                                                                 <th className="text-center text-light bg-primary">Date</th>
                                                                 <th className="text-light bg-primary">Pièces</th>
@@ -243,7 +265,7 @@ export default function SaisiePage() {
                                                                 <th className="text-end text-light bg-primary">N° Compte</th>
                                                                 <th className="text-end text-light bg-primary">Tiers</th>
                                                                 <th className="text-center text-light bg-primary">libellé</th>
-                                                                <th className="text-center text-light bg-primary">Date d’échéance</th>
+                                                                <th className="text-center text-light bg-primary">Date d'échéance</th>
                                                                 <th className="text-center text-light bg-primary">Débit</th>
                                                                 <th className="text-center text-light bg-primary">Crédit</th>
                                                             </tr>
@@ -273,7 +295,7 @@ export default function SaisiePage() {
                                                                 <td className="text-center">10.000.000</td>
                                                             </tr>
                                                             <tr style={{ backgroundColor: "#b9fbc0", }}>
-                                                                <td colSpan="7">Total(Équilibre)</td>
+                                                                <td colSpan="7">Total</td>
                                                                 <td className="text-center">10.000.000</td>
                                                                 <td className="text-center">10.000.000</td>
                                                             </tr>

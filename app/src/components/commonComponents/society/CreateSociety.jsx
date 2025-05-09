@@ -1,8 +1,11 @@
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
+import { toast } from 'react-toastify';
 
 const CreateCompanyModal = ({ show, onClose }) => {
     const [step, setStep] = useState(1);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
     const [form, setForm] = useState({
         name: "",
         sigle: "",
@@ -15,12 +18,11 @@ const CreateCompanyModal = ({ show, onClose }) => {
         activite: "",
         date: "",
         autres: "",
-        dirigeant:"",
-        nationaliteDirigeant:"",
-        capital:"",
-        employes:"",
-        remarques:""
-
+        dirigeant: "",
+        nationaliteDirigeant: "",
+        capital: "",
+        employes: "",
+        remarques: ""
     });
 
     useEffect(() => {
@@ -44,10 +46,62 @@ const CreateCompanyModal = ({ show, onClose }) => {
         setForm((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("✅ Société créée :", form);
-        onClose();
+        try {
+            setLoading(true);
+            const response = await fetch('https://talisman-pro-apis.onrender.com/api/v1/societies/create/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    name: form.name,
+                    sigle: form.sigle,
+                    ifu: form.ifu,
+                    codeActivite: form.codeActivite,
+                    email: form.email,
+                    adresse: form.adresse,
+                    registre: form.registre,
+                    contact: form.contact,
+                    activite: form.activite,
+                    dateCreation: form.date,
+                    autres: form.autres,
+                    dirigeant: form.dirigeant,
+                    nationaliteDirigeant: form.nationaliteDirigeant,
+                    capital: form.capital,
+                    employes: form.employes,
+                    remarques: form.remarques
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Erreur lors de la création de la société');
+            }
+
+            const data = await response.json();
+            toast.success('Société créée avec succès !', {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+            });
+            onClose();
+        } catch (err) {
+            toast.error(err.message || 'Une erreur est survenue lors de la création de la société', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+            });
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
     };
 
     const handleBackdropClick = (e) => {
@@ -138,7 +192,6 @@ const CreateCompanyModal = ({ show, onClose }) => {
                                     <input name="date" type="date" value={form.date} onChange={handleChange} required style={inputStyle} />
                                 </div>
 
-
                                 <div style={{ gridColumn: '1 / -1' }}>
                                     <label>Autres informations (Optionnel)</label>
                                     <textarea
@@ -155,72 +208,76 @@ const CreateCompanyModal = ({ show, onClose }) => {
                                         }}
                                     />
                                 </div>
-
                             </>
                         )}
 
                         {step === 2 && (
                             <>
-                            <div>
-                              <label>Nom du dirigeant principal</label>
-                              <input
-                                name="dirigeant"
-                                type="text"
-                                value={form.dirigeant || ""}
-                                onChange={handleChange}
-                                style={inputStyle}
-                              />
-                            </div>
-                            <div>
-                              <label>Nationalité du dirigeant</label>
-                              <input
-                                name="nationaliteDirigeant"
-                                type="text"
-                                value={form.nationaliteDirigeant || ""}
-                                onChange={handleChange}
-                                style={inputStyle}
-                              />
-                            </div>
-                            <div>
-                              <label>Capital social</label>
-                              <input
-                                name="capital"
-                                type="number"
-                                value={form.capital || ""}
-                                onChange={handleChange}
-                                style={inputStyle}
-                              />
-                            </div>
-                            <div>
-                              <label>Nombre d'employés</label>
-                              <input
-                                name="employes"
-                                type="number"
-                                value={form.employes || ""}
-                                onChange={handleChange}
-                                style={inputStyle}
-                              />
-                            </div>
-                            <div style={{ gridColumn: '1 / -1' }}>
-                              <label>Observations ou remarques</label>
-                              <textarea
-                                name="remarques"
-                                value={form.remarques || ""}
-                                onChange={handleChange}
-                                placeholder="Remarques additionnelles sur la société"
-                                style={{
-                                  width: '100%',
-                                  padding: '0.375rem 0.75rem',
-                                  border: '1px solid #ced4da',
-                                  borderRadius: '0.25rem',
-                                  minHeight: '80px'
-                                }}
-                              />
-                            </div>
-                          </>
-                          
+                                <div>
+                                    <label>Nom du dirigeant principal</label>
+                                    <input
+                                        name="dirigeant"
+                                        type="text"
+                                        value={form.dirigeant}
+                                        onChange={handleChange}
+                                        style={inputStyle}
+                                    />
+                                </div>
+                                <div>
+                                    <label>Nationalité du dirigeant</label>
+                                    <input
+                                        name="nationaliteDirigeant"
+                                        type="text"
+                                        value={form.nationaliteDirigeant}
+                                        onChange={handleChange}
+                                        style={inputStyle}
+                                    />
+                                </div>
+                                <div>
+                                    <label>Capital social</label>
+                                    <input
+                                        name="capital"
+                                        type="number"
+                                        value={form.capital}
+                                        onChange={handleChange}
+                                        style={inputStyle}
+                                    />
+                                </div>
+                                <div>
+                                    <label>Nombre d'employés</label>
+                                    <input
+                                        name="employes"
+                                        type="number"
+                                        value={form.employes}
+                                        onChange={handleChange}
+                                        style={inputStyle}
+                                    />
+                                </div>
+                                <div style={{ gridColumn: '1 / -1' }}>
+                                    <label>Observations ou remarques</label>
+                                    <textarea
+                                        name="remarques"
+                                        value={form.remarques}
+                                        onChange={handleChange}
+                                        placeholder="Remarques additionnelles sur la société"
+                                        style={{
+                                            width: '100%',
+                                            padding: '0.375rem 0.75rem',
+                                            border: '1px solid #ced4da',
+                                            borderRadius: '0.25rem',
+                                            minHeight: '80px'
+                                        }}
+                                    />
+                                </div>
+                            </>
                         )}
                     </div>
+
+                    {error && (
+                        <div style={{ color: 'red', marginTop: '1rem' }}>
+                            {error}
+                        </div>
+                    )}
 
                     <div style={{
                         marginTop: '1rem',
@@ -232,12 +289,17 @@ const CreateCompanyModal = ({ show, onClose }) => {
                     }}>
                         <button type="button" onClick={onClose} style={cancelButtonStyle}>Annuler</button>
                         {step === 1 ? (
-                            <button type="button"onClick={(e) => {
-                                e.preventDefault();  // ← Ajout pour bloquer tout comportement par défaut
+                            <button type="button" onClick={(e) => {
+                                e.preventDefault();
                                 setStep(2);
                             }} style={primaryButtonStyle}>Suivant</button>
                         ) : (
-                            <button type="submit" style={primaryButtonStyle}>Créer</button>
+                            <button type="submit" disabled={loading} style={{
+                                ...primaryButtonStyle,
+                                opacity: loading ? 0.7 : 1
+                            }}>
+                                {loading ? 'Création...' : 'Créer'}
+                            </button>
                         )}
                     </div>
                 </form>
