@@ -74,7 +74,7 @@ export default function AppContent() {
                     throw new Error('Non authentifié');
                 }
 
-                const response = await fetch('https://talisman-pro-apis.onrender.com/api/v1/societies/', {
+                const response = await fetch('http://82.112.254.228:8000/api/v1/societies/', {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
@@ -112,7 +112,7 @@ export default function AppContent() {
             }
 
             setLoading(true);
-            const response = await fetch('https://talisman-pro-apis.onrender.com/api/v1/societies/', {
+            const response = await fetch('http://82.112.254.228:8000/api/v1/societies/', {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -253,7 +253,7 @@ export default function AppContent() {
             setLoading(true);
             console.log('Envoi des données au backend:', form);
 
-            const response = await fetch('https://talisman-pro-apis.onrender.com/api/v1/folders/create/', {
+            const response = await fetch('http://82.112.254.228:8000/api/v1/folders/create/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

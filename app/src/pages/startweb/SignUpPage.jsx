@@ -61,7 +61,7 @@ const SignUpPage = () => {
             for (let [key, value] of form.entries()) {
                 console.log(`${key}:`, value);
             }
-            const response = await fetch("https://talisman-pro-apis.onrender.com/api/v1/companies/create/", {
+            const response = await fetch("http://82.112.254.228:8000/api/v1/companies/create/", {
                 method: "POST",
                 body: form,
             });
@@ -78,7 +78,7 @@ const SignUpPage = () => {
                 navigate("/login");
             }
         } catch (err) {
-            setError("Une erreur réseau est survenue.");
+            setError("Une erreur réseau est survenue.", err);
         } finally {
             setLoading(false);
         }

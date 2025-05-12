@@ -16,7 +16,7 @@ const LoginPage = () => {
         setError("");
 
         try {
-            const response = await fetch("https://talisman-pro-apis.onrender.com/api/v1/auth/login/", {
+            const response = await fetch("http://82.112.254.228:8000/api/v1/auth/login/", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -34,6 +34,15 @@ const LoginPage = () => {
 
             // Stocke le token ou utilisateur
             localStorage.setItem("token", data.access);
+
+            // Stocke l'utilisateur
+            localStorage.setItem("user", JSON.stringify(data.user));
+            // Stocke l'entreprise
+            localStorage.setItem("company", JSON.stringify(data.user.company));
+            // Stocke l'ID de l'entreprise 
+            localStorage.setItem("companyId", data.user.company.id);
+            console.log(data.user.company.id);
+            
             // Redirige vers le dashboard
             navigate("/dashboard");
 

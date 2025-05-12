@@ -50,7 +50,7 @@ const CreateCompanyModal = ({ show, onClose }) => {
         e.preventDefault();
         try {
             setLoading(true);
-            const response = await fetch('https://talisman-pro-apis.onrender.com/api/v1/societies/create/', {
+            const response = await fetch('http://82.112.254.228:8000/api/v1/societies/create/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
