@@ -2,59 +2,21 @@ import React, { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 import FoldersTable from './dossiers/FoldersTable';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-    faFolder,
-    faPlusCircle,
-    faKeyboard,
-    faLink,
-    faUniversity,
-    faPrint,
-    faBook,
-    faSearch,
-    faLock,
-    faSave,
-    faFileExport,
-    faCalendar,
-    faEllipsisH,
-    faEye,
-    faEdit,
-    faArchive,
-    faTrash
-} from '@fortawesome/free-solid-svg-icons';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
-import CreateSociety from '../commonComponents/society/CreateSociety';
+import CreateSociety from './society/CreateSociety';
 import MenuTop from './topMenu/MenuTop';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const styles = `
-    .menu-item {
-        transition: all 0.2s ease;
-        padding: 5px 10px;
-        border-radius: 4px;
-    }
-    .menu-item:hover {
-        background-color: rgb(110, 110, 110);
-    }
-    .menu-item a {
-        color: inherit;
-        text-decoration: none;
-    }
-    .menu-item:hover a {
-        color: white;
-    }
-`;
+
 
 export default function AppContent() {
     const [showModal1, setShowModal1] = useState(false);
     const [showModal2, setShowModal2] = useState(false);
     const [showSocietePopup, setShowSocietePopup] = useState(false);
     const [selectedRow, setSelectedRow] = useState(null);
-    const [startDate, setStartDate] = useState(new Date());
-    const [endDate, setEndDate] = useState(new Date());
-    const [showStartDatePicker, setShowStartDatePicker] = useState(false);
-    const [showEndDatePicker, setShowEndDatePicker] = useState(false);
+
     const [societies, setSocieties] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -367,7 +329,7 @@ export default function AppContent() {
                                                 type="text"
                                                 className="form-control border-0"
                                                 placeholder="Rechercher une société..."
-                                                onChange={(e) => console.log(e.target.value)} 
+                                                onChange={(e) => console.log(e.target.value)}
                                             />
                                         </div>
                                     </div>
@@ -542,9 +504,21 @@ export default function AppContent() {
                         }}>
                             <div className="modal-content">
                                 <div className="modal-header d-flex justify-content-between">
-                                    <h5 className="modal-title">Societé {selectedRow}</h5>
-                                    <h5 className='me-3'>Référentiel : SYSCOHADA révisé</h5>
+                                    <h5 className="modal-title">Societé Epitech</h5>
+                                    <div className='d-flex align-items-center justify-content-center'>        
+                                    <h6 className='me-3 align-items-center justify-content-center'>Référentiel : SYSCOHADA révisé</h6>                            
+                                        <div className="d-flex me-2  bg-dark  pe-3 ps-3  py-2" style={{ width: "150.24px", borderRadius: "4px" }}>
 
+                                            <Link className="text-fixed-white border-0 ps-2 me-2" to="#" style={{ whiteSpace: "nowrap", fontSize: "11px" }} onClick={(e) => {
+                                                e.preventDefault();
+                                                e.stopPropagation();
+
+                                            }}>
+                                               Ajouter un exercice
+                                            </Link>
+                                        </div>
+                                        
+                                    </div>
                                 </div>
                                 <div className="modal-body">
                                     <FoldersTable />
@@ -634,7 +608,7 @@ export default function AppContent() {
                                                 }}
                                             >
                                                 <option value="SYSCOHADA Révisé">SYSCOHADA Révisé</option>
-                                                <option value="IFRS">IFRS</option>
+                                                <option value="IFRS">SysBNL</option>
                                             </select>
                                         </div>
 

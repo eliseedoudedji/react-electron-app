@@ -14,7 +14,6 @@ import {
     faLock,
     faSave,
     faFileExport,
-    faCalendar,
     faBuilding
 } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';

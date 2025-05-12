@@ -18,6 +18,18 @@ export default function SaisiePage() {
     const [debit, setDebit] = useState('');
     const [credit, setCredit] = useState('');
 
+    const [form, setForm] = useState({
+        acountSold: '',
+        date: '',
+        piece: '',
+        datedEcheance: '',
+        reference: '',
+        compteNumber: '',
+        tiers: '',
+        libelle: '',
+        debit: '',
+        credit: '',
+    });
 
     const toggleSidebar = () => {
         setIsSidebarCollapsed(!isSidebarCollapsed);
@@ -118,6 +130,7 @@ export default function SaisiePage() {
                                             <input
                                         type="text"
                                         placeholder="---"
+                                        value={form.intitule}
                                         style={{ backgroundColor: "#b9fbc0", border: "1px solid #ccc",fontSize:"9px", borderRadius: 4,width:"71%",padding:"3px 1px 3px 7px" }}
                                         readOnly
                                     /></div>
