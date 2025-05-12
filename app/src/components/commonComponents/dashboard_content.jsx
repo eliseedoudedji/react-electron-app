@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import CreateSociety from './society/CreateSociety';
-import MenuTop from './topMenu/MenuTop';
+import MenuTop from './features/menus/menu_subbar/menu_appbar';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -26,6 +26,7 @@ export default function AppContent() {
         societyId: '',
         notes: ''
     });
+    const [allFolders, setAllFolders] = useState([]);
 
     // Vérifier la connexion au backend
     useEffect(() => {
@@ -33,10 +34,15 @@ export default function AppContent() {
             try {
                 const token = localStorage.getItem('token');
                 if (!token) {
-                    throw new Error('Non authentifié');
+                    toast.error('Veuillez vous connecter pour accéder à cette fonctionnalité', {
+                        position: "top-right",
+                        autoClose: 5000,
+                    });
+                    return;
                 }
 
-                const response = await fetch('http://82.112.254.228:8000/api/v1/societies/', {
+                setLoading(true);
+                const response = await fetch('http://82.112.254.228:8000/api/v1/folders/', {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
@@ -44,10 +50,14 @@ export default function AppContent() {
                 if (!response.ok) {
                     throw new Error('Le serveur backend n\'est pas accessible');
                 }
-                toast.success('Connexion au serveur établie', {
-                    position: "top-right",
-                    autoClose: 3000,
-                });
+                const data = await response.json();
+                setAllFolders(data)
+                console.log(data); // Debug log
+
+                // Vérifier si data est un tableau ou si les sociétés sont dans une propriété
+                //   const societiesList = Array.isArray(data) ? data : (data.data || data.results || []);
+                // setSocieties(societiesList);
+
             } catch (err) {
                 toast.error(err.message === 'Non authentifié' ?
                     'Veuillez vous connecter pour accéder à cette fonctionnalité' :
@@ -83,11 +93,12 @@ export default function AppContent() {
                 throw new Error('Erreur lors de la récupération des sociétés');
             }
             const data = await response.json();
-            console.log('Données reçues:', data); // Debug log
+            console.log('Données reçues:', data.data); // Debug log
 
             // Vérifier si data est un tableau ou si les sociétés sont dans une propriété
-            const societiesList = Array.isArray(data) ? data : (data.societies || data.results || []);
+            const societiesList = Array.isArray(data) ? data : (data.data || data.results || []);
             setSocieties(societiesList);
+
 
             if (!societiesList || societiesList.length === 0) {
                 toast.info('Veuillez d\'abord créer une société avant de créer un dossier', {
@@ -101,7 +112,6 @@ export default function AppContent() {
                 setShowSocietePopup(true);
                 return;
             }
-
             setShowModal2(true);
         } catch (err) {
             console.error('Erreur lors de la récupération des sociétés:', err);
@@ -244,6 +254,11 @@ export default function AppContent() {
                 pauseOnHover: true,
                 draggable: true,
             });
+            // Mise à jour immédiate de l'affichage
+            setAllFolders((prevFolders) => ({
+                ...prevFolders,
+                data: [...(prevFolders.data || []), data.data] // adapte selon la structure retournée
+            }));
             closeModal2();
         } catch (err) {
             console.error('Erreur lors de la création:', err);
@@ -269,6 +284,48 @@ export default function AppContent() {
         console.log('Champ modifié:', name, value); // Debug log
     };
 
+    const handleDeleteFolder = async (id) => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            toast.error('Veuillez vous connecter pour accéder à cette fonctionnalité', {
+                position: "top-right",
+                autoClose: 5000,
+            });
+            return;
+        }
+
+        try {
+            const response = await fetch(`http://82.112.254.228:8000/api/v1/folders/delete/${id}/`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Erreur lors de la suppression');
+            }
+
+            toast.success('Dossier supprimé avec succès !', {
+                position: "top-right",
+                autoClose: 3000,
+            });
+
+            // Recharge la liste des dossiers après suppression
+            setAllFolders(prev => ({
+                ...prev,
+                data: prev.data.filter(folder => folder.id !== id)
+            }));
+
+        } catch (err) {
+            console.error('Erreur lors de la suppression:', err);
+            toast.error(err.message || 'Une erreur est survenue', {
+                position: "top-right",
+                autoClose: 5000,
+            });
+        }
+    };
 
 
     return (
@@ -339,23 +396,8 @@ export default function AppContent() {
                                             <nav>
                                                 <div className="breadcrumb mb-0">
                                                     <div className="d-flex" style={{ flexWrap: "nowrap", overflowX: "auto" }}>
-                                                        <div className="d-flex me-4 align-items-center justify-content-center bg-danger ps-3 pe-3  py-1" style={{ width: "150.24px", borderRadius: "4px" }}>
-                                                            <div className="-text text-muted text-fixed-white me-0 border-0 pe-0">
-                                                                <i className="fa fa-trash mt-1" />
-                                                            </div>
-                                                            <Link className="text-fixed-white border-0 ps-2" to="#" style={{ whiteSpace: "nowrap", fontSize: "11px" }}>
-                                                                Supprimer
-                                                            </Link>
-                                                        </div>
-                                                        <div className="d-flex me-4 align-items-center justify-content-center bg-primary pe-3 ps-3  py-1" style={{ width: "150.24px", borderRadius: "4px" }}>
-                                                            <div className="-text text-muted bg-primary text-fixed-white me-0 border-0 pe-0">
-                                                                <i className="fa fa-clone mt-1" />
-                                                            </div>
-                                                            <Link className="text-fixed-white border-0 ps-2" to="#" style={{ whiteSpace: "nowrap", fontSize: "11px" }}>
-                                                                Dupliquer
-                                                            </Link>
-                                                        </div>
-                                                        <div className="d-flex me-2 align-items-center justify-content-center bg-success pe-3 ps-3  " style={{ cursor: "pointer", borderRadius: "4px" }}>
+
+                                                        <div className="d-flex me-2 align-items-center justify-content-center bg-success pe-3 ps-3  " style={{ cursor: "pointer", borderRadius: "4px", height: '27px' }}>
                                                             <div className="-text text-muted text-fixed-white me-0 border-0 pe-0">
                                                                 <i className="fa fa-plus mt-1" />
                                                             </div>
@@ -376,67 +418,60 @@ export default function AppContent() {
                                                 <th className="wd-5p tx-center  bg-primary text-light">Numéro</th>
                                                 <th className="wd-25p  bg-primary text-light">Référentiel</th>
                                                 <th className="text-center  bg-primary text-light">Société</th>
-                                                <th className="text-center  bg-primary text-light">Dossiers/société</th>
-                                                <th className=" bg-primary text-light">Statut</th>
+                                                <th className="text-center  bg-primary text-light">Exercices</th>
                                                 <th className=" bg-primary text-light">Dernière modification</th>
                                                 <th className=" bg-primary text-light">Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td className="tx-center">1</td>
-                                                <td>
-                                                    <span className="tx-14">SYSCOHADA révisé</span>
-                                                </td>
-                                                <td>
-                                                    <div className="text-center">EPITECH</div>
-                                                </td>
-                                                <td className="text-center" >
-                                                    <span className="badge badge-sm rounded-pill bg-info-transparent text-info">
-                                                        05
-                                                    </span>
-                                                </td>
+                                            {allFolders.data?.map((folder, index) => (
+                                                <tr key={folder.id}>
+                                                    <td className="tx-center">{index + 1}</td>
+                                                    <td>
+                                                        <span className="tx-14">{folder.intitule}</span>
+                                                    </td>
+                                                    <td>
+                                                        <div className="text-center">{folder.society?.name || "Société inconnue"}</div>
+                                                    </td>
+                                                    <td className="text-center">
+                                                        <span className="badge badge-sm rounded-pill bg-info-transparent text-info">
+                                                            {folder.exercices?.length || 0}
+                                                        </span>
+                                                    </td>
+                                                    <td className="text-center">
+                                                        {/* Remplace ici par la vraie date si disponible */}
+                                                        {folder.updated_at ? new Date(folder.updated_at).toLocaleString() : "Non défini"}
+                                                    </td>
+                                                    <td
+                                                        className="d-flex"
+                                                        style={{
+                                                            alignItems: "center",
+                                                            justifyContent: "center",
+                                                            gap: "1rem" // espace entre les éléments
+                                                        }}
+                                                    >
+                                                        <div
 
-                                                <td className="text-center">
-                                                    <span className="badge badge-sm rounded-pill bg-info-transparent text-success">
-                                                        Active
-                                                    </span>
-                                                </td>
-
-                                                <td className="text-center">20-04-2022 à 14:30</td>
-                                                <td className="text-center" onClick={() => handleRowClick1()} style={{ textDecoration: "underline", color: 'blue', cursor: "pointer" }}>
-                                                    Consulter
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td className="tx-center">2</td>
-                                                <td>
-                                                    <span className="tx-14">SYSCOHADA révisé</span>
-                                                </td>
-                                                <td>
-                                                    <div className="text-center">Design SA</div>
-                                                </td>
-                                                <td className="text-center" >
-                                                    <span className="badge badge-sm rounded-pill bg-info-transparent text-info">
-                                                        01
-                                                    </span>
-                                                </td>
-
-                                                <td className="text-center">
-                                                    <span className="badge badge-sm rounded-pill bg-danger-transparent text-danger">
-                                                        Accès interdit
-                                                    </span>
-                                                </td>
-
-                                                <td className="text-center">20-04-2022 à 14:30</td>
-                                                <td className="text-center" onClick={() => handleRowClick1()} style={{ textDecoration: "underline", color: 'blue', cursor: "pointer" }}>
+                                                            style={{ textDecoration: "underline", color: 'blue', cursor: "pointer" }}
+                                                        > <Link to={`/exercices/${folder.id}`}>
+                                                                Voir
+                                                            </Link>
 
 
+                                                        </div>
+                                                        <div
+                                                            style={{ textDecoration: "underline", color: 'red', cursor: "pointer" }}
+                                                            onClick={() => handleDeleteFolder(folder.id)}
+                                                        >
+                                                            supprimer
+                                                        </div>
 
-                                                    Consulter
-                                                </td>
-                                            </tr>
+                                                    </td>
+
+                                                </tr>
+                                            ))}
                                         </tbody>
+
                                     </table>
                                 </div>
                             </div>
@@ -505,8 +540,8 @@ export default function AppContent() {
                             <div className="modal-content">
                                 <div className="modal-header d-flex justify-content-between">
                                     <h5 className="modal-title">Societé Epitech</h5>
-                                    <div className='d-flex align-items-center justify-content-center'>        
-                                    <h6 className='me-3 align-items-center justify-content-center'>Référentiel : SYSCOHADA révisé</h6>                            
+                                    <div className='d-flex align-items-center justify-content-center'>
+                                        <h6 className='me-3 align-items-center justify-content-center'>Référentiel : SYSCOHADA révisé</h6>
                                         <div className="d-flex me-2  bg-dark  pe-3 ps-3  py-2" style={{ width: "150.24px", borderRadius: "4px" }}>
 
                                             <Link className="text-fixed-white border-0 ps-2 me-2" to="#" style={{ whiteSpace: "nowrap", fontSize: "11px" }} onClick={(e) => {
@@ -514,10 +549,10 @@ export default function AppContent() {
                                                 e.stopPropagation();
 
                                             }}>
-                                               Ajouter un exercice
+                                                Ajouter un exercice
                                             </Link>
                                         </div>
-                                        
+
                                     </div>
                                 </div>
                                 <div className="modal-body">
@@ -608,7 +643,7 @@ export default function AppContent() {
                                                 }}
                                             >
                                                 <option value="SYSCOHADA Révisé">SYSCOHADA Révisé</option>
-                                                <option value="IFRS">SysBNL</option>
+                                                <option value="IFRS">SYCEBNL</option>
                                             </select>
                                         </div>
 

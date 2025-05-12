@@ -1,8 +1,8 @@
 import React from 'react'
 import { useParams } from 'react-router-dom';
-import AppSidebar from '../../../components/commonComponents/AppSidebar';
+
 import ExercicesTable from '../../../components/commonComponents/main/ExercicesTable';
-import FolderHeader from '../../../components/commonComponents/dossiers/header/FolderHeader';
+import FolderHeader from '../../../components/commonComponents/features/menus/menu_appbar/component/menu_appbar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faFolder,
@@ -18,6 +18,7 @@ import {
     faFileExport,
     faCalendar
 } from '@fortawesome/free-solid-svg-icons';
+import AppSidebar from '../../../components/commonComponents/AppSidebar';
 
 export default function DossierPage() {
     const { id } = useParams();

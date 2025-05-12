@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { createPortal } from 'react-dom';
-import MenuTop from '../../../../components/commonComponents/topMenu/MenuTop'
-import Sidebar from '../../../../components/commonComponents/sidebar/Sidebar';
+import MenuTop from '../../../../components/commonComponents/features/menus/menu_subbar/menu_appbar'
+import Sidebar from '../../../../components/commonComponents/features/menus/menu_sidebar/menu_sidebar';
 import { Link } from 'react-router-dom';
 import CreateSociety from '../../../../components/commonComponents/society/CreateSociety';
 

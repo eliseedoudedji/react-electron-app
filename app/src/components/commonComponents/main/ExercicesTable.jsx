@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import CreateJournalModal from '../dossiers/CreateJournal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash, faHome, faFileAlt, faCog, faChartBar, faUsers, faBars, faChevronLeft, faBook, faFolderOpen, faTruck, faUserTie, faUser, faExchangeAlt, faList, faBolt, faBuilding, faMapMarkerAlt, faMapPin, faThLarge, faUserShield, faFileSignature } from '@fortawesome/free-solid-svg-icons';
-import Sidebar from '../sidebar/Sidebar';
+import Sidebar from '../features/menus/menu_sidebar/menu_sidebar';
 export default function ExercicesTable() {
     // État pour contrôler l'affichage du modal et stocker l'élément sélectionné
     const [showModal, setShowModal] = useState(false);

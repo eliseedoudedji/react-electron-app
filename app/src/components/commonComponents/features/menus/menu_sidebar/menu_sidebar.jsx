@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faBook, faFolderOpen, faUsers, faTruck, faUserTie, faUser,
-  faExchangeAlt, faFileAlt, faList, faBolt, faBuilding,
+  faExchangeAlt, faFileAlt, faList, faBuilding,
   faMapMarkerAlt, faMapPin, faThLarge, faUserShield, faFileSignature,
   faBars, faChevronLeft, faChevronDown, faChevronRight
 } from '@fortawesome/free-solid-svg-icons';

@@ -1,6 +1,6 @@
 import React from 'react'
 
-import FolderHeader from '../dossiers/header/FolderHeader';
+import FolderHeader from '../menu_appbar/component/menu_appbar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faFolder,

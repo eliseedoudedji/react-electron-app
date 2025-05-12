@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import FolderHeader from './dossiers/header/FolderHeader'
+import FolderHeader from './features/menus/menu_appbar/component/menu_appbar'
 // Import logo images
 import light from "@assets/light.svg";
 

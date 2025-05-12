@@ -22,8 +22,10 @@ const CreateCompanyModal = ({ show, onClose }) => {
         nationaliteDirigeant: "",
         capital: "",
         employes: "",
-        remarques: ""
+        remarques: "",
+        companyId:""
     });
+ 
 
     useEffect(() => {
         if (show) {
@@ -45,7 +47,9 @@ const CreateCompanyModal = ({ show, onClose }) => {
         const { name, value } = e.target;
         setForm((prev) => ({ ...prev, [name]: value }));
     };
-
+const [token, setToken] = useState(
+     localStorage.getItem("token")
+);
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -54,6 +58,7 @@ const CreateCompanyModal = ({ show, onClose }) => {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    Authorization: "Bearer "+ token 
                 },
                 body: JSON.stringify({
                     name: form.name,
@@ -71,15 +76,17 @@ const CreateCompanyModal = ({ show, onClose }) => {
                     nationaliteDirigeant: form.nationaliteDirigeant,
                     capital: form.capital,
                     employes: form.employes,
-                    remarques: form.remarques
+                    remarques: form.remarques,
+                    companyId: 1
                 })
             });
 
             if (!response.ok) {
+                response.status
                 throw new Error('Erreur lors de la création de la société');
             }
 
-            const data = await response.json();
+           
             toast.success('Société créée avec succès !', {
                 position: "top-right",
                 autoClose: 3000,

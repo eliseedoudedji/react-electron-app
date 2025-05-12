@@ -92,7 +92,7 @@ export default function FolderHeader() {
         };
     }, []);
 
-    const menuStyles = {
+    const style = {
         header: {
             borderBottom: "1px solid #ddd",
             backgroundColor: "#ffffff",
@@ -180,6 +180,7 @@ export default function FolderHeader() {
             marginRight: "8px"
         }
     };
+    const menuStyles = style;
 
     return (
         <header ref={headerRef} style={menuStyles.header}>
